@@ -13,10 +13,12 @@
   <v-text-field
     label="密碼" type="password"
     minlength="4" maxlength="20" counter
+    hint="請輸入英數字混合密碼"
   ></v-text-field>
   <v-text-field
     label="確認密碼" type="password"
     minlength="4" maxlength="20" counter
+    hint="請再次輸入密碼"
   ></v-text-field>
   <div class="text-center">
     <!-- 上課範例中，v-btn標籤裡有:loading="isSubmitting"，這裡先暫時拿掉 -->

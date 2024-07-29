@@ -13,7 +13,7 @@
           </v-btn>
         </template>
 
-        <v-btn v-for="(item, index) in items" :key="index" :to="item.to">{{ item.title }}</v-btn>
+        <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
 
         <!-- <v-list>
           <v-list-item
@@ -31,7 +31,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const items = ref([
+const memberItems = ref([
   { title: '寫譜專區', to: '/writtingArea', prependIcon: 'mdi-pencil-box' },
   { title: '我的鼓譜', to: '/myScore', prependIcon: 'mdi-file-document-outline' },
   { title: '我的收藏', to: '/save', prependIcon: 'mdi-content-save-all-outline' },
