@@ -14,7 +14,23 @@
       <v-card-title>會員登入</v-card-title>
       <v-card-text>
         <!-- ******************內容待編輯************************** -->
-        <p>登入待編輯，待元件register.vue完成後再改</p>
+        <v-form @submit.prevent="submit" :disabled="isSubmitting">
+          <!-- 帳號、密碼、信箱等規則先照上課範例 -->
+          <v-text-field
+            label="帳號"
+            minlength="4" maxlength="20" counter
+            v-model="account.value.value"
+            :error-messages="account.errorMessage.value"
+          ></v-text-field>
+          <v-text-field
+            label="密碼" type="password"
+            minlength="4" maxlength="20" counter
+            hint="請輸入英數字混合密碼"
+            v-model="password.value.value"
+            :error-messages="password.errorMessage.value"
+          ></v-text-field>
+          <v-btn type="submit" :loading="isSubmitting">登入</v-btn>
+        </v-form>
         <p>尚未註冊會員？</p>
         <v-btn  @click="registerDialog = true" id="registerBtn">
           點我註冊
