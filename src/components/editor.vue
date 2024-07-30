@@ -2,58 +2,69 @@
   <!-- 新增小節按鈕 -->
   <v-btn id="addSection">新增小節</v-btn>
   <v-container class="editor">
-    <!-- 一列 -->
-    <v-row>
-      <!--  樂器(列)名稱------------------------------------- -->
-      <v-col class="instruments w-100">
-        <div class="row-name"></div>
-        <div class="row-name"></div>
-        <div class="row-name">Hi-Hat</div>
-        <div class="row-name">snare (小鼓)</div>
-        <div class="row-name">kick (大鼓)</div>
-      </v-col>
-      <!-- 一個小節------------------------------------------ -->
-       <v-col class="sections w-100">
-        <h1 class="n-section w-100">第x小節</h1>
-        <!-- 一個小節裡總共幾拍 -->
-        <div class="divisions w-100">
-          <!-- 每一拍 -->
-          <div class="n-division w-25" v-for="(item,index) in signatureSectionItems" :key="index">
-            <h2>第{{index+1}}拍</h2>
-            <!-- 所有音符：HiHat、snare、kick，總共三組 -->
-            <div class="notes w-1000">
-              <!-- 不同聲音再拆開來 -->
-              <!-- HiHat-------------------------- -->
-              <div class="hiHat-notes w-100">
-                <!-- 單個按鈕 -->
-                <!-- 加顏色待編輯 -->
-                <v-btn class="n-hiHat-note" v-for="(item,index) in divisionIitems"  :key="index" @click="toggleClass(key)">.</v-btn>
-              </div>
-              <!-- 小鼓--------------------------- -->
-              <div class="snare-notes w-100">
-                <!-- 單個按鈕 -->
-                <v-btn class="n-snare-note" v-for="(item,index) in divisionIitems"  :key="index">.</v-btn>
-              </div>
-              <!-- 大鼓--------------------------- -->
-              <div class="kick-notes w-100">
-                <!-- 單個按鈕 -->
-                <v-btn class="n-kick-note" v-for="(item,index) in divisionIitems"  :key="index">.</v-btn>
+    <v-form>
+      <!-- 一列 -->
+      <v-row>
+        <!--  樂器(列)名稱------------------------------------- -->
+        <v-col class="instruments w-100">
+          <div class="row-name"></div>
+          <div class="row-name"></div>
+          <div class="row-name">Hi-Hat</div>
+          <div class="row-name">snare (小鼓)</div>
+          <div class="row-name">kick (大鼓)</div>
+        </v-col>
+        <!-- 一個小節------------------------------------------ -->
+         <v-col class="sections w-100">
+          <h1 class="n-section w-100">第x小節</h1>
+          <!-- 一個小節裡總共幾拍 -->
+          <div class="divisions w-100">
+            <!-- 每一拍 -->
+            <div class="n-division w-25" v-for="(item,index) in signatureSectionItems" :key="index">
+              <h2>第{{index+1}}拍</h2>
+              <!-- 所有音符：HiHat、snare、kick，總共三組 -->
+              <div class="notes w-1000">
+                <!-- 不同聲音再拆開來 -->
+                <!-- HiHat-------------------------- -->
+                <div class="hiHat-notes w-100">
+                  <!-- 單個按鈕 -->
+                  <!-- 加顏色待編輯 -->
+                  <v-checkbox
+                    class="n-hiHat-note"
+                    v-for="(item,index) in divisionIitems"
+                    :key="index">
+                  </v-checkbox>
+                </div>
+                <!-- 小鼓--------------------------- -->
+                <div class="snare-notes w-100">
+                  <!-- 單個按鈕 -->
+                  <v-checkbox
+                    class="n-snare-note"
+                    v-for="(item,index) in divisionIitems"
+                    :key="index">
+                  </v-checkbox>
+                </div>
+                <!-- 大鼓--------------------------- -->
+                <div class="kick-notes w-100">
+                  <!-- 單個按鈕 -->
+                  <v-checkbox
+                    class="n-kick-note"
+                    v-for="(item,index) in divisionIitems"
+                    :key="index">
+                  </v-checkbox>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-       </v-col>
-    </v-row>
+         </v-col>
+      </v-row>
+  </v-form>
   </v-container>
 </template>
 
 <script setup>
-// 每個格子裡面都有一變數，值為true的時候一種顏色，false時則為另一種，分別表示按下/沒按
-// 顏色可以用addClass來改變，true的時候有class，反之則無
-// 當格子click時，改變此變數的值true/false
-// 根據true/false決定是否撥放聲音
-
 import { ref } from 'vue'
+
+// 1. 定義schema
 
 // 一個小節有幾拍 (常見4拍) *****ref先拿掉*****------------
 const signatureSection = 4
@@ -80,13 +91,13 @@ const divisionIitems = Array.from({ length: division1 / 4 }) // 創建一個長�
 // 判斷每個按鈕是否被點擊之變數
 const isActive = ref((Array(divisionIitems.length).fill(false))) // 創建與陣列divisionIitems相同長度的陣列，並指定所有元素為falsue
 
-// 定義點擊時用到的函數
-function toggleClass (key) {
-  // 點擊時布林值會切換
-  isActive.value[key] = !isActive.value[key]
-  console.log(isActive.value[key]) // 確定布林值會切換
-  // 改變顏色待編輯
-}
+// 定義點擊時用到的函數******改成checkbox應該就不需要了******
+// function toggleClass (key) {
+//   // 點擊時布林值會切換
+//   isActive.value[key] = !isActive.value[key]
+//   console.log(isActive.value[key]) // 確定布林值會切換
+//   // 改變顏色待編輯
+// }
 
 // 以4/3、一小節為例-----------------------------
 // 第一列：第幾小節
