@@ -18,11 +18,6 @@ export const useUserStore = defineStore('user', () => {
     return token.value.length > 0
   })
 
-  // 是否為管理員
-  // const isAdmin = computed(() => {
-  //   return role.value === UserRole.ADMIN
-  // })
-
   // 登入---------------------------------------------------------------------
   // 登入要對使用者的store做操作，操作成功要把上方的token、account等值換掉
   // 有些人覺得登入是表單送出，所以把請求的API放在page裡

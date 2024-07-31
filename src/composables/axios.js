@@ -1,4 +1,6 @@
+// 引入套件
 import axios from 'axios'
+// 引入stores
 import { useUserStore } from '@/stores/user'
 
 // baseUrl是設定基準的網址，先設定baseURL，後續在請求時就不用寫那麼多
@@ -35,7 +37,7 @@ apiAuth.interceptors.request.use(config => {
   return config
 })
 
-// 1. apiAuth.get(/user/profile)
+// 1. apiAuth.get(/user/profile) 執行back \ controller \user.js裡的profile
 // 2. apiAuth.interceptors.request  自動加上 JWT
 // 3. 傳送出去
 // 4. apiAuth.interceptors.response(成功處理, 失敗處理)
@@ -46,14 +48,15 @@ apiAuth.interceptors.request.use(config => {
 apiAuth.interceptors.response.use(res => {
   // res是回應 (response)
   return res
-}, async error => {
-  // 如果失敗有回應 (網路斷線也算是失敗，網路斷線不會有回應)
+}, // 如果產生錯誤則要執行以下內容
+async error => {
+  // 如果失敗有回應 (網路斷線也算是失敗，但網路斷線不會有回應)
   if (error.response) {
-    // 如果得到登入過期的回應訊息，且不是舊換新
+    // 如果得到登入過期的回應訊息，且url不是舊換新
     if (error.response.data.message === '登入過期' && error.config.url !== '/users/extend') {
       const user = useUserStore()
       try {
-        // 傳送舊換新請求
+        // 傳送舊換新請求 (用patch)
         const { data } = await apiAuth.patch('/user/extend')
         // 舊換新成功，更新 store 的 token
         user.token = data.result
