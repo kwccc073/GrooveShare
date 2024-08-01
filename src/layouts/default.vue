@@ -100,7 +100,7 @@ const drawer = ref(false)
 const navItems = computed(() => {
   return [
     { title: '尋找練鼓室', to: '/searchTrainingRoom', prependIcon: 'mdi-map-search-outline' },
-    { title: '尋找鼓譜', to: '/searchScore', prependIcon: 'mdi-text-search-variant' },
+    { title: '尋找鼓譜', to: '/searchSong', prependIcon: 'mdi-text-search-variant' },
   ]
 })
 

@@ -2,7 +2,7 @@
   <div class="container">
     <breadcrumbs></breadcrumbs>
     <!-- 搜尋欄位，待新增 -->
-    <scoreTable></scoreTable>
+    <songTable></songTable>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 import { definePage } from 'vue-router/auto'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import scoreTable from '@/components/scoreTable'
+import songTable from '@/components/songTable'
 
 definePage({
   meta: {

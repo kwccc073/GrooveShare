@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <breadcrumbs></breadcrumbs>
-    <scoreTable></scoreTable>
-    
+    <songTable></songTable>
   </div>
 </template>
 
@@ -10,7 +9,7 @@
 import { definePage } from 'vue-router/auto'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import scoreTable from '@/components/scoreTable'
+import songTable from '@/components/songTable'
 definePage({
   meta: {
     title: '我的鼓譜',

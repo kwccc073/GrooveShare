@@ -89,25 +89,24 @@ const schema = yup.object({
   // 演唱者
   singer: yup
     .string() // 文字
-    .required('演唱者必填'), // 必填
+    .required('演唱者必填-schema'), // 必填
   // 歌名
   songTitle: yup
     .string()
-    .required('歌名必填'),
+    .required('歌名必填-schema'),
   // 曲風
   songStyle: yup
     .string()
-    .required('曲風必填')
-    .test('isSongStyle', '曲風分類錯誤', value => {
+    .required('曲風必填-schema')
+    .test('isSongStyle', '曲風分類錯誤-schema', value => {
       return songStylies.includes(value)
     }),
   // 速度
   BPM: yup
     .number()
     // 打的不是數字就會觸發typeError
-    .typeError('格式錯誤，只能為數字')
-    .required('BPM必填')
-    .min(0, 'BPM不能小於 0'),
+    .typeError('格式錯誤，只能為數字-schema')
+    .required('BPM必填-schema'),
   // 拍號
   // signature: yup.object().shape({
   //   // 一個小節幾拍
@@ -161,6 +160,7 @@ const submit = handleSubmit(async (values) => {
     const fd = new FormData()
 
     // 把東西放入form-data：fd.append(key, value)
+    // 加'editor', 建立此歌曲的使用者
     fd.append('singer', values.singer)
     fd.append('songTitle', values.songTitle)
     fd.append('songStyle', values.songStyle)
@@ -168,15 +168,10 @@ const submit = handleSubmit(async (values) => {
 
     // 拍號先不寫
 
-    // 打印並檢查 FormData 的內容，確保所有字段正確添加。OK
-    for (let pair of fd.entries()) {
-      console.log(pair[0] + ': ' + pair[1])
-    }
-
     // 再來要檢查後端驗證邏輯******從這裡開始*******
 
-    // // 新增樂譜
-    // await apiAuth.post('/song', fd)
+    // 新增樂譜
+    await apiAuth.post('/song', fd)
 
     // 另一種寫法測試
     // await apiAuth.post('/song', {

@@ -115,6 +115,7 @@ const passwordConfirm = useField('passwordConfirm')
 const submit = handleSubmit(async (values) => {
   try {
     await api.post('/user', {
+      // 顯示在Request payload上面
       account: values.account,
       email: values.email,
       password: values.password
