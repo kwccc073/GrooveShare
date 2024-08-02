@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <breadcrumbs></breadcrumbs>
-    <scoreTable></scoreTable>
   </div>
 </template>
 
@@ -9,7 +8,6 @@
 import { definePage } from 'vue-router/auto'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import scoreTable from '@/components/scoreTable'
 
 definePage({
   meta: {
@@ -17,6 +15,7 @@ definePage({
     // login: true
   }
 })
+
 </script>
 
 <style scoped lang="scss">

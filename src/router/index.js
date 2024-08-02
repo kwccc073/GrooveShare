@@ -21,7 +21,8 @@ router.beforeEach(async (to, from, next) => {
   // 進來網頁的第一次導航（一定會發生）
   if (from === START_LOCATION) {
     // 取得使用者資料
-    await user.profile()
+    await user.profile() // @/stores/user.js中的profile函式
+    // console.log(data.result.account)
   }
 
   if (user.isLogin && ['/register', '/login'].includes(to.path)) {

@@ -34,7 +34,7 @@ import { ref } from 'vue'
 const memberItems = ref([
   { title: '寫譜專區', to: '/writtingArea', prependIcon: 'mdi-pencil-box' },
   { title: '我的鼓譜', to: '/myScore', prependIcon: 'mdi-file-document-outline' },
-  { title: '我的收藏', to: '/save', prependIcon: 'mdi-content-save-all-outline' },
+  { title: '我的收藏', to: '/mySave', prependIcon: 'mdi-content-save-all-outline' },
   { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
   { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
 ])

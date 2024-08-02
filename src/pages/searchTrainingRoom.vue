@@ -43,7 +43,7 @@
           <!-- 設定其插槽名稱為top -->
           <template #top>
             <v-text-field
-              label="搜尋練鼓室"
+              label="搜尋（請輸入城市或名稱）"
               v-model="tableSearch"
               append-icon="mdi-magnify"
               @click-append="tableLoadItems(true)"
@@ -71,7 +71,7 @@
                如果沒有id => 顯示'新增練鼓室' -->
           {{ dialog.id ? '編輯練鼓室' : '新增練鼓室' }}
         </v-card-title>
-        <!-- 步驟5. 綁定欄位的 v-model、:error-messages -->
+        <!-- submit功能之步驟5. 綁定欄位的 v-model、:error-messages -->
         <v-card-text>
           <v-select
             label="縣市"
@@ -125,10 +125,10 @@
 // 定義頁面
 import { definePage } from 'vue-router/auto'
 import { ref } from 'vue'
-// 步驟1-1. 引入驗證套件
+// submit功能之步驟1-1. 引入驗證套件
 import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
-// 步驟6-2. 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
+// submit功能之步驟6-2. 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -143,7 +143,7 @@ definePage({
   }
 })
 
-// 步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
+// submit功能之步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
 
 const createSnackbar = useSnackbar()
@@ -181,14 +181,14 @@ const openDialog = (item) => {
 const closeDialog = () => {
   dialog.value.open = false // dialog.value.open決定對話框是否開啟
   resetForm() // 重設表單，回到initialValues
-  //  resetForm() 不會重設檔案上傳（因為是引入其他套件），因此要自己寫：
-  fileAgent.value.deleteFileRecord() // deleteFileRecord()是套件內建的function，用於清除
 }
 
 const cities = ['臺北市', '新北市', '桃園市', '臺中市', '臺南市', '高雄市', '基隆市', '新竹市', '嘉義市', '宜蘭縣', '新竹縣', '苗栗縣', '彰化縣', '南投縣', '雲林縣', '嘉義縣', '屏東縣', '花蓮縣', '臺東縣', '澎湖縣']
 const reservations = ['電話預約', '官網預約', '社群預約', '現場登記', '其他預約方式']
+// 定義電話號碼驗證的正則表達式
+const phoneNumberRegex = /^0\d{9}$/
 
-// 步驟2. 以schema定義格式----------------------------------------------
+// submit功能之步驟2. 以schema定義格式----------------------------------------------
 const schema = yup.object({
   // 縣市----------------
   city: yup
@@ -211,12 +211,9 @@ const schema = yup.object({
     .required('名稱必填-schema'),
   // 連絡電話----------------------------
   phoneNumber: yup
-    .number()
-    // 打的不是數字就會觸發typeError
-    .typeError('格式錯誤，只能為數字-schema')
+    .string()
     .required('連絡電話必填-schema')
-    .min(10, '電話號碼為10碼')
-    .max(10, '電話號碼為10碼'),
+    .matches(phoneNumberRegex, '電話號碼格式不正確'),
   // 預約方式---------------------------
   reservation: yup
     .string()
@@ -233,7 +230,7 @@ const schema = yup.object({
     .min(0, '費用不能小於 0'),
 })
 
-// 步驟3. useForm()建立表單------------------------------------------------------------
+// submit功能之步驟3. useForm()建立表單------------------------------------------------------------
 // 解構出handleSubmit (處理送出表單的動作)、isSubmitting (判斷表單是否在送出)、resetForm (重設表單)
 const { handleSubmit, isSubmitting, resetForm } = useForm({
   // 驗證格式為上方的schema
@@ -252,7 +249,7 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
   }
 })
 
-// 步驟4. useField()建立表單的各個欄位---------------------------------------------
+// submit功能之步驟4. useField()建立表單的各個欄位---------------------------------------------
 // useField()裡的欄位名稱要跟跟上方schema的一樣
 // useField('city') => 返回與 city 字段相關的值(value)和錯誤訊息(errorMessage)
 
@@ -267,7 +264,7 @@ const phoneNumber = useField('phoneNumber')
 const reservation = useField('reservation')
 const fee = useField('fee')
 
-// 步驟6-1. 定義送出的function-----------------------------------------------------------------
+// submit功能之步驟6-1. 定義送出的function-----------------------------------------------------------------
 // handleSubmit()會先上方的schema執行驗證，過了再執行下面的程式碼
 const submit = handleSubmit(async (values) => {
   try {
@@ -315,6 +312,7 @@ const submit = handleSubmit(async (values) => {
   }
 })
 
+// 表格------------------------------------------------------------------------------------
 // 一頁顯示幾個
 const tableItemsPerPage = ref(10)
 // 排序（先按照日期排序就好）*****待新增******

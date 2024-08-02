@@ -89,10 +89,13 @@ import hoverMenu from '@/components/bar/hoverMenu'
 import logIn from '@/components/bar/logIn'
 // 彈出對話框
 import { useSnackbar } from 'vuetify-use-dialog'
+// 跳到其他分頁用
+import { useRouter } from 'vue-router'
 
 const { mobile } = useDisplay() // 手機斷點
 const user = useUserStore() // 引入 store
 const createSnackbar = useSnackbar() // 彈出對話框
+const router = useRouter() // 跳到其他分頁用
 
 // 用於判斷是否點擊漢堡按鈕
 const drawer = ref(false)
@@ -109,7 +112,7 @@ const memberItems = computed(() => {
   return [
     { title: '寫譜專區', to: '/writtingArea', prependIcon: 'mdi-pencil-box' },
     { title: '我的鼓譜', to: '/myScore', prependIcon: 'mdi-file-document-outline' },
-    { title: '我的收藏', to: '/save', prependIcon: 'mdi-content-save-all-outline' },
+    { title: '我的收藏', to: '/mySave', prependIcon: 'mdi-content-save-all-outline' },
     { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
     { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
   ]
@@ -124,6 +127,8 @@ const logout = async () => {
       color: 'green'
     }
   })
+  // 回到首頁
+  router.push('/')
 }
 </script>
 

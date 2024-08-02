@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <breadcrumbs></breadcrumbs>
-    <songTable></songTable>
   </div>
 </template>
 
@@ -9,13 +8,14 @@
 import { definePage } from 'vue-router/auto'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import songTable from '@/components/songTable'
+
 definePage({
   meta: {
     title: '我的鼓譜',
     // login: true
   }
 })
+
 </script>
 
 <style scoped lang="scss">

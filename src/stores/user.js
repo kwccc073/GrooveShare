@@ -7,8 +7,12 @@ import { useApi } from '@/composables/axios'
 export const useUserStore = defineStore('user', () => {
   const { api, apiAuth } = useApi()
 
+  // 要抓下來的東西-------------
   const token = ref('')
   const account = ref('')
+  const email = ref('')
+  const icon = ref('')
+  const id = ref('')
   // const role = ref(UserRole.USER) // 使用者
   // const cart = ref(0)
 
@@ -28,8 +32,12 @@ export const useUserStore = defineStore('user', () => {
       // 跟後端的controllerss的檔案user.js登入後回傳的資料一樣
       token.value = data.result.token
       account.value = data.result.account
+      email.value = data.result.email
+      icon.value = data.result.icon
+      id.value = data.result.id
       // role.value = data.result.role
       // cart.value = data.result.cart
+      console.log(data.result) // 只有出現token和account
       return '登入成功'
     } catch (error) {
       console.log(error)
@@ -44,12 +52,21 @@ export const useUserStore = defineStore('user', () => {
       // 把使用者的token帶出去
       const { data } = await apiAuth.get('/user/profile')
       account.value = data.result.account
+      email.value = data.result.email
+      icon.value = data.result.icon
+      id.value = data.result.id
+      console.log('store:' + data.result.id)
+      console.log('store:' + data.result.icon)
+      // id.value = data.result._id ***待編輯****
       // role.value = data.result.role
       // cart.value = data.result.cart
     } catch (error) {
       // 錯誤的話把東西清空
       token.value = ''
       account.value = ''
+      email.value = ''
+      icon.value = ''
+      id.value = ''
       // role.value = UserRole.USER
       // cart.value = 0
     }
@@ -67,6 +84,9 @@ export const useUserStore = defineStore('user', () => {
     // 登出要將所有值重設
     token.value = ''
     account.value = ''
+    email.value = ''
+    icon.value = ''
+    id.value = ''
     // role.value = UserRole.USER
     // cart.value = 0
   }
@@ -108,6 +128,8 @@ export const useUserStore = defineStore('user', () => {
   return {
     token,
     account,
+    email,
+    id,
     // role,
     // cart,
     isLogin,
