@@ -12,7 +12,7 @@ import breadcrumbs from '@/components/breadcrumbs'
 definePage({
   meta: {
     title: '我的收藏',
-    // login: true
+    login: true
   }
 })
 

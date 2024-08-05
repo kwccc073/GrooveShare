@@ -22,7 +22,7 @@ router.beforeEach(async (to, from, next) => {
   if (from === START_LOCATION) {
     // 取得使用者資料
     await user.profile() // @/stores/user.js中的profile函式
-    // console.log(data.result.account)
+    // 重新整理之後才有反應***待編輯***
   }
 
   if (user.isLogin && ['/register', '/login'].includes(to.path)) {

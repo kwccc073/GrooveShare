@@ -12,7 +12,7 @@ import breadcrumbs from '@/components/breadcrumbs'
 definePage({
   meta: {
     title: '我的鼓譜',
-    // login: true
+    login: true
   }
 })
 

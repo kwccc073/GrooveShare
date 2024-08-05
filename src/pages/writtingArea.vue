@@ -14,6 +14,8 @@
 
 <script setup>
 import { definePage } from 'vue-router/auto'
+// 取得當前使用者資料
+import { useUserStore } from '@/stores/user'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
 import songFormation from '@/components/songFormation'
@@ -21,10 +23,15 @@ import editor from '@/components/editor.vue'
 
 definePage({
   meta: {
-    title: '寫譜專區'
-    // login: true
+    title: '寫譜專區',
+    login: true
   }
 })
+
+// 取得當前使用者資料
+const user = useUserStore()
+const account = user.account
+console.log(account)
 </script>
 
 <style scoped lang="scss">

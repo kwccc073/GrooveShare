@@ -129,6 +129,7 @@ export const useUserStore = defineStore('user', () => {
     token,
     account,
     email,
+    icon,
     id,
     // role,
     // cart,

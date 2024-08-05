@@ -9,7 +9,7 @@
           Title
         </v-app-bar-title>
       </router-link>
-      <!-- 靠右待編輯************************ -->
+      <v-spacer></v-spacer>
       <!-- 使用漢堡按鈕 -->
       <template v-if="mobile">
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>

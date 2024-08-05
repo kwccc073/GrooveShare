@@ -70,11 +70,17 @@ import * as yup from 'yup'
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
+// 取得當前使用者資料
+import { useUserStore } from '@/stores/user'
 
 // 步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
 
 const createSnackbar = useSnackbar()
+
+// 取得當前使用者資料
+const user = useUserStore()
+const account = user.account
 
 // 選項（跟後端相同）-------------------------------------------------
 // 曲風
@@ -160,7 +166,7 @@ const submit = handleSubmit(async (values) => {
     const fd = new FormData()
 
     // 把東西放入form-data：fd.append(key, value)
-    // 加'editor', 建立此歌曲的使用者
+    fd.append('editor', account) // 建立此歌曲的使用者
     fd.append('singer', values.singer)
     fd.append('songTitle', values.songTitle)
     fd.append('songStyle', values.songStyle)

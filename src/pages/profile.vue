@@ -6,9 +6,8 @@
       <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
     </v-row>
     <v-row>
-      <v-col cols="12">帳號：{{ nowAccount }}</v-col>
+      <v-col cols="12">帳號：{{ user.account }}</v-col>
       <v-col cols="12">email：{{ nowEmail }}</v-col>
-      <v-col cols="12">大頭貼：{{ nowIcon }}</v-col>
       <img :src="nowIcon" alt="大頭貼" id="icon">
     </v-row>
 
@@ -38,17 +37,20 @@
             :error-text="{ type: '檔案格式不支援', size: '檔案大小不能超過 1MB' }"
             ref="fileAgent"
           ></vue-file-agent>
-          <!-- 帳號 -->
-          <!-- 暫時拿掉:error-messages="account.errorMessage.value" -->
-          <v-text-field
-            label="帳號"
-            v-model="account.value.value"
-          ></v-text-field>
-          <!-- 暫時拿掉:error-messages="email.errorMessage.value" -->
           <v-text-field
             label="email"
             v-model="email.value.value"
           ></v-text-field>
+          <!-- 密碼 ******************待編輯********************-->
+          <!-- <v-text-field
+            label="密碼"
+            v-model="password.value.value"
+          ></v-text-field> -->
+          <!-- 確認密碼 -->
+          <!-- <v-text-field
+            label="確認密碼"
+            v-model="passwordConfirm.value.value"
+          ></v-text-field> -->
         </v-card-text>
         <v-card-actions>
           <!-- :loading="isSubmitting" 表示送出的時候會轉圈，避免重複點擊 -->
@@ -76,30 +78,39 @@ import validator from 'validator'
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
+// 跳轉分頁用
+import { useRouter } from 'vue-router'
 
 definePage({
   meta: {
     title: '會員資料',
-    // login: true
+    login: true
   }
 })
-
-// 進到網頁會先顯示原本的資料-------------------------***目前寫法抓不到頭貼，待編輯***
-// router裡面有寫到：一進網頁會先取得使用者資料
-const user = useUserStore()
-const nowAccount = user.account
-const nowEmail = user.email
-const nowIcon = user.Icon
-
-console.log(`現在：${nowAccount}、${nowEmail}、${nowIcon}`) // Icon是undifined
 
 // 步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
 
 const createSnackbar = useSnackbar() // 對話框
+const router = useRouter() // 跳到其他分頁用
 
 // 要抓頁面上東西需在標籤上加ref='XXX'，並於JS中const同名的ref
 const fileAgent = ref(null)
+
+// 第一次進分頁時不知為何沒有執行profile抓資料，因此需先手動重新整理****待編輯****
+
+// 進到網頁會先顯示原本的資料-------------------------***目前寫法抓不到頭貼，待編輯***
+// router裡面有寫到：一進網頁會先取得使用者資料
+const user = useUserStore()
+// console.log(user.account) // 確認store有存account
+// console.log(user.email) // 確認store有存account
+// console.log(user.icon) // 確認store有存icon
+// const nowAccount = user.account
+const nowEmail = user.email
+const nowIcon = user.icon
+
+// const { data } = await apiAuth.get('/user/profile')
+// console.log(`現在：${nowAccount}、${nowEmail}、${nowIcon}`) // Icon是undifined
 
 // 會員專區按鈕-----------------------
 const memberItems = ref([
@@ -118,44 +129,35 @@ const dialog = ref({
 // 打開視窗******item待確認要不要放******
 const openDialog = async (item) => {
   dialog.value.open = true
-  const { data } = await apiAuth.get('/user/profile') // 取得使用者資料
-  account.value.value = data.result.account
-  email.value.value = data.result.email
-  icon.value.value = data.result.icon
-  id.value.value = data.result.id
-  console.log('openDialog：' + data.result.account) // 這裡確定可以抓到東西***待編輯***
-  console.log('openDialog：' + data.result.email) // 這裡確定可以抓到東西***待編輯***
-  console.log('openDialog：' + data.result.icon) // 這裡確定可以抓到東西***待編輯***
 
-  // 打開後要帶入使用者資料 ****待編輯*****
-  // account.value.value = user.account
-  // email.value.value = user.email
-  // icon.value.value = user.icon
-  // id.value.value = user.id
-  // console.log('openDialog：' + id.value.value)
-  // console.log('openDialog：' + email.value.value)
-  // console.log('openDialog：' + icon.value.value) // 這裡的icon會變undifines*******
+  // 打開後代入store中的使用者資料
+  account.value.value = user.account // 同一個使用者會固定帳號，不得修改
+  email.value.value = nowEmail
+  icon.value.value = nowIcon // 打開對話框沒有顯示圖片**待編輯**
+  id.value.value = user.id // 同一個使用者會固定id，不得修改
+  // 密碼待編輯
+  // password.value.value = ''
+  // passwordConfirm.value.value = ''
 }
 
 // 關閉視窗
 const closeDialog = () => {
   dialog.value.open = false // dialog.value.open決定對話框是否開啟
-  resetForm()
 }
 
 const schema = yup.object({
-  account: yup
-    .string() // 此欄位為文字
-    .required('使用者帳號必填') // 此欄位為必填
-    .min(4, '使用者帳號長度不符') // 最少4個字
-    .max(20, '使用者帳號長度不符')
-    .test(
-      // .test(自訂驗證名稱, 錯誤訊息, 驗證 function)
-      'isAlphanumeric', '使用者帳號格式錯誤',
-      (value) => {
-        return validator.isAlphanumeric(value)
-      }
-    ),
+  // account: yup
+  //   .string() // 此欄位為文字
+  //   .required('使用者帳號必填') // 此欄位為必填
+  //   .min(4, '使用者帳號長度不符') // 最少4個字
+  //   .max(20, '使用者帳號長度不符')
+  //   .test(
+  //     // .test(自訂驗證名稱, 錯誤訊息, 驗證 function)
+  //     'isAlphanumeric', '使用者帳號格式錯誤',
+  //     (value) => {
+  //       return validator.isAlphanumeric(value)
+  //     }
+  //   ),
   email: yup
     .string()
     .required('使用者信箱必填')
@@ -165,20 +167,20 @@ const schema = yup.object({
         return validator.isEmail(value)
       }
     ),
-// 修改密碼部分***待編輯***
-//   password: yup
-//     .string()
-//     .required('使用者密碼必填')
-//     .min(4, '使用者密碼長度不符')
-//     .max(20, '使用者密碼長度不符'),
-//   passwordConfirm: yup
-//     .string()
-//     .oneOf([yup.ref('password')], '密碼不一致')
+  // 修改密碼部分***待編輯***
+  // password: yup
+  //   .string()
+  //   .required('使用者密碼必填')
+  //   .min(4, '使用者密碼長度不符')
+  //   .max(20, '使用者密碼長度不符'),
+  // passwordConfirm: yup
+  //   .string()
+  //   .oneOf([yup.ref('password')], '密碼不一致')
 })
 
 // 步驟3. useForm()建立表單------------------------------------------------------------
 // 解構出handleSubmit (處理送出表單的動作)、isSubmitting (判斷表單是否在送出)、resetForm (重設表單)
-const { handleSubmit, isSubmitting, resetForm } = useForm({
+const { handleSubmit, isSubmitting } = useForm({
   // 驗證格式為上方的schema
   validationSchema: schema
 })
@@ -194,23 +196,12 @@ const account = useField('account')
 const email = useField('email')
 const icon = useField('icon')
 const id = useField('id')
+// 密碼***待編輯***
 // const password = useField('password')
 // const passwordConfirm = useField('passwordConfirm')
 // 檔案上傳用
 const fileRecords = ref([])
 const rawFileRecords = ref([])
-
-// 編輯後再次打開視窗不會顯示圖片，且會員資料那邊沒有顯示編輯過後的結果
-// 編輯後要重新取資料****待編輯*****
-const updateProfile = async () => {
-  await apiAuth.get('/user/profile')
-  // account.value.value = data.result.account
-  // email.value.value = data.result.email
-  // icon.value.value = data.result.icon
-  // console.log('updateProfile：' + data.result.account)
-  // console.log('updateProfile：' + data.result.email)
-  // console.log('updateProfile：' + data.result.icon)
-}
 
 // 步驟6-1. 定義送出的function-----------------------------------------------------------------
 // handleSubmit()會先上方的schema執行驗證，過了再執行下面的程式碼
@@ -220,12 +211,13 @@ const submit = handleSubmit(async (values) => {
   if (fileRecords.value[0]?.error) return
 
   try {
-    // 檔案上傳會用到form-data，是一種用於構建 HTTP POST 請求的內容類型，主要用於上傳文件和提交表單數據。
     // 建立物件fd
     const fd = new FormData()
     // 把東西放入form-data：fd.append(key, value)*****待編輯*****
     fd.append('account', values.account)
     fd.append('email', values.email)
+    // 密碼***待編輯***
+    // fd.append('password', values.password) // 送出後，資料庫顯示的是未加密的密碼，且無法用新密碼登入**待編輯**
 
     // 如果有放檔案就要放入fd
     if (fileRecords.value.length > 0) {
@@ -243,7 +235,7 @@ const submit = handleSubmit(async (values) => {
       }
     })
 
-    updateProfile() // 更新顯示的資料
+    router.go(0) // 重新加載當前的路由
     closeDialog() // 關閉視窗
   } catch (error) {
     console.log(error)
@@ -257,8 +249,7 @@ const submit = handleSubmit(async (values) => {
 })
 
 // 待解決問題******************
-// 送出後頁面上的資料沒有跟著更新（但重新整理就會更新了）
-// 重新整理前再按一次按鈕，上傳欄位看的到原本的圖，但重新整理後就看不到了
+// 打開編輯視窗沒辦法看到原本的圖片
 </script>
 
 <style scoped lang="scss">

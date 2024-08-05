@@ -38,7 +38,7 @@
     </template>
   </v-data-table-server>
   <!-- 以下內容*************待刪除********** -->
-    <v-table>
+    <v-table class="bg-primary">
       <thead class="thead">
         <tr>
           <th>歌手/樂團</th>
@@ -135,6 +135,7 @@ const tableHeaders = [
   { title: '歌名', align: 'center', sortable: true, key: 'songTitle' },
   { title: '曲風', align: 'center', sortable: true, key: 'songStyle' },
   { title: 'BPM', align: 'center', sortable: true, key: 'BPM' },
+  { title: '建立者', align: 'center', sortable: false, key: 'editor' },
   // { title: '難易度', align: 'center', sortable: true, key: 'sell' },
   { title: '操作', align: 'center', sortable: false, key: 'action' }
 ]
