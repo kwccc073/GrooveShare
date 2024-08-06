@@ -43,17 +43,17 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
-          <!-- <span>拍號：</span> -->
+          <span>拍號：</span>
           <!-- 一個小節幾拍 -->
-          <!-- <v-select -->
-            <!-- :items="signatureSections" -->
-            <!-- v-model="signatureSection.value.value" -->
-          <!-- ></v-select> -->
+          <v-select
+            :items="signatureSections"
+            v-model="signatureSection.value.value"
+          ></v-select>
           <!-- 以幾分音符為一拍 -->
-          <!-- <v-select -->
-            <!-- :items="signatureNotes" -->
-            <!-- v-model="signatureNote.value.value" -->
-          <!-- ></v-select> -->
+          <v-select
+            :items="signatureNotes"
+            v-model="signatureNote.value.value"
+          ></v-select>
         </v-col>
       </v-row>
       <v-row>
@@ -114,22 +114,20 @@ const schema = yup.object({
     .typeError('格式錯誤，只能為數字-schema')
     .required('BPM必填-schema'),
   // 拍號
-  // signature: yup.object().shape({
-  //   // 一個小節幾拍
-  //   signatureSection: yup
-  //     .number()
-  //     .required('拍號必填')
-  //     .test('issignatureSection', '拍號錯誤', value => {
-  //       return signatureSections.includes(value)
-  //     }),
-  //   // 以幾分音符為一拍
-  //   signatureNote: yup
-  //     .number()
-  //     .required('拍號必填')
-  //     .test('issignatureNote', '音符拍數錯誤', value => {
-  //       return signatureNotes.includes(value)
-  //     })
-  // }),
+  // 一個小節幾拍
+  signatureSection: yup
+    .number()
+    .required('拍號必填')
+    .test('issignatureSection', '拍號錯誤', value => {
+      return signatureSections.includes(value)
+    }),
+  // 以幾分音符為一拍
+  signatureNote: yup
+    .number()
+    .required('拍號必填')
+    .test('issignatureNote', '音符拍數錯誤', value => {
+      return signatureNotes.includes(value)
+    }),
 })
 
 // 步驟3. useForm()建立表單------------------------------------------------------------
@@ -143,6 +141,8 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
     songTitle: '',
     songStyle: '',
     BPM: 0,
+    signatureSection: 4,
+    signatureNote: 4,
     // 拍號先不寫
   }
 })
@@ -155,9 +155,8 @@ const singer = useField('singer')
 const songTitle = useField('songTitle')
 const songStyle = useField('songStyle')
 const BPM = useField('BPM')
-// ***********拍號待確認，先不使用***************
-// const signatureSection = useField('signature.signatureSection') // 一小節有幾拍
-// const signatureNote = useField('signature.signatureNote') // 以幾分音符為一拍
+const signatureSection = useField('signature.signatureSection') // 一小節有幾拍
+const signatureNote = useField('signature.signatureNote') // 以幾分音符為一拍
 
 // 步驟6-1. 定義送出的function-----------------------------------------------------------------
 const submit = handleSubmit(async (values) => {
@@ -171,10 +170,8 @@ const submit = handleSubmit(async (values) => {
     fd.append('songTitle', values.songTitle)
     fd.append('songStyle', values.songStyle)
     fd.append('BPM', values.BPM)
-
-    // 拍號先不寫
-
-    // 再來要檢查後端驗證邏輯******從這裡開始*******
+    fd.append('signatureSection', values.signatureSection)
+    fd.append('signatureNote', values.signatureNote)
 
     // 新增樂譜
     await apiAuth.post('/song', fd)

@@ -32,12 +32,13 @@
       <!-- 已收藏 -->
       <v-btn elevation="0" prepend-icon=" mdi-cards-heart"></v-btn>
       <!-- 觀看鼓譜 -->
-      <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" to="/watchScore"></v-btn>
+      <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
       <!-- 下載 -->
       <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn>
     </template>
   </v-data-table-server>
-  <!-- 以下內容*************待刪除********** -->
+
+  <!-- 以下內容*************待刪除*************************************************** -->
     <v-table class="bg-primary">
       <thead class="thead">
         <tr>
@@ -70,7 +71,7 @@
               <!-- 沒鎖的 -->
               <v-btn elevation="0" prepend-icon=" mdi-lock-open-variant"></v-btn>
               <!-- 觀看鼓譜 -->
-              <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" to="/watchScore"></v-btn>
+              <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline"></v-btn>
               <!-- 刪除 -->
               <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" to="/watchScore"></v-btn>
             </div>
@@ -137,7 +138,7 @@ const tableHeaders = [
   { title: 'BPM', align: 'center', sortable: true, key: 'BPM' },
   { title: '建立者', align: 'center', sortable: false, key: 'editor' },
   // { title: '難易度', align: 'center', sortable: true, key: 'sell' },
-  { title: '操作', align: 'center', sortable: false, key: 'action' }
+  { title: '', align: 'center', sortable: false, key: 'action' }
 ]
 // 預設剛點進來的時候會是載入狀態
 const tableLoading = ref(true)

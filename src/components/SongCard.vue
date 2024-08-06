@@ -4,29 +4,31 @@
     <v-card-title>
       <router-link :to="'/songs/' + _id">{{ songTitle }}</router-link>
     </v-card-title>
-    <v-card-subtitle>${{ songTitle }}</v-card-subtitle>
+    <v-card-subtitle>{{ singer }}</v-card-subtitle>
     <v-card-text>
       {{ songStyle }}
     </v-card-text>
     <v-card-actions>
       <!-- v-spacer會自動把東西推到右邊 -->
       <v-spacer></v-spacer>
-      <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading">加入購物車</v-btn>
+      <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading">收藏歌曲</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/user' // stores
+import { useRouter } from 'vue-router' // 路由
 import { useSnackbar } from 'vuetify-use-dialog'
 import { ref } from 'vue'
 
 const user = useUserStore()
+const router = useRouter()
 const createSnackbar = useSnackbar()
 
 // props表示元件可以接收的資料，defineProps()是script setup的固定寫法（不須import）
 // 可以一個個定義每個東西的型態、預設值等
-const props = defineProps(['_id', 'songStyle', 'songTitle', 'songTitle', 'BPM'])
+const props = defineProps(['_id', 'songStyle', 'songTitle', 'singer', 'BPM', 'signatureSection', 'signatureNotes'])
 
 const loading = ref(false) // UIUX用，使按下去時按鈕為載入狀態（避免一直點）
 
