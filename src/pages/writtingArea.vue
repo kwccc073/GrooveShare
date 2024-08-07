@@ -2,13 +2,11 @@
   <div class="container">
     <breadcrumbs></breadcrumbs>
     <!-- 歌曲基本資料填寫 -->
-    <songFormation></songFormation>
-
-    <!-- 開始按鈕 -->
-    <v-btn>開始寫譜</v-btn>
+    <!-- <songFormation></songFormation> -->
 
     <!-- 寫譜器 -->
-     <editor></editor>
+    <!-- <editor></editor> -->
+    <testEditor></testEditor>
   </div>
 </template>
 
@@ -18,8 +16,9 @@ import { definePage } from 'vue-router/auto'
 import { useUserStore } from '@/stores/user'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import songFormation from '@/components/songFormation'
-import editor from '@/components/editor.vue'
+// import songFormation from '@/components/songFormation'
+// import editor from '@/components/editor.vue'
+import testEditor from '@/components/testEditor.vue'
 
 definePage({
   meta: {

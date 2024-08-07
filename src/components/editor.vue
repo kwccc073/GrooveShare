@@ -184,7 +184,4 @@ const isActive = ref((Array(divisionIitems.length).fill(false))) // 創建與陣
   }
 }
 
-.active{
-  background: red;
-}
 </style>

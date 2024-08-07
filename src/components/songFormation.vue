@@ -1,5 +1,4 @@
 <template>
-    <!-- 表單記得寫 @submit.prevent="submit" :disabled="isSubmitting"-->
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <v-row>
