@@ -1,6 +1,7 @@
 <template>
+  <v-container>
+    <breadcrumbs></breadcrumbs>
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
-      <v-container >
         <!-- 歌曲基本資料-------------------------------------------------------------------------- -->
         <v-row>
           <v-col cols="12" md="6">
@@ -57,7 +58,7 @@
           </v-col>
         </v-row>
         <!-- 樂譜部分-------------------------------------------- -->
-        <v-row class="h-100" v-for="(section, sectionIndex) in scoreKick" :key="sectionIndex">
+        <v-row class="h-100" v-for="(section, sectionIndex) in scoreKick.value.value" :key="sectionIndex">
           <!--  樂器(列)名稱------------------------------------- -->
           <v-col cols="2" class="instruments w-100 bg-black">
             <div class="row-name"></div>
@@ -81,8 +82,8 @@
                       v-for="(HiHat, HiHatIndex) in beat"
                       :key="HiHatIndex"
                       :value="true"
-                      v-model="scoreHiHat[sectionIndex][beatIndex][HiHatIndex]"
-                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${HiHatIndex+1}`,scoreHiHat[sectionIndex][beatIndex][HiHatIndex])"
+                      v-model="scoreHiHat.value.value[sectionIndex][beatIndex][HiHatIndex]"
+                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${HiHatIndex+1}`,scoreHiHat.value.value[sectionIndex][beatIndex][HiHatIndex])"
                       >
                     </v-checkbox>
                   </div>
@@ -93,8 +94,8 @@
                       v-for="(snare, snareIndex) in beat"
                       :key="snareIndex"
                       :value="true"
-                      v-model="scoreSnare[sectionIndex][beatIndex][snareIndex]"
-                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${snareIndex+1}`,scoreSnare[sectionIndex][beatIndex][snareIndex])"
+                      v-model="scoreSnare.value.value[sectionIndex][beatIndex][snareIndex]"
+                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${snareIndex+1}`,scoreSnare.value.value[sectionIndex][beatIndex][snareIndex])"
                       >
                     </v-checkbox>
                   </div>
@@ -106,8 +107,8 @@
                       v-for="(kick, kickIndex) in beat"
                       :key="kickIndex"
                       :value="true"
-                      v-model="scoreKick[sectionIndex][beatIndex][kickIndex]"
-                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${kickIndex+1}`,scoreKick[sectionIndex][beatIndex][kickIndex])"
+                      v-model="scoreKick.value.value[sectionIndex][beatIndex][kickIndex]"
+                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${kickIndex+1}`,scoreKick.value.value[sectionIndex][beatIndex][kickIndex])"
                       >
                     </v-checkbox>
                   </div>
@@ -122,12 +123,17 @@
             <v-btn type="submit" :loading="isSubmitting">儲存</v-btn>
           </v-col>
         </v-row>
-      </v-container>
     </v-form>
+  </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { definePage } from 'vue-router/auto'
+// 取得當前使用者資料
+import { useUserStore } from '@/stores/user'
+// 引入自定義元件
+import breadcrumbs from '@/components/breadcrumbs'
+import { ref, computed } from 'vue'
 // 步驟1-1. 引入驗證套件
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
@@ -135,8 +141,13 @@ import * as yup from 'yup'
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
-// 取得當前使用者資料
-import { useUserStore } from '@/stores/user'
+
+definePage({
+  meta: {
+    title: '寫譜專區',
+    login: true
+  }
+})
 
 // 步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
@@ -155,6 +166,101 @@ const songStylies = ['流行', '龐克', '金屬', '後搖', '慢搖', '民謠',
 const signatureBeats = [2, 3, 4, 6, 9]
 // 拍號－以幾分音符為一拍
 const signatureNotes = [2, 4, 8]
+
+// 樂譜部分-------------------------------------------------------------------------
+// 使用的變數--------------
+// 整個譜裡有幾個小節 ***以下三個值應該要可以變動（待編輯）*****
+const sections = 2
+// 一個小節有幾拍 (常見4拍)
+// 更改初始值的signatureBeat會變化，但沒辦法及時變化，推測是因為這邊的signatureBeat還沒傳到後端？****待編輯****
+const beats = 4
+// 以幾分音符為一拍（相當於切成 division / 4 份）
+const divisions = 16
+
+// 全譜--------------------
+// hiHat
+const initialScoreHiHat = ref(
+  // 整個譜裡有 sections 個小節
+  Array.from({ length: sections }, () =>
+    // 每個小節裡有 beats 拍
+    Array.from({ length: beats }, () =>
+    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
+      Array.from({ length: divisions / 4 }, () =>
+        // 每個預設值為false
+        false
+      )
+    )
+  )
+)
+// 小鼓
+const initialScoreSnare = ref(
+  // 整個譜裡有 sections 個小節
+  Array.from({ length: sections }, () =>
+    // 每個小節裡有 beats 拍
+    Array.from({ length: beats }, () =>
+    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
+      Array.from({ length: divisions / 4 }, () =>
+        // 每個預設值為false
+        false
+      )
+    )
+  )
+)
+// 大鼓全譜
+const initialScoreKick = ref(
+  // 整個譜裡有 sections 個小節
+  Array.from({ length: sections }, () =>
+    // 每個小節裡有 beats 拍
+    Array.from({ length: beats }, () =>
+    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
+      Array.from({ length: divisions / 4 }, () =>
+        // 每個預設值為false
+        false
+      )
+    )
+  )
+)
+
+console.log(initialScoreHiHat.value)
+
+// 新增小節function----------------------------------------------------------------
+// 按下按鈕會出現錯誤********待編輯*************
+const addSection = () => {
+  console.log(scoreKick.value.value) // 正確顯示
+  // HiHat------------
+  scoreKick.value.value.push(
+    // 每個小節裡有 beats 拍
+    Array.from({ length: beats }, () =>
+    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
+      Array.from({ length: divisions / 4 }, () =>
+        // 每個預設值為false
+        false
+      )
+    )
+  )
+  // 小鼓--------------
+  // scoreSnare.value.value.push(
+  //   // 每個小節裡有 beats 拍
+  //   Array.from({ length: beats }, () =>
+  //   // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
+  //     Array.from({ length: divisions / 4 }, () =>
+  //       // 每個預設值為false
+  //       false
+  //     )
+  //   )
+  // )
+  // 大鼓------------
+  // scoreKick.value.value.push(
+  //   // 每個小節裡有 beats 拍
+  //   Array.from({ length: beats }, () =>
+  //   // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
+  //     Array.from({ length: divisions / 4 }, () =>
+  //       // 每個預設值為false
+  //       false
+  //     )
+  //   )
+  // )
+}
 
 // 步驟2. 以schema定義格式---------------------
 const schema = yup.object({
@@ -194,8 +300,20 @@ const schema = yup.object({
     .test('issignatureNote', '音符拍數錯誤', value => {
       return signatureNotes.includes(value)
     }),
+  // 加這個不影響submit
   scoreHiHat:
-    // 小節
+  // yup.string(),
+  // 小節****待編輯*******
+  yup.array().of(
+    // 拍
+    yup.array().of(
+      // 拆成X份
+      yup.array().of(
+        yup.boolean()
+      )
+    )
+  ),
+  scoreSnare:
     yup.array().of(
       // 拍
       yup.array().of(
@@ -204,12 +322,22 @@ const schema = yup.object({
           yup.boolean()
         )
       )
+    ),
+  scoreKick:
+  yup.array().of(
+    // 拍
+    yup.array().of(
+      // 拆成X份
+      yup.array().of(
+        yup.boolean()
+      )
     )
+  ),
 })
 
 // 步驟3. useForm()建立表單-------------------
 // 解構出handleSubmit (處理送出表單的動作) 和 isSubmitting (判斷表單是否在送出)
-const { handleSubmit, isSubmitting, resetForm } = useForm({
+const { handleSubmit, isSubmitting } = useForm({
   // 指定驗證格式使用上方建立的schema
   validationSchema: schema,
   // 初始值設定
@@ -221,6 +349,10 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
     signatureBeat: 4,
     signatureNote: 4,
     // 譜部分的初始值******待編輯*******
+    // 加了這個之後submit會沒有反應
+    scoreHiHat: initialScoreHiHat.value,
+    scoreSnare: initialScoreSnare.value,
+    scoreKick: initialScoreKick.value
   }
 })
 
@@ -234,10 +366,24 @@ const songStyle = useField('songStyle')
 const BPM = useField('BPM')
 const signatureBeat = useField('signatureBeat') // 一小節有幾拍
 const signatureNote = useField('signatureNote') // 以幾分音符為一拍
+// 加這個不影響submit
+const scoreHiHat = useField('scoreHiHat')
+const scoreSnare = useField('scoreSnare')
+const scoreKick = useField('scoreKick')
 
+console.log(scoreHiHat.value.value)
+// console.log(JSON.stringify(initialScoreHiHat.value[0]))
+// console.log(typeof (JSON.stringify(scoreKick.value.value[0][0][0]))) // string
+// console.log(typeof (scoreKick.value.value[0][0][0])) // boolean
+
+// console.log(typeof (scoreKick.value.value)) // 原本：object
+// console.log(JSON.stringify(scoreKick.value.value[0]))
+// console.log(JSON.stringify(scoreKick.value.value[1]))
 // 步驟6-1. 定義送出的function-----------------------------------------------------------------
 const submit = handleSubmit(async (values) => {
   try {
+    console.log('已送出')
+    // console.log(typeof (values.scoreHiHat))
     // 檔案上傳會用到form-data，是一種用於構建 HTTP POST 請求的內容類型，主要用於上傳文件和提交表單數據。
     const fd = new FormData()
 
@@ -250,7 +396,10 @@ const submit = handleSubmit(async (values) => {
     fd.append('signatureBeat', values.signatureBeat)
     fd.append('signatureNote', values.signatureNote)
     // 待編輯
-    fd.append('scoreHiHat')
+    // 先以JSON 字串形式傳送到後端，後端再處理
+    fd.append('scoreHiHat', JSON.stringify(values.scoreHiHat))
+    fd.append('scoreSnare', JSON.stringify(values.scoreSnare))
+    fd.append('scoreKick', JSON.stringify(values.scoreKick))
 
     // 新增樂譜
     await apiAuth.post('/song', fd)
@@ -282,151 +431,65 @@ const submit = handleSubmit(async (values) => {
   }
 })
 
-// 樂譜部分-------------------------------------------------------------------------
-// 使用的變數--------------
-// 整個譜裡有幾個小節 ***以下三個值應該要可以變動（待編輯）*****
-const sections = 1
-// 一個小節有幾拍 (常見4拍)
-// 更改初始值的signatureBeat會變化，但沒辦法及時變化，推測是因為這邊的signatureBeat還沒傳到後端？****待編輯****
-const beats = signatureBeat.value.value
-// 以幾分音符為一拍（相當於切成 division / 4 份）
-const divisions = 16
-
-// 全譜--------------------
-// hiHat
-const scoreHiHat = ref(
-  // 整個譜裡有 sections 個小節
-  Array.from({ length: sections }, () =>
-    // 每個小節裡有 beats 拍
-    Array.from({ length: beats }, () =>
-    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
-      Array.from({ length: divisions / 4 }, () =>
-        // 每個預設值為false
-        false
-      )
-    )
-  )
-)
-// 小鼓
-const scoreSnare = ref(
-  // 整個譜裡有 sections 個小節
-  Array.from({ length: sections }, () =>
-    // 每個小節裡有 beats 拍
-    Array.from({ length: beats }, () =>
-    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
-      Array.from({ length: divisions / 4 }, () =>
-        // 每個預設值為false
-        false
-      )
-    )
-  )
-)
-// 大鼓全譜
-const scoreKick = ref(
-  // 整個譜裡有 sections 個小節
-  Array.from({ length: sections }, () =>
-    // 每個小節裡有 beats 拍
-    Array.from({ length: beats }, () =>
-    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
-      Array.from({ length: divisions / 4 }, () =>
-        // 每個預設值為false
-        false
-      )
-    )
-  )
-)
-
-// 新增小節function----------------------------------------------------------------
-const addSection = () => {
-  // HiHat------------
-  scoreHiHat.value.push(
-    // 每個小節裡有 beats 拍
-    Array.from({ length: beats }, () =>
-    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
-      Array.from({ length: divisions / 4 }, () =>
-        // 每個預設值為false
-        false
-      )
-    )
-  )
-  // 小鼓--------------
-  scoreSnare.value.push(
-    // 每個小節裡有 beats 拍
-    Array.from({ length: beats }, () =>
-    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
-      Array.from({ length: divisions / 4 }, () =>
-        // 每個預設值為false
-        false
-      )
-    )
-  )
-  // 大鼓------------
-  scoreKick.value.push(
-    // 每個小節裡有 beats 拍
-    Array.from({ length: beats }, () =>
-    // 每拍以 division 分音符為一拍，相當於切成 division / 4 份
-      Array.from({ length: divisions / 4 }, () =>
-        // 每個預設值為false
-        false
-      )
-    )
-  )
-}
-
 </script>
 
 <style scoped lang="scss">
 // 一整列------------------------------------------------------------------------------------------------
-.v-row{
-  display: flex;
-  background: lavenderblush;
-  padding: 0;
-  // 樂器(列)名稱-------------------------------------------------
-  // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
-  .instruments{
-    background: lawngreen;
-    padding: 0;
-    text-align: center;
-
-    .row-name{
-      height: 20%;
-      background: orange;
-      width: 100%;
-    }
-  }
-
-  // 一個小節 ----------------------------------------------------
-  .section{
-    background: lemonchiffon;
-    padding: 0.2rem;
+.v-container{
+  width: 80vw;
+  margin: auto;
+  padding-top: 1rem;
+  .v-row{
     display: flex;
-    flex-direction: column;
-
-    .sectionTitle{
-      background: darkgoldenrod;
-      font-size: 1rem; // 字體大小待編輯
+    background: lavenderblush;
+    padding: 0;
+    // 樂器(列)名稱-------------------------------------------------
+    // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
+    .instruments{
+      background: lawngreen;
       padding: 0;
       text-align: center;
+
+      .row-name{
+        height: 20%;
+        background: orange;
+        width: 100%;
+      }
     }
 
-    // 一個小節裡的所有拍-----------------------------
-    .allBeats{
-      background: darkcyan;
+    // 一個小節 ----------------------------------------------------
+    .section{
+      background: lemonchiffon;
+      padding: 0.2rem;
       display: flex;
-      justify-content: space-around;
-      // 每一拍
-      .beat{
-        padding: 0.2rem;
+      flex-direction: column;
 
-        .beat-title{
-          text-align: center;
-        }
-        .allNoteAreas{
-          .noteArea{
-            display: flex;
-            flex-direction: row;
-          }
+      .sectionTitle{
+        background: darkgoldenrod;
+        font-size: 1rem; // 字體大小待編輯
+        padding: 0;
+        text-align: center;
       }
+
+      // 一個小節裡的所有拍-----------------------------
+      .allBeats{
+        background: darkcyan;
+        display: flex;
+        justify-content: space-around;
+        // 每一拍
+        .beat{
+          padding: 0.2rem;
+
+          .beat-title{
+            text-align: center;
+          }
+          .allNoteAreas{
+            .noteArea{
+              display: flex;
+              flex-direction: row;
+            }
+        }
+        }
       }
     }
   }

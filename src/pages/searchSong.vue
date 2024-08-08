@@ -37,58 +37,6 @@
       <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn>
     </template>
   </v-data-table-server>
-
-  <!-- 以下內容*************待刪除*************************************************** -->
-    <v-table class="bg-primary">
-      <thead class="thead">
-        <tr>
-          <th>歌手/樂團</th>
-          <th>歌名</th>
-          <th>曲風</th>
-          <th>BPM</th>
-          <th>難易度</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="song in songs"
-          :key="song.name"
-        >
-          <td>{{ song.singer }}</td>
-          <td>{{ song.songTitle }}</td>
-          <td>{{ song.songStyle }}</td>
-          <td>{{ song.BPM }}</td>
-          <td>{{ song.degreen }}</td>
-          <td>
-            <!-- 我的鼓譜 ***待編輯***-------------------- -->
-            <!-- 已發布 -->
-            <!-- v-if的路由待編輯 -->
-            <div id="postingTools" class="toolBtns" v-if="route.path==='/myScore'">
-              <!-- elevation="0"是去除v-btn預設的陰影 -->
-              <!-- 鎖起來的 -->
-              <v-btn elevation="0" prepend-icon=" mdi-lock"></v-btn>
-              <!-- 沒鎖的 -->
-              <v-btn elevation="0" prepend-icon=" mdi-lock-open-variant"></v-btn>
-              <!-- 觀看鼓譜 -->
-              <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline"></v-btn>
-              <!-- 刪除 -->
-              <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" to="/watchScore"></v-btn>
-            </div>
-
-            <!-- 草稿匣***待編輯*** -->
-            <!-- v-if的路由待編輯 -->
-            <div id="editScoreTools" class="toolBtns" v-if="route.path==='/myScore'">
-              <!-- elevation="0"是去除v-btn預設的陰影 -->
-              <!-- 編輯鼓譜 -->
-              <v-btn elevation="0" prepend-icon=" mdi-pencil" to="/editScore"></v-btn>
-              <!-- 刪除鼓譜 -->
-              <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline"></v-btn>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
   </v-container>
 </template>
 
