@@ -15,8 +15,7 @@
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       </template>
 
-      <!-- 電腦版按鈕 -->
-      <!-- 靠右待編輯************************ -->
+      <!-- 電腦版按鈕----------------------------------------------------------- -->
       <template v-else>
         <template v-for="item in navItems" :key="item.to">
           <v-btn
@@ -31,8 +30,12 @@
         <!-- 註冊/登入按鈕
              沒登入才會顯示-->
         <logIn v-if="!user.isLogin"></logIn>
-        <!-- 登出按鈕
-             有登入才會顯示 -->
+        <!-- 登入的使用者、登出按鈕：有登入才會顯示 -->
+        <!-- 排版****待編輯**** -->
+        <span v-if="user.isLogin">
+          <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
+          {{ nowAccount }}
+        </span>
         <v-btn prepend-icon="mdi-account-arrow-right" v-if="user.isLogin" @click="logout">登出</v-btn>
       </template>
     </v-container>
@@ -71,6 +74,10 @@
     <!-- 登出按鈕
          有登入才會顯示 -->
     <v-list-item v-if="user.isLogin" @click="logout" title="登出"></v-list-item>
+    <span v-if="user.isLogin">
+      <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
+      {{ nowAccount }}
+    </span>
   </v-navigation-drawer>
   <!-- 主要內容 -->
   <v-main>
@@ -82,7 +89,7 @@
 import { ref, computed } from 'vue'
 // 引入斷點
 import { useDisplay } from 'vuetify'
-// 引入store
+// 引入store，可取得當下的使用者
 import { useUserStore } from '@/stores/user'
 // 引入自定義的元件
 import hoverMenu from '@/components/bar/hoverMenu'
@@ -93,7 +100,12 @@ import { useSnackbar } from 'vuetify-use-dialog'
 import { useRouter } from 'vue-router'
 
 const { mobile } = useDisplay() // 手機斷點
+
 const user = useUserStore() // 引入 store
+// 取得當下的使用者
+const nowAccount = user.account
+const nowIcon = user.icon
+
 const createSnackbar = useSnackbar() // 彈出對話框
 const router = useRouter() // 跳到其他分頁用
 

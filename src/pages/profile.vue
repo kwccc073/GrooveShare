@@ -12,7 +12,7 @@
     </v-row>
 
     <v-btn color="green" @click="openDialog(null)">修改個人檔案</v-btn>
-    <v-dialog v-model="dialog.open" persistent width="500">
+    <v-dialog v-model="isOpen" persistent width="500">
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <v-card>
@@ -54,7 +54,7 @@
         </v-card-text>
         <v-card-actions>
           <!-- :loading="isSubmitting" 表示送出的時候會轉圈，避免重複點擊 -->
-          <v-btn color="red" :loading="isSubmitting" @click="closeDialog">取消</v-btn>
+          <v-btn color="red" :loading="isSubmitting" @click="isOpen = false">取消</v-btn>
           <v-btn color="green" type="submit" :loading="isSubmitting">送出</v-btn>
         </v-card-actions>
       </v-card>
@@ -122,13 +122,11 @@ const memberItems = ref([
 ])
 
 // 視窗------------------------------------
-const dialog = ref({
-  open: false // 預設對話框現在是關閉的狀態
-})
+const isOpen = ref(false) // 決定對話框是否開啟
 
-// 打開視窗******item待確認要不要放******
+// 打開視窗 funtion******item待確認要不要放******
 const openDialog = async (item) => {
-  dialog.value.open = true
+  isOpen.value = true
 
   // 打開後代入store中的使用者資料
   account.value.value = user.account // 同一個使用者會固定帳號，不得修改
@@ -138,11 +136,6 @@ const openDialog = async (item) => {
   // 密碼待編輯
   // password.value.value = ''
   // passwordConfirm.value.value = ''
-}
-
-// 關閉視窗
-const closeDialog = () => {
-  dialog.value.open = false // dialog.value.open決定對話框是否開啟
 }
 
 const schema = yup.object({
@@ -236,7 +229,7 @@ const submit = handleSubmit(async (values) => {
     })
 
     router.go(0) // 重新加載當前的路由
-    closeDialog() // 關閉視窗
+    isOpen.value = false // 關閉視窗
   } catch (error) {
     console.log(error)
     createSnackbar({

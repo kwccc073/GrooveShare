@@ -134,7 +134,6 @@ import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import TrainingRoomTable from '@/components/TrainingRoomTable'
 
 definePage({
   meta: {

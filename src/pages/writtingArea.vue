@@ -388,7 +388,8 @@ const submit = handleSubmit(async (values) => {
     fd.append('scoreHiHat', JSON.stringify(values.scoreHiHat))
     fd.append('scoreSnare', JSON.stringify(values.scoreSnare))
     fd.append('scoreKick', JSON.stringify(values.scoreKick))
-    fd.append('isPublic', JSON.stringify(values.isPublic))
+    fd.append('isPublic', values.isPublic)
+    console.log('isPublic的資料型態為', typeof (values.isPublic))
 
     // 新增樂譜
     await apiAuth.post('/song', fd)

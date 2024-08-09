@@ -39,7 +39,7 @@ const saveSong = async () => {
     return
   }
   loading.value = true // 還沒跑完的時候loading為true
-  const result = await user.saveSong(props._id, 1)
+  const result = await user.saveSong(props._id)
   createSnackbar({
     text: result.text,
     snackbarProps: {

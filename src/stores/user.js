@@ -14,7 +14,7 @@ export const useUserStore = defineStore('user', () => {
   const icon = ref('')
   const id = ref('')
   // const role = ref(UserRole.USER) // 使用者
-  // const cart = ref(0)
+  const saving = ref(0)
 
   // 是否登入
   const isLogin = computed(() => {
@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', () => {
       icon.value = data.result.icon
       id.value = data.result.id
       // role.value = data.result.role
-      // cart.value = data.result.cart
+      saving.value = data.result.saving
       console.log(data.result) // 只有出現token和account
       return '登入成功'
     } catch (error) {
@@ -59,7 +59,7 @@ export const useUserStore = defineStore('user', () => {
       console.log('store:' + data.result.icon)
       // id.value = data.result._id ***待編輯****
       // role.value = data.result.role
-      // cart.value = data.result.cart
+      saving.value = data.result.saving
     } catch (error) {
       // 錯誤的話把東西清空
       token.value = ''
@@ -68,7 +68,7 @@ export const useUserStore = defineStore('user', () => {
       icon.value = ''
       id.value = ''
       // role.value = UserRole.USER
-      // cart.value = 0
+      saving.value = 0
     }
   }
 
@@ -88,31 +88,31 @@ export const useUserStore = defineStore('user', () => {
     icon.value = ''
     id.value = ''
     // role.value = UserRole.USER
-    // cart.value = 0
+    saving.value = 0
   }
 
-  // const addCart = async (product, quantity) => {
-  //   try {
-  //     const { data } = await apiAuth.patch('/user/cart', {
-  //       product, quantity
-  //     })
-  //     cart.value = data.result
-  //     return {
-  //       color: 'green',
-  //       text: '成功'
-  //     }
-  //   } catch (error) {
-  //     return {
-  //       color: 'red',
-  //       text: error?.response?.data?.message || '發生錯誤，請稍後再試'
-  //     }
-  //   }
-  // }
+  // *****0809**********從這裡開始編輯*********
+  const saveSong = async (songId) => {
+    try {
+      // const { data } = await apiAuth.patch('/user/song', 要傳送的數據)
+      const { data } = await apiAuth.patch('/user/song', songId)
+      songId.value = data.result
+      return {
+        color: 'green',
+        text: '收藏歌曲成功-stores'
+      }
+    } catch (error) {
+      return {
+        color: 'red',
+        text: error?.response?.data?.message || '發生錯誤，請稍後再試'
+      }
+    }
+  }
 
   // const checkout = async () => {
   //   try {
   //     await apiAuth.post('/order')
-  //     cart.value = 0
+  //     saving.value = 0
   //     return {
   //       color: 'green',
   //       text: '成功'
@@ -132,13 +132,13 @@ export const useUserStore = defineStore('user', () => {
     icon,
     id,
     // role,
-    // cart,
+    saving,
     isLogin,
     // isAdmin,
     login,
     profile,
     logout,
-    // addCart,
+    saveSong,
     // checkout
   }
 }, {
