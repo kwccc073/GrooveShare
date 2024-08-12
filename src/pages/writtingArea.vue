@@ -6,88 +6,92 @@
       </v-col>
     </v-row>
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
-        <!-- 歌曲基本資料-------------------------------------------------------------------------- -->
-        <v-row>
-          <v-col cols="12" md="6">
-            <span>演奏/演唱者：</span>
-            <!-- 步驟5. 綁定欄位的 v-model、:error-messages -->
-            <v-text-field
-              placeholder="請輸入演奏/演唱者"
-              v-model="singer.value.value"
-              :error-messages="singer.errorMessage.value"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <span>歌名：</span>
-            <v-text-field
-              placeholder="請輸入歌名"
-              v-model="songTitle.value.value"
-              :error-messages="songTitle.errorMessage.value"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="3">
-            <span>曲風：</span>
-            <!-- v-autocomplete 是可以打字的下拉選單
+      <!-- 歌曲基本資料-------------------------------------------------------------------------- -->
+      <v-row id="songInformation">
+        <v-col cols="12" md="6">
+          <span>演奏/演唱者：</span>
+          <!-- 步驟5. 綁定欄位的 v-model、:error-messages -->
+          <v-text-field
+            placeholder="請輸入演奏/演唱者"
+            v-model="singer.value.value"
+            :error-messages="singer.errorMessage.value"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <span>歌名：</span>
+          <v-text-field
+            placeholder="請輸入歌名"
+            v-model="songTitle.value.value"
+            :error-messages="songTitle.errorMessage.value"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="3">
+          <span>曲風：</span>
+          <!-- v-autocomplete 是可以打字的下拉選單
                  :items放選項的陣列-->
-            <v-autocomplete
-              label="請選擇曲風"
-              :items="songStylies"
-              v-model="songStyle.value.value"
-              :error-messages="songStyle.errorMessage.value"
-            ></v-autocomplete>
-          </v-col>
-          <v-col cols="12" md="3">
-            <span>BPM：</span>
-            <v-text-field
-              placeholder="請輸入BPM"
-              type="number" min="0"
-              v-model="BPM.value.value"
-              :error-messages="BPM.errorMessage.value"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="3">
-            <span>拍號：</span>
-            <!-- 一個小節幾拍 -->
-            <!-- @update:modelValue="" 用來監測此值的變化 -->
-            <v-select
-              :items="signatureBeats"
-              v-model="signatureBeat.value.value"
-              :disabled="isDisabled"
-            ></v-select>
-            <!-- 以幾分音符為一拍 -->
-            <v-select
-              :items="signatureNotes"
-              v-model="signatureNote.value.value"
-              :disabled="isDisabled"
-            ></v-select>
-          </v-col>
-          <v-col cols="3">
-            <v-checkbox
+          <v-autocomplete
+            label="請選擇曲風"
+            :items="songStylies"
+            v-model="songStyle.value.value"
+            :error-messages="songStyle.errorMessage.value"
+          ></v-autocomplete>
+        </v-col>
+        <v-col cols="12" md="3">
+          <span>BPM：</span>
+          <v-text-field
+            placeholder="請輸入BPM"
+            type="number" min="0"
+            v-model="BPM.value.value"
+            :error-messages="BPM.errorMessage.value"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="3" id="signature">
+          <span>拍號：</span>
+          <!-- 一個小節幾拍 -->
+          <!-- @update:modelValue="" 用來監測此值的變化 -->
+          <v-select
+            :items="signatureBeats"
+            v-model="signatureBeat.value.value"
+            :disabled="isDisabled"
+          ></v-select>
+          <span>/</span>
+          <!-- 以幾分音符為一拍 -->
+          <v-select
+            :items="signatureNotes"
+            v-model="signatureNote.value.value"
+            :disabled="isDisabled"
+          ></v-select>
+        </v-col>
+        <v-col cols="3">
+          <v-checkbox
             label="公開"
             v-model="isPublic.value.value"
             @change="console.log(isPublic.value.value)"
           ></v-checkbox>
-          </v-col>
-        </v-row>
-        <!-- 樂譜部分-------------------------------------------- -->
-        <v-row>
-          <v-col cols="12">
-            <v-btn @click="start()" :disabled="isDisabled">開始寫譜</v-btn>
-          </v-col>
-        </v-row>
-        <v-row class="h-100" v-for="(section, sectionIndex) in scoreHiHat.value.value" :key="sectionIndex">
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" id="btns">
+          <v-btn @click="start()" :disabled="isDisabled">開始寫譜</v-btn>
+          <v-btn @click="addSection()" :disabled="!isDisabled">新增小節</v-btn>
+          <v-btn type="submit" :loading="isSubmitting" :disabled="!isDisabled">上傳鼓譜</v-btn>
+        </v-col>
+      </v-row>
+      <!-- 樂譜部分-------------------------------------------- -->
+      <v-row id="scoreArea" class="h-100" >
+        <template v-for="(section, sectionIndex) in scoreHiHat.value.value" :key="sectionIndex">
           <!--  樂器(列)名稱------------------------------------- -->
-          <v-col cols="2" class="instruments w-100 bg-black">
+          <!-- 最大尺寸時，sectionIndex%2==0"的時候才顯示 -->
+          <!-- 其他小尺寸則全都要顯示****待編輯**** -->
+          <v-col cols="2" class="instruments w-100" v-if="sectionIndex%2==0">
             <div class="row-name"></div>
             <div class="row-name"></div>
             <div class="row-name">Hi-Hat</div>
-            <div class="row-name">snare (小鼓)</div>
-            <div class="row-name">kick (大鼓)</div>
+            <div class="row-name">小鼓</div>
+            <div class="row-name">大鼓</div>
           </v-col>
           <!-- 小節 -->
-          <v-col cols="10" lg="5" class="section">
+          <v-col cols="10" md="5" class="section">
             <div class="sectionTitle">第{{sectionIndex+1}}小節</div>
             <div class="allBeats">
             <!-- 一拍------------------------------------------------------------ -->
@@ -95,53 +99,48 @@
                 <div class="beat-title">第 {{beatIndex + 1}} 拍</div>
                 <div class="allNoteAreas">
                   <!-- HiHat------------------------------------->
-                  <div id="HiHat-area" class="noteArea w-100 bg-info d-flex">
-                    <v-checkbox
-                      class="n-HiHat-note"
-                      v-for="(HiHat, HiHatIndex) in beat"
-                      :key="HiHatIndex"
-                      :value="true"
-                      v-model="scoreHiHat.value.value[sectionIndex][beatIndex][HiHatIndex]"
-                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${HiHatIndex+1}`,scoreHiHat.value.value[sectionIndex][beatIndex][HiHatIndex])"
-                      >
-                    </v-checkbox>
+                  <div id="HiHat-area" class="noteArea w-100 d-flex">
+                  <v-checkbox
+                    class="n-HiHat-note"
+                    v-for="(HiHat, HiHatIndex) in beat"
+                    :key="HiHatIndex"
+                    :value="true"
+                    v-model="scoreHiHat.value.value[sectionIndex][beatIndex][HiHatIndex]"
+                    @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${HiHatIndex+1}`,scoreHiHat.value.value[sectionIndex][beatIndex][HiHatIndex])"
+                    >
+                  </v-checkbox>
                   </div>
                   <!-- 小鼓------------------------------------->
-                  <div id="snare-area" class="noteArea w-100 bg-secondary d-flex">
-                    <v-checkbox
-                      class="n-snare-note"
-                      v-for="(snare, snareIndex) in beat"
-                      :key="snareIndex"
-                      :value="true"
-                      v-model="scoreSnare.value.value[sectionIndex][beatIndex][snareIndex]"
-                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${snareIndex+1}`,scoreSnare.value.value[sectionIndex][beatIndex][snareIndex])"
-                      >
-                    </v-checkbox>
+                  <div id="snare-area" class="noteArea w-100  d-flex">
+                  <v-checkbox
+                    class="n-snare-note"
+                    v-for="(snare, snareIndex) in beat"
+                    :key="snareIndex"
+                    :value="true"
+                    v-model="scoreSnare.value.value[sectionIndex][beatIndex][snareIndex]"
+                    @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${snareIndex+1}`,scoreSnare.value.value[sectionIndex][beatIndex][snareIndex])"
+                    >
+                  </v-checkbox>
                   </div>
                   <!-- 大鼓------------------------------------->
                   <!-- scoreKick[第X小節][第X拍][第X拍的第X部分] -->
-                  <div id="kick-area" class="noteArea w-100 bg-white d-flex">
-                    <v-checkbox
-                      class="n-kick-note"
-                      v-for="(kick, kickIndex) in beat"
-                      :key="kickIndex"
-                      :value="true"
-                      v-model="scoreKick.value.value[sectionIndex][beatIndex][kickIndex]"
-                      @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${kickIndex+1}`,scoreKick.value.value[sectionIndex][beatIndex][kickIndex])"
-                      >
-                    </v-checkbox>
+                  <div id="kick-area" class="noteArea w-100 d-flex">
+                  <v-checkbox
+                    class="n-kick-note"
+                    v-for="(kick, kickIndex) in beat"
+                    :key="kickIndex"
+                    :value="true"
+                    v-model="scoreKick.value.value[sectionIndex][beatIndex][kickIndex]"
+                    @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${kickIndex+1}`,scoreKick.value.value[sectionIndex][beatIndex][kickIndex])"
+                    >
+                  </v-checkbox>
                   </div>
                 </div>
               </div>
             </div>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-btn @click="addSection()" :disabled="!isDisabled">新增小節 sections</v-btn>
-            <v-btn type="submit" :loading="isSubmitting" :disabled="!isDisabled">儲存</v-btn>
-          </v-col>
-        </v-row>
+        </template>
+      </v-row>
     </v-form>
   </v-container>
 </template>
@@ -160,6 +159,8 @@ import * as yup from 'yup'
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
+// 跳轉分頁用
+import { useRouter } from 'vue-router'
 
 definePage({
   meta: {
@@ -175,6 +176,8 @@ const createSnackbar = useSnackbar()
 // 取得當前使用者資料
 const user = useUserStore()
 const account = user.account
+
+const router = useRouter() // 跳到其他分頁用
 
 // 歌曲基本資訊部分-----------------------------------------------------------------
 // 選項（跟後端相同）--------------------------
@@ -401,6 +404,7 @@ const submit = handleSubmit(async (values) => {
         color: 'green'
       }
     })
+    router.push('/myScore')
   } catch (error) {
     console.log(error)
     createSnackbar({
@@ -421,47 +425,88 @@ const submit = handleSubmit(async (values) => {
   margin: auto;
   padding-top: 1rem;
 
-  .v-row{
+  #songInformation{
+    .v-col{
+      // 只有公開的部分有成功套用***待編輯***
+      display: flex;
+      // flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      // background: chartreuse;
+
+      // .v-select{
+      //   display: inline-block;
+      //   width: 50%;
+      // }
+    }
+    // 拍號
+    #signature{
+      display: flex;
+      justify-content: center;
+      align-content: center;
+
+      .v-select{
+        display: inline-block;
+        width: 30%;
+        height: 30%;
+      }
+    }
+  }
+
+  #btns{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+  // 樂譜部分--------------------------------------------------------------------
+  #scoreArea{
     display: flex;
-    background: lavenderblush;
+    // background: lavenderblush;
+    border: 1px solid black;
     padding: 0;
-    text-align: center;
+    // text-align: center;
+
     // 樂器(列)名稱-------------------------------------------------
     // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
     .instruments{
-      background: lawngreen;
+      // background: lawngreen;
       padding: 0;
       text-align: center;
 
       .row-name{
         height: 20%;
-        background: orange;
+        // background: orange;
+        // border: 1px solid black;
         width: 100%;
       }
     }
 
     // 一個小節 ----------------------------------------------------
     .section{
-      background: lemonchiffon;
+      // background: lemonchiffon;
       padding: 0.2rem;
       display: flex;
       flex-direction: column;
 
       .sectionTitle{
-        background: darkgoldenrod;
-        font-size: 1rem; // 字體大小待編輯
+        // background: darkgoldenrod;
+        border: 1px solid black;
+        // font-size: 1rem; // 字體大小待編輯
         padding: 0;
         text-align: center;
       }
 
       // 一個小節裡的所有拍-----------------------------
       .allBeats{
-        background: darkcyan;
+        // background: darkcyan;
+        border: 1px solid black;
         display: flex;
         justify-content: space-around;
         // 每一拍
         .beat{
           padding: 0.2rem;
+          border: 1px solid black;
 
           .beat-title{
             text-align: center;
@@ -470,6 +515,7 @@ const submit = handleSubmit(async (values) => {
             .noteArea{
               display: flex;
               flex-direction: row;
+              border: 1px solid black;
             }
         }
         }
@@ -477,4 +523,68 @@ const submit = handleSubmit(async (values) => {
     }
   }
 }
+// .v-container{
+//   width: 80vw;
+//   margin: auto;
+//   padding-top: 1rem;
+
+//   .v-row{
+//     display: flex;
+//     background: lavenderblush;
+//     padding: 0;
+//     // text-align: center;
+//     // 樂器(列)名稱-------------------------------------------------
+//     // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
+
+
+
+//     .instruments{
+//       background: lawngreen;
+//       padding: 0;
+//       text-align: center;
+
+//       .row-name{
+//         height: 20%;
+//         background: orange;
+//         width: 100%;
+//       }
+//     }
+
+//     // 一個小節 ----------------------------------------------------
+//     .section{
+//       background: lemonchiffon;
+//       padding: 0.2rem;
+//       display: flex;
+//       flex-direction: column;
+
+//       .sectionTitle{
+//         background: darkgoldenrod;
+//         font-size: 1rem; // 字體大小待編輯
+//         padding: 0;
+//         text-align: center;
+//       }
+
+//       // 一個小節裡的所有拍-----------------------------
+//       .allBeats{
+//         background: darkcyan;
+//         display: flex;
+//         justify-content: space-around;
+//         // 每一拍
+//         .beat{
+//           padding: 0.2rem;
+
+//           .beat-title{
+//             text-align: center;
+//           }
+//           .allNoteAreas{
+//             .noteArea{
+//               display: flex;
+//               flex-direction: row;
+//             }
+//         }
+//         }
+//       }
+//     }
+//   }
+// }
 </style>

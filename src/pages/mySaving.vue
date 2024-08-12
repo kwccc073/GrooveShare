@@ -1,52 +1,50 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <breadcrumbs></breadcrumbs>
-      </v-col>
-      <v-col cols="12">
-        <v-data-table-server
-          v-model:items-per-page="tableItemsPerPage"
-          v-model:sort-by="tableSortBy"
-          v-model:page="tablePage"
-          :items="tableItems"
-          :headers="tableHeaders"
-          :loading="tableLoading"
-          :items-length="tableItemsLength"
-          :search="tableSearch"
-          @update:items-per-page="tableLoadItems(false)"
-          @update:sort-by="tableLoadItems(false)"
-          @update:page="tableLoadItems(false)"
-          hover>
-            <template #top>
-              <v-text-field
-                label="搜尋（請輸入演唱/演奏者、歌名或曲風）"
-                v-model="tableSearch"
-                append-icon="mdi-magnify"
-                @click-append="tableLoadItems(true)"
-                @keydown.enter="tableLoadItems(true)"
-              ></v-text-field>
-            </template>
-            <!-- 操作按鈕 ****我的收藏page也會有這幾個按鈕****---------- -->
-            <template #[`item.action`]="{ item }">
-              <!-- elevation="0"是去除v-btn預設的陰影 -->
-              <!-- @click="openDialog(item)" 此屬性待加上去********************* -->
-              <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
-              <template v-if="nowAccount !== item.editor">
-                <!-- 已收藏和未收藏用v-if決定顯示哪個****待編輯**** -->
-                <!-- 未收藏 -->
-                <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline"></v-btn>
-                <!-- 已收藏 -->
-                <!-- <v-btn elevation="0" prepend-icon=" mdi-cards-heart"></v-btn> -->
-              </template>
-              <!-- 觀看鼓譜 -->
-              <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
-              <!-- 下載 -->
-              <!-- <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn> -->
-            </template>
-          </v-data-table-server>
-        </v-col>
-    </v-row>
+    <breadcrumbs></breadcrumbs>
+    <v-data-table-server
+      v-model:items-per-page="tableItemsPerPage"
+      v-model:sort-by="tableSortBy"
+      v-model:page="tablePage"
+      :items="tableItems"
+      :headers="tableHeaders"
+      :loading="tableLoading"
+      :items-length="tableItemsLength"
+      :search="tableSearch"
+      @update:items-per-page="tableLoadItems(false)"
+      @update:sort-by="tableLoadItems(false)"
+      @update:page="tableLoadItems(false)"
+      hover>
+    <template #top>
+      <v-text-field
+        label="搜尋（請輸入演唱/演奏者、歌名或曲風）"
+        v-model="tableSearch"
+        append-icon="mdi-magnify"
+        @click-append="tableLoadItems(true)"
+        @keydown.enter="tableLoadItems(true)"
+      ></v-text-field>
+    </template>
+
+    <!-- 公開狀態 -->
+    <!-- <template #[`item.isPublic`]="{ value }"> -->
+      <!-- 公開－true -->
+      <!-- <v-btn elevation="0" icon="mdi-lock-open-variant" v-if="value" @click="changeIsPublic(value)"></v-btn> -->
+      <!-- 隱私－false -->
+      <!-- <v-btn elevation="0" icon="mdi-lock" v-else @click="changeIsPublic(value)"></v-btn> -->
+    <!-- </template> -->
+
+    <!-- 操作按鈕 ****我的收藏page也會有這幾個按鈕****---------- -->
+    <template #[`item.action`]="{ item }">
+      <!-- elevation="0"是去除v-btn預設的陰影 -->
+      <!-- @click="openDialog(item)" 此屬性待加上去********************* -->
+      <!-- 已收藏 ***滑過去要顯示收藏OR取消收藏，待編輯***-->
+      <!-- 參考：https://vuetifyjs.com/en/components/menus/#activator-and-tooltip 的 v-tooltip -->
+      <v-btn elevation="0" prepend-icon=" mdi-cards-heart"></v-btn>
+      <!-- 觀看鼓譜 -->
+      <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
+      <!-- 下載 -->
+      <!-- <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn> -->
+    </template>
+  </v-data-table-server>
   </v-container>
 </template>
 
@@ -61,23 +59,23 @@ import { useSnackbar } from 'vuetify-use-dialog'
 import { useApi } from '@/composables/axios'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-// 引入store，可取得當下的使用者
+// store－用於取得現在的使用者
 import { useUserStore } from '@/stores/user'
 
 definePage({
   meta: {
-    title: '尋找鼓譜',
-    login: false
+    title: '我的收藏',
+    login: true
   }
 })
+
+// 進到網頁會先顯示原本的資料-------------------------***目前寫法抓不到頭貼，待編輯***
+// router裡面有寫到：一進網頁會先取得使用者資料
+const user = useUserStore()
 
 const route = useRoute() // 取得現在的路由
 const createSnackbar = useSnackbar() // 彈出對話框
 const { apiAuth } = useApi() // 取出apiAuth（要做請求都要做這個）
-
-const user = useUserStore() // 引入 store
-// 取得當下的使用者
-const nowAccount = user.account
 
 // 一頁顯示幾個
 const tableItemsPerPage = ref(10)
@@ -102,6 +100,7 @@ const tableHeaders = [
   { title: 'BPM', align: 'center', sortable: true, key: 'BPM' },
   { title: '建立者', align: 'center', sortable: false, key: 'editor' },
   // { title: '難易度', align: 'center', sortable: true, key: 'sell' },
+  { title: '公開', align: 'center', sortable: false, key: 'isPublic' },
   { title: '', align: 'center', sortable: false, key: 'action' }
 ]
 // 預設剛點進來的時候會是載入狀態
@@ -118,23 +117,22 @@ const tableLoadItems = async (reset) => {
   try {
     // 取得表格資料
     // 設定get參數：.get(網址,請求的設定) ***get無送出的資料***
-    const { data } = await apiAuth.get('/song/all', {
+    const { data } = await apiAuth.get('/user/saving', {
       params: {
         page: tablePage.value,
         itemsPerPage: tableItemsPerPage.value,
         sortBy: tableSortBy.value[0]?.key || 'createdAt',
         sortOrder: tableSortBy.value[0]?.order || 'desc',
-        search: tableSearch.value
+        search: tableSearch.value,
+        user: user.account
       }
     })
-    // 從0開始刪除, 所有東西, 把回來的資料放進去
-    tableItems.value.splice(0, tableItems.value.length, ...data.result.data)
-    // 陣列的長度
-    tableItemsLength.value = data.result.total
+    console.log(data.result)
+    tableItems.value = data.result[0]
   } catch (error) {
     console.log(error)
     createSnackbar({
-      text: error?.response?.data?.message || '發生錯誤',
+      text: error?.response?.data?.message || '發生錯誤-mySave',
       snackbarProps: {
         color: 'red'
       }
@@ -144,6 +142,7 @@ const tableLoadItems = async (reset) => {
 }
 
 tableLoadItems() // 第一次進來一定要呼叫
+
 </script>
 
 <style scoped lang="scss">

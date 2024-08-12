@@ -29,10 +29,13 @@
           ></v-text-field>
           <v-btn type="submit" :loading="isSubmitting">登入</v-btn>
         </v-form>
-        <p>尚未註冊會員？</p>
-        <!-- 註冊按鈕位置待調整 -->
-        <register></register>
+        <div>
+          <span>尚未註冊會員？</span>
+          <!-- 註冊按鈕位置待調整 -->
+          <register></register>
+        </div>
       </v-card-text>
+
       </v-card>
     </v-dialog>
   </div>
@@ -104,7 +107,7 @@ const submit = handleSubmit(async (values) => {
       }
     })
     // 登入成功會跳到首頁
-    router.push('/')
+    router.push('/profile')
     // 並關閉登入視窗
     logInDialog.value = false
   } else {
@@ -115,9 +118,17 @@ const submit = handleSubmit(async (values) => {
 
 <style scoped lang="scss">
 .v-dialog{
+  // background: violet; // 這是卡片旁邊區塊的顏色
 
   .v-card{
+    // background: cadetblue;
+    text-align: center;
     width: 50vw;
+
+    .v-card-title{
+      font-weight: bold;
+    }
+
   }
 }
 

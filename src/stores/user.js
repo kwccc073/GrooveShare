@@ -14,7 +14,8 @@ export const useUserStore = defineStore('user', () => {
   const icon = ref('')
   const id = ref('')
   // const role = ref(UserRole.USER) // 使用者
-  const saving = ref(0)
+  // 購物車有數量，但收藏歌曲沒有，因此推測這裡應該是空陣列***待編輯***
+  const saving = ref([])
 
   // 是否登入
   const isLogin = computed(() => {
@@ -37,7 +38,7 @@ export const useUserStore = defineStore('user', () => {
       id.value = data.result.id
       // role.value = data.result.role
       saving.value = data.result.saving
-      console.log(data.result) // 只有出現token和account
+      console.log(data.result) // 只有出現token和account（因為登入只會傳這兩個值）
       return '登入成功'
     } catch (error) {
       console.log(error)
@@ -55,11 +56,9 @@ export const useUserStore = defineStore('user', () => {
       email.value = data.result.email
       icon.value = data.result.icon
       id.value = data.result.id
-      console.log('store:' + data.result.id)
-      console.log('store:' + data.result.icon)
-      // id.value = data.result._id ***待編輯****
-      // role.value = data.result.role
       saving.value = data.result.saving
+      // role.value = data.result.role
+      console.log(data.result.saving) // 得到undefined（待編輯）
     } catch (error) {
       // 錯誤的話把東西清空
       token.value = ''
@@ -68,7 +67,7 @@ export const useUserStore = defineStore('user', () => {
       icon.value = ''
       id.value = ''
       // role.value = UserRole.USER
-      saving.value = 0
+      saving.value = []
     }
   }
 
@@ -88,18 +87,25 @@ export const useUserStore = defineStore('user', () => {
     icon.value = ''
     id.value = ''
     // role.value = UserRole.USER
-    saving.value = 0
+    saving.value = []
   }
 
-  // *****0809**********從這裡開始編輯*********
-  const saveSong = async (songId) => {
+  // saveSong相當於上課範例中的addCart
+  const saveSong = async (song) => {
     try {
       // const { data } = await apiAuth.patch('/user/song', 要傳送的數據)
-      const { data } = await apiAuth.patch('/user/song', songId)
-      songId.value = data.result
+      const { data } = await apiAuth.patch('/user/saving', { song })
+      // console.log(data)
+      saving.value = data.result
+      const text = ref('')
+      if (data.isSaving) {
+        text.value = '收藏歌曲成功-stores'
+      } else {
+        text.value = '取消收藏歌曲-stores'
+      }
       return {
         color: 'green',
-        text: '收藏歌曲成功-stores'
+        text: text.value
       }
     } catch (error) {
       return {

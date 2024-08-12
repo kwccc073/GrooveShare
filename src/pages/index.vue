@@ -72,7 +72,7 @@ const songs = ref([]) // 商品
 
 // 載入最新上架的歌曲
 // 目前是取全部歌曲，再由上架時間 (新->舊)排列
-// 改成只取最新的幾首歌曲就好*****待編輯*******
+// 改成只取最新的幾首歌曲*****待編輯*******
 const loadSongs = async () => {
   try {
     const { data } = await api.get('/song/all', {
@@ -86,7 +86,7 @@ const loadSongs = async () => {
     pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE) // 總共幾頁
     // 把songs陣列裡的內容換掉：從第0個開始清除, songs陣列長度個,
     songs.value.splice(0, songs.value.length, ...data.result.data)
-    console.log(songs.value)
+    // console.log(songs.value)
   } catch (error) {
     console.log(error)
     createSnackbar({

@@ -1,7 +1,7 @@
 <template>
   <!-- 參考：https://vuetifyjs.com/en/components/dialogs/#anatomy -->
-  <div class="text-center pa-4">
-    <v-btn @click="registerDiglog = true" variant="text">
+  <div class="text-center pa-4 d-inline-block">
+    <v-btn @click="registerDiglog = true" variant="text" id="clickme">
       點我註冊會員
     </v-btn>
 
@@ -142,14 +142,22 @@ const submit = handleSubmit(async (values) => {
 </script>
 
 <style scoped lang="scss">
+#clickme{
+  color: gray;
+}
+
 .v-dialog{
+  // background: violet; // 這是卡片旁邊區塊的顏色
 
   .v-card{
+    // background: cadetblue;
+    text-align: center;
     width: 50vw;
 
-    #registerBtn{
-      color: skyblue;
+    .v-card-title{
+      font-weight: bold;
     }
+
   }
 }
 

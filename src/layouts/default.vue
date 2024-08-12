@@ -27,6 +27,7 @@
         <!-- 會員專區下拉選單
              要登入才會顯示 -->
         <hoverMenu v-if="user.isLogin"></hoverMenu>
+        <v-btn prepend-icon="mdi-account-arrow-right" v-if="user.isLogin" @click="logout">登出</v-btn>
         <!-- 註冊/登入按鈕
              沒登入才會顯示-->
         <logIn v-if="!user.isLogin"></logIn>
@@ -36,7 +37,6 @@
           <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
           {{ nowAccount }}
         </span>
-        <v-btn prepend-icon="mdi-account-arrow-right" v-if="user.isLogin" @click="logout">登出</v-btn>
       </template>
     </v-container>
   </v-app-bar>
@@ -44,6 +44,12 @@
   <!-- 參考：https://vuetifyjs.com/en/components/navigation-drawers/#caveats -->
   <!-- 改成靠右****待編輯**** -->
   <v-navigation-drawer v-if="mobile" v-model="drawer">
+    <span v-if="user.isLogin">
+      <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
+      {{ nowAccount }}
+    </span>
+    <v-divider></v-divider>
+
     <!-- 非會員專區 -->
     <template v-for="item in navItems" :key="item.to">
       <v-list-item
@@ -74,10 +80,6 @@
     <!-- 登出按鈕
          有登入才會顯示 -->
     <v-list-item v-if="user.isLogin" @click="logout" title="登出"></v-list-item>
-    <span v-if="user.isLogin">
-      <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
-      {{ nowAccount }}
-    </span>
   </v-navigation-drawer>
   <!-- 主要內容 -->
   <v-main>
@@ -124,8 +126,8 @@ const memberItems = computed(() => {
   return [
     { title: '寫譜專區', to: '/writtingArea', prependIcon: 'mdi-pencil-box' },
     { title: '我的鼓譜', to: '/myScore', prependIcon: 'mdi-file-document-outline' },
-    { title: '我的收藏', to: '/mySave', prependIcon: 'mdi-content-save-all-outline' },
-    { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
+    { title: '我的收藏', to: '/mySaving', prependIcon: 'mdi-content-save-all-outline' },
+    // { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
     { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
   ]
 })

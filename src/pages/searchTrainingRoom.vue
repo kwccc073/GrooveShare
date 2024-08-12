@@ -1,15 +1,14 @@
 <template>
   <v-container>
-    <breadcrumbs></breadcrumbs>
-    <!-- 原版－待刪除***************** -->
-    <!-- <TrainingRoomTable></TrainingRoomTable> -->
-
     <v-row>
-      <v-col cols="12">
-        <v-btn color="green" @click="openDialog(null)">新增練鼓室資料</v-btn>
+      <v-col cols="6">
+        <breadcrumbs></breadcrumbs>
       </v-col>
+      <v-col cols="6" id="col-btn">
+        <v-btn @click="openDialog(null)" prepend-icon="mdi-plus">新增練鼓室資料</v-btn>
+      </v-col>
+      <!-- 練鼓室表格--------------------------------------------------------- -->
       <v-col cols="12">
-        <!-- 練鼓室表格--------------------------------------------------------- -->
         <!-- v-data-table-server 是有翻頁、排序功能的表格，使後端只會回傳當下那個頁面的東西（比較不會跑太久） -->
         <!-- 要綁定的屬性
         items-per-page 一頁顯示幾個
@@ -38,6 +37,7 @@
           @update:sort-by="tableLoadItems(false)"
           @update:page="tableLoadItems(false)"
           hover
+          id="table"
         >
         <!-- 特定的東西（如圖片）要修改顯示內容的方式如下---------------------- -->
           <!-- 設定其插槽名稱為top -->
@@ -54,7 +54,7 @@
           <!-- { item }表示原始的東西而不是值**** -->
           <template #[`item.action`]="{ item }">
             <!-- 點擊時打開編輯視窗，並帶入item(這一列的練鼓室資料) -->
-            <v-btn icon="mdi-pencil" variant="text" color="blue" @click="openDialog(item)"></v-btn>
+            <v-btn icon="mdi-pencil" variant="text" @click="openDialog(item)"></v-btn>
           </template>
         </v-data-table-server>
       </v-col>
@@ -62,7 +62,7 @@
   </v-container>
   <!-- 新增/編輯視窗---------------------------------------- -->
   <!-- permanent表示永久固定 -->
-  <v-dialog v-model="dialog.open" persistent width="500">
+  <v-dialog v-model="dialog.open" persistent width="70vw">
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <v-card>
@@ -73,43 +73,59 @@
         </v-card-title>
         <!-- submit功能之步驟5. 綁定欄位的 v-model、:error-messages -->
         <v-card-text>
-          <v-select
-            label="縣市"
-            :items="cities"
-            v-model="city.value.value"
-            :error-messages="city.errorMessage.value"
-          ></v-select>
-          <v-text-field
-            label="地區"
-            v-model="district.value.value"
-            :error-messages="district.errorMessage.value"
-          ></v-text-field>
-          <v-text-field
-            label="地址"
-            v-model="address.value.value"
-            :error-messages="address.errorMessage.value"
-          ></v-text-field>
-          <v-text-field
-            label="名稱"
-            v-model="trainingRoomName.value.value"
-            :error-messages="trainingRoomName.errorMessage.value"
-          ></v-text-field>
-          <v-text-field
-            label="連絡電話"
-            v-model="phoneNumber.value.value"
-            :error-messages="phoneNumber.errorMessage.value"
-          ></v-text-field>
-          <v-select
-            label="預約方式"
-            :items="reservations"
-            v-model="reservation.value.value"
-            :error-messages="reservation.errorMessage.value"
-          ></v-select>
-          <v-text-field
-            label="費用（元/小時）"
-            v-model="fee.value.value"
-            :error-messages="fee.errorMessage.value"
-          ></v-text-field>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-select
+                label="縣市"
+                :items="cities"
+                v-model="city.value.value"
+                :error-messages="city.errorMessage.value"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                label="地區"
+                v-model="district.value.value"
+                :error-messages="district.errorMessage.value"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                label="地址"
+                v-model="address.value.value"
+                :error-messages="address.errorMessage.value"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                label="名稱"
+                v-model="trainingRoomName.value.value"
+                :error-messages="trainingRoomName.errorMessage.value"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                label="連絡電話"
+                v-model="phoneNumber.value.value"
+                :error-messages="phoneNumber.errorMessage.value"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-select
+                label="預約方式"
+                :items="reservations"
+                v-model="reservation.value.value"
+                :error-messages="reservation.errorMessage.value"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                label="費用（元/小時）"
+                v-model="fee.value.value"
+                :error-messages="fee.errorMessage.value"
+              ></v-text-field>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <!-- :loading="isSubmitting" 表示送出的時候會轉圈，避免重複點擊 -->
@@ -385,9 +401,45 @@ tableLoadItems() // 第一次進來一定要呼叫
 </script>
 
 <style scoped lang="scss">
-.V-container{
+.v-container{
   width: 80vw;
   margin: auto;
   padding-top: 1rem;
+
+  .v-row{
+    .v-col{
+
+      .v-data-table{
+        text-align: center; // 沒有整個表格內容都置中**待編輯**
+        // background: gold;
+
+        .v-data-table-header {
+          background: green; // 沒有改到顏色**待編輯**
+        }
+      }
+    }
+    #col-btn{
+      text-align: right;
+    }
+  }
+}
+
+.v-dialog{
+  // background: violet; // 這是卡片旁邊區塊的顏色
+
+  .v-card{
+    // background: cadetblue;
+    text-align: center;
+
+    .v-card-title{
+      font-weight: bold;
+    }
+
+    .v-card-actions{
+      // 沒有置中**待編輯**
+      display: flex;
+      justify-content: center;
+    }
+  }
 }
 </style>

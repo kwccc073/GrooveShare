@@ -1,17 +1,28 @@
 <template>
   <v-container>
-    <breadcrumbs></breadcrumbs>
-    <v-row class="bg-primary">會員功能</v-row>
     <v-row>
-      <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
+      <v-col cols="12">
+        <breadcrumbs></breadcrumbs>
+      </v-col>
+      <v-col cols="6" id="col-profile">
+        <img :src="nowIcon" alt="大頭貼" id="icon">
+        <div id="information">
+          <p>帳號：{{ user.account }}</p>
+          <p>email：{{ nowEmail }}</p>
+          <v-btn @click="openDialog(null)" id="btn-edit">修改個人檔案</v-btn>
+        </div>
+      </v-col>
     </v-row>
+    <v-row class="bg-primary"></v-row>
     <v-row>
-      <v-col cols="12">帳號：{{ user.account }}</v-col>
-      <v-col cols="12">email：{{ nowEmail }}</v-col>
-      <img :src="nowIcon" alt="大頭貼" id="icon">
+      <v-col cols="12" id="memberArea-title">
+        會員專區
+      </v-col>
+      <v-col cols="12">
+        <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
+      </v-col>
     </v-row>
 
-    <v-btn color="green" @click="openDialog(null)">修改個人檔案</v-btn>
     <v-dialog v-model="isOpen" persistent width="500">
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
@@ -116,8 +127,8 @@ const nowIcon = user.icon
 const memberItems = ref([
   { title: '寫譜專區', to: '/writtingArea', prependIcon: 'mdi-pencil-box' },
   { title: '我的鼓譜', to: '/myScore', prependIcon: 'mdi-file-document-outline' },
-  { title: '我的收藏', to: '/mySave', prependIcon: 'mdi-content-save-all-outline' },
-  { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
+  { title: '我的收藏', to: '/mySaving', prependIcon: 'mdi-content-save-all-outline' },
+  // { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
   { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
 ])
 
@@ -247,15 +258,54 @@ const submit = handleSubmit(async (values) => {
 
 <style scoped lang="scss">
 .v-container{
-  width: 80vw;
   margin: auto;
   padding-top: 1rem;
-  background: yellow;
 
-  // 大頭貼
-  #icon{
-    width: 100px;
-    height: 100px;
+  .v-row{
+    .v-col{}
+
+      #col-profile{
+        // background: cadetblue;
+        display: flex;
+        justify-content: space-around;
+        // 大頭貼
+        #icon{
+          width: 100px;
+          height: 100px;
+          background: lightgray;
+        }
+        #information{
+          height: 100%;
+          // background: gold;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+
+          #btn-edit{
+            width: 100%;
+          }
+        }
+      }
+      #memberArea-title{
+        font-weight: bold;
+        text-decoration: underline;
+      }
   }
 }
+
+  .v-card{
+    // background: cadetblue;
+    text-align: center;
+
+    .v-card-title{
+      font-weight: bold;
+    }
+
+    .v-card-actions{
+      // 沒有置中**待編輯**
+      display: flex;
+      justify-content: center;
+    }
+  }
+
 </style>
