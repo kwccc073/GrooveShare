@@ -35,7 +35,7 @@
               <template v-if="nowAccount !== item.editor">
                 <!-- 已收藏和未收藏用v-if決定顯示哪個****待編輯**** -->
                 <!-- 未收藏 -->
-                <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline"></v-btn>
+                <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline" @click="saveSong(item._id)" :loading="loadingSave"></v-btn>
                 <!-- 已收藏 -->
                 <!-- <v-btn elevation="0" prepend-icon=" mdi-cards-heart"></v-btn> -->
               </template>
@@ -144,6 +144,26 @@ const tableLoadItems = async (reset) => {
 }
 
 tableLoadItems() // 第一次進來一定要呼叫
+
+// 收藏歌曲function--------------------------------------------
+const loadingSave = ref(false)
+const saveSong = async (songID) => {
+  // 如果沒有登入
+  if (!user.isLogin) {
+    alert('請先登入帳號')
+    return
+  }
+  loadingSave.value = true // 還沒跑完的時候loading為true
+  const result = await user.saveSong(songID)
+  // console.log(result)
+  createSnackbar({
+    text: result.text,
+    snackbarProps: {
+      color: result.color
+    }
+  })
+  loadingSave.value = false // 跑完的時候loading為false
+}
 </script>
 
 <style scoped lang="scss">

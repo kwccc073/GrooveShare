@@ -9,6 +9,8 @@
       <!-- v-spacer會自動把東西推到右邊 -->
       <v-spacer></v-spacer>
       <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
+      <!-- 如果已經收藏，按鈕文字要改成"取消收藏****待編輯**** -->
+
       <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading" v-if="nowAccount !== editor">收藏歌曲</v-btn>
     </v-card-actions>
   </v-card>

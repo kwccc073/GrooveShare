@@ -99,7 +99,7 @@
                 <div class="beat-title">第 {{beatIndex + 1}} 拍</div>
                 <div class="allNoteAreas">
                   <!-- HiHat------------------------------------->
-                  <div id="HiHat-area" class="noteArea w-100 d-flex">
+                  <div class="HiHat-area noteArea w-100 d-flex">
                   <v-checkbox
                     class="n-HiHat-note"
                     v-for="(HiHat, HiHatIndex) in beat"
@@ -111,7 +111,7 @@
                   </v-checkbox>
                   </div>
                   <!-- 小鼓------------------------------------->
-                  <div id="snare-area" class="noteArea w-100  d-flex">
+                  <div id="" class="snare-area noteArea w-100  d-flex">
                   <v-checkbox
                     class="n-snare-note"
                     v-for="(snare, snareIndex) in beat"
@@ -124,7 +124,7 @@
                   </div>
                   <!-- 大鼓------------------------------------->
                   <!-- scoreKick[第X小節][第X拍][第X拍的第X部分] -->
-                  <div id="kick-area" class="noteArea w-100 d-flex">
+                  <div id="" class="kick-area noteArea w-100 d-flex">
                   <v-checkbox
                     class="n-kick-note"
                     v-for="(kick, kickIndex) in beat"
@@ -523,68 +523,4 @@ const submit = handleSubmit(async (values) => {
     }
   }
 }
-// .v-container{
-//   width: 80vw;
-//   margin: auto;
-//   padding-top: 1rem;
-
-//   .v-row{
-//     display: flex;
-//     background: lavenderblush;
-//     padding: 0;
-//     // text-align: center;
-//     // 樂器(列)名稱-------------------------------------------------
-//     // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
-
-
-
-//     .instruments{
-//       background: lawngreen;
-//       padding: 0;
-//       text-align: center;
-
-//       .row-name{
-//         height: 20%;
-//         background: orange;
-//         width: 100%;
-//       }
-//     }
-
-//     // 一個小節 ----------------------------------------------------
-//     .section{
-//       background: lemonchiffon;
-//       padding: 0.2rem;
-//       display: flex;
-//       flex-direction: column;
-
-//       .sectionTitle{
-//         background: darkgoldenrod;
-//         font-size: 1rem; // 字體大小待編輯
-//         padding: 0;
-//         text-align: center;
-//       }
-
-//       // 一個小節裡的所有拍-----------------------------
-//       .allBeats{
-//         background: darkcyan;
-//         display: flex;
-//         justify-content: space-around;
-//         // 每一拍
-//         .beat{
-//           padding: 0.2rem;
-
-//           .beat-title{
-//             text-align: center;
-//           }
-//           .allNoteAreas{
-//             .noteArea{
-//               display: flex;
-//               flex-direction: row;
-//             }
-//         }
-//         }
-//       }
-//     }
-//   }
-// }
 </style>

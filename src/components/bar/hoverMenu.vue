@@ -7,9 +7,9 @@
         <template v-slot:activator="{ props }">
           <v-btn
             v-bind="props"
-            prepend-icon="mdi-account"
           >
-          會員專區
+          <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
+          {{ nowAccount }}
           </v-btn>
         </template>
 
@@ -30,6 +30,13 @@
 
 <script setup>
 import { ref } from 'vue'
+//  引入store，可取得當下的使用者
+import { useUserStore } from '@/stores/user'
+
+// 取得當下的使用者
+const user = useUserStore()
+const nowAccount = user.account
+const nowIcon = user.icon
 
 const memberItems = ref([
   { title: '寫譜專區', to: '/writtingArea', prependIcon: 'mdi-pencil-box' },

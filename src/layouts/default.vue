@@ -27,16 +27,12 @@
         <!-- 會員專區下拉選單
              要登入才會顯示 -->
         <hoverMenu v-if="user.isLogin"></hoverMenu>
-        <v-btn prepend-icon="mdi-account-arrow-right" v-if="user.isLogin" @click="logout">登出</v-btn>
+        <v-btn v-if="user.isLogin" @click="logout">登出</v-btn>
         <!-- 註冊/登入按鈕
              沒登入才會顯示-->
         <logIn v-if="!user.isLogin"></logIn>
         <!-- 登入的使用者、登出按鈕：有登入才會顯示 -->
         <!-- 排版****待編輯**** -->
-        <span v-if="user.isLogin">
-          <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
-          {{ nowAccount }}
-        </span>
       </template>
     </v-container>
   </v-app-bar>
@@ -44,10 +40,10 @@
   <!-- 參考：https://vuetifyjs.com/en/components/navigation-drawers/#caveats -->
   <!-- 改成靠右****待編輯**** -->
   <v-navigation-drawer v-if="mobile" v-model="drawer">
-    <span v-if="user.isLogin">
-      <img :src="nowIcon" id="icon" style="width: 15px;height: 15px;">
-      {{ nowAccount }}
-    </span>
+    <div v-if="user.isLogin" id="userAccount">
+      <img :src="nowIcon" id="icon" style="width: 40px;height: 40px;">
+      <span>{{ nowAccount }}</span>
+    </div>
     <v-divider></v-divider>
 
     <!-- 非會員專區 -->
@@ -147,4 +143,11 @@ const logout = async () => {
 </script>
 
 <style>
+.v-navigation-drawer{
+
+  #userAccount{
+    display: flex;
+    align-items: center;
+  }
+}
 </style>

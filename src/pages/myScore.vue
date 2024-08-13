@@ -147,6 +147,7 @@ tableLoadItems() // 第一次進來一定要呼叫
 // 切換隱私狀態的funtion*****待編輯*****
 const changeIsPublic = (value) => {
 }
+// 刪除歌曲function*****待編輯*****
 </script>
 
 <style scoped lang="scss">
