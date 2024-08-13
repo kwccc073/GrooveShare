@@ -72,7 +72,6 @@ definePage({
 // 進到網頁會先顯示原本的資料-------------------------***目前寫法抓不到頭貼，待編輯***
 // router裡面有寫到：一進網頁會先取得使用者資料
 const user = useUserStore()
-console.log(user.saving) // [收藏的歌曲id]
 
 const router = useRouter() // 取得現在的路由
 const createSnackbar = useSnackbar() // 彈出對話框
@@ -128,7 +127,7 @@ const tableLoadItems = async (reset) => {
         user: user.account
       }
     })
-    console.log(data.result)
+    // console.log(data.result)
     tableItems.value = data.result[0]
   } catch (error) {
     console.log(error)

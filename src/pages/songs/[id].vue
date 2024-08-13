@@ -37,7 +37,10 @@
             </v-form> -->
             <v-btn color="green" prepend-icon="mdi-pencil-outline" @click="editSong(null)" v-if="nowAccount === song.editor">編輯</v-btn>
             <!-- 如果已經收藏，按鈕文字要改成"取消收藏****待編輯**** -->
-            <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loadingSave" v-else>收藏</v-btn>
+            <template v-else>
+              <v-btn color="primary" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loadingSave" v-if="song.isSaved">取消收藏</v-btn>
+              <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loadingSave" v-else>收藏</v-btn>
+            </template>
           </template>
         </v-col>
         <v-col cols="6">
@@ -244,6 +247,7 @@ const createSnackbar = useSnackbar()
 // 取得現在的使用者
 const user = useUserStore()
 const nowAccount = user.account
+const nowSaving = user.saving
 
 // 頁面中歌曲的預設值
 const song = ref({
@@ -255,7 +259,10 @@ const song = ref({
   songStyle: '',
   signatureBeat: 0,
   signatureNote: 0,
-  scoreHiHat: [[[]]]
+  scoreHiHat: [[[]]],
+  scoreSnare: [[[]]],
+  scoreKick: [[[]]],
+  isSaved: false
 })
 
 // 抓資料下來
@@ -275,6 +282,8 @@ const load = async () => {
     song.value.scoreSnare = data.result.scoreSnare
     song.value.scoreKick = data.result.scoreKick
     song.value.isPublic = data.result.isPublic
+    // 是否被收藏
+    song.value.isSaved = nowSaving.includes(song.value._id)
 
     document.title = 'Title | ' + song.value.songTitle
   } catch (error) {
@@ -289,6 +298,10 @@ const load = async () => {
 }
 load()
 
+// console.log(song.value) // 取不到
+// console.log(song.value.BPM) // 取不到
+// console.log(nowSaving.includes(song.value._id))
+
 // 視窗------------------------------------
 const isEditing = ref(false) // 決定對話框是否開啟
 
@@ -296,6 +309,7 @@ const isEditing = ref(false) // 決定對話框是否開啟
 const editSong = async (item) => {
   isEditing.value = true
 
+  console.log(song.value.BPM) // 取的到值
   // 把原本的值 (song.value.XXX) 帶入表單內的值(XXX.value.value)
   singer.value.value = song.value.singer
   songTitle.value.value = song.value.songTitle
@@ -473,7 +487,6 @@ const submit = handleSubmit(async (values) => {
   }
 })
 
-
 // 收藏歌曲function------------------------------------------------------------------------------------
 const loadingSave = ref(false)
 const saveSong = async () => {
@@ -491,6 +504,7 @@ const saveSong = async () => {
       color: result.color
     }
   })
+  song.value.isSaved = !song.value.isSaved
   loadingSave.value = false // 跑完的時候loading為false
 }
 </script>

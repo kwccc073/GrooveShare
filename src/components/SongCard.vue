@@ -10,23 +10,24 @@
       <v-spacer></v-spacer>
       <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
       <!-- 如果已經收藏，按鈕文字要改成"取消收藏****待編輯**** -->
-
-      <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading" v-if="nowAccount !== editor">收藏歌曲</v-btn>
+      <template v-if="nowAccount !== editor">
+        <v-btn color="primary" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loading" v-if="nowSaving.includes(_id)">取消收藏</v-btn>
+        <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading" v-else>收藏歌曲</v-btn>
+      </template>
     </v-card-actions>
   </v-card>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/user' // stores
-import { useRouter } from 'vue-router' // 路由
 import { useSnackbar } from 'vuetify-use-dialog'
 import { ref } from 'vue'
 
 const user = useUserStore()
 // 取得當下的使用者
 const nowAccount = user.account
+const nowSaving = ref(user.saving)
 
-const router = useRouter()
 const createSnackbar = useSnackbar()
 
 // props表示元件可以接收的資料，defineProps()是script setup的固定寫法（不須import）
@@ -50,6 +51,7 @@ const saveSong = async () => {
       color: result.color
     }
   })
+  nowSaving.value = user.saving
   loading.value = false // 跑完的時候loading為false
 }
 </script>

@@ -33,12 +33,13 @@ export const useUserStore = defineStore('user', () => {
       // 跟後端的controllerss的檔案user.js登入後回傳的資料一樣
       token.value = data.result.token
       account.value = data.result.account
-      email.value = data.result.email
-      icon.value = data.result.icon
-      id.value = data.result.id
+      // email.value = data.result.email
+      // icon.value = data.result.icon
+      // id.value = data.result.id
       // role.value = data.result.role
-      saving.value = data.result.saving
+      // saving.value = data.result.saving
       console.log(data.result) // 只有出現token和account（因為登入只會傳這兩個值）
+      console.log(saving.value)
       return '登入成功'
     } catch (error) {
       console.log(error)
@@ -52,13 +53,14 @@ export const useUserStore = defineStore('user', () => {
     try {
       // 把使用者的token帶出去
       const { data } = await apiAuth.get('/user/profile')
+      // data.result.後端有傳過來的東西
       account.value = data.result.account
       email.value = data.result.email
       icon.value = data.result.icon
       id.value = data.result.id
       saving.value = data.result.saving
-      // role.value = data.result.role
-      console.log(data.result.saving) // 得到undefined（待編輯）
+      console.log(data.result)
+      console.log(data.result.saving) // 有成功取得收藏歌曲
     } catch (error) {
       // 錯誤的話把東西清空
       token.value = ''
@@ -68,6 +70,7 @@ export const useUserStore = defineStore('user', () => {
       id.value = ''
       // role.value = UserRole.USER
       saving.value = []
+      console.log('user.profile失敗')
     }
   }
 
@@ -97,6 +100,7 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await apiAuth.patch('/user/saving', { song })
       // console.log(data)
       saving.value = data.result
+
       const text = ref('')
       if (data.isSaving) {
         text.value = '收藏歌曲成功-stores'

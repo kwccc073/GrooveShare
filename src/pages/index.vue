@@ -14,7 +14,7 @@
       <v-row>
         <v-col cols="12">
           <!-- 換頁的箭頭：https://vuetifyjs.com/en/components/paginations/-->
-          <v-pagination v-model="page" :length="pages" rounded="circle" @update:model-value="loadSongs"></v-pagination>
+          <!-- <v-pagination v-model="page" :length="pages" rounded="circle" @update:model-value="loadSongs"></v-pagination> -->
         </v-col>
       </v-row>
     </div>
@@ -65,6 +65,7 @@ const { api } = useApi()
 const createSnackbar = useSnackbar()
 
 // 取最新上架的歌曲用------------------------------------------------------------------
+// 刪除不需要的參數***待編輯***
 const page = ref(1) // 現在第幾頁
 const pages = ref(1) // 總共幾頁
 const ITEMS_PER_PAGE = 3 // 一頁3個
@@ -75,7 +76,7 @@ const songs = ref([]) // 商品
 // 改成只取最新的幾首歌曲*****待編輯*******
 const loadSongs = async () => {
   try {
-    const { data } = await api.get('/song/all', {
+    const { data } = await api.get('/song/new', {
       // 傳參數讓後端知道一頁有幾個*****待編輯*******
       params: {
         // 沒有做排序就會預設照時間排

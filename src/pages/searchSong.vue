@@ -34,10 +34,11 @@
               <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
               <template v-if="nowAccount !== item.editor">
                 <!-- 已收藏和未收藏用v-if決定顯示哪個****待編輯**** -->
+                <!-- 實心愛心 => 已收藏，按下去會取消收藏 -->
+                <v-btn elevation="0" prepend-icon=" mdi-cards-heart" @click="saveSong(item._id)" v-if="nowSaving.includes(item._id)"></v-btn>
                 <!-- 未收藏 -->
-                <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline" @click="saveSong(item._id)" :loading="loadingSave"></v-btn>
-                <!-- 已收藏 -->
-                <!-- <v-btn elevation="0" prepend-icon=" mdi-cards-heart"></v-btn> -->
+                <!-- 白色變黑色會馬上變，但黑色不會變回白色***待編輯*** -->
+                <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline" @click="saveSong(item._id)" :loading="loadingSave" v-else></v-btn>
               </template>
               <!-- 觀看鼓譜 -->
               <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
@@ -54,7 +55,7 @@
 import { definePage } from 'vue-router/auto'
 import { ref } from 'vue'
 // 取得現在路由
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 // 彈出對話框
 import { useSnackbar } from 'vuetify-use-dialog'
 // 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
@@ -71,13 +72,13 @@ definePage({
   }
 })
 
-const route = useRoute() // 取得現在的路由
 const createSnackbar = useSnackbar() // 彈出對話框
 const { apiAuth } = useApi() // 取出apiAuth（要做請求都要做這個）
 
 const user = useUserStore() // 引入 store
 // 取得當下的使用者
 const nowAccount = user.account
+const nowSaving = ref(user.saving)
 
 // 一頁顯示幾個
 const tableItemsPerPage = ref(10)
@@ -162,6 +163,7 @@ const saveSong = async (songID) => {
       color: result.color
     }
   })
+  nowSaving.value = user.saving
   loadingSave.value = false // 跑完的時候loading為false
 }
 </script>
