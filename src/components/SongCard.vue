@@ -2,9 +2,15 @@
 <template>
   <v-card>
     <v-card-title>
-      <router-link :to="'/songs/' + _id" class="router-link">{{ singer }} - {{ songTitle }}</router-link>
+      <router-link :to="'/songs/' + _id" class="router-link">
+        <h4>{{ singer }}</h4>
+        <h4>{{ songTitle }}</h4>
+        </router-link>
     </v-card-title>
-    <v-card-subtitle>{{ songStyle }} / {{ BPM }}</v-card-subtitle>
+    <v-card-subtitle>
+      <p>{{ songStyle }} / {{ BPM }}</p>
+      <p>收藏次數：{{ savedTimes }}</p>
+    </v-card-subtitle>
     <v-card-actions>
       <!-- v-spacer會自動把東西推到右邊 -->
       <v-spacer></v-spacer>
@@ -32,7 +38,7 @@ const createSnackbar = useSnackbar()
 
 // props表示元件可以接收的資料，defineProps()是script setup的固定寫法（不須import）
 // 可以一個個定義每個東西的型態、預設值等
-const props = defineProps(['_id', 'songStyle', 'songTitle', 'singer', 'BPM', 'signatureSection', 'signatureNotes', 'editor'])
+const props = defineProps(['_id', 'songStyle', 'songTitle', 'singer', 'BPM', 'signatureSection', 'signatureNotes', 'editor', 'savedTimes'])
 
 const loading = ref(false) // UIUX用，使按下去時按鈕為載入狀態（避免一直點）
 

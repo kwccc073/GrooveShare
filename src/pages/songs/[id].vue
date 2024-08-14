@@ -221,6 +221,9 @@
       </v-row>
     </v-form>
   </v-container>
+  <div class="test">
+    <testNote v-bind="song"></testNote>
+  </div>
 </template>
 
 <script setup>
@@ -232,6 +235,8 @@ import { useSnackbar } from 'vuetify-use-dialog'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useUserStore } from '@/stores/user' // 取得現在的使用者
+// 引入自定義的元件－音符
+import testNote from '@/components/testNote.vue'
 
 definePage({
   meta: {
