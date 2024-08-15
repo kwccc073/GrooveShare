@@ -4,19 +4,28 @@
   <!-- 最外層：(section, sectionIndex) in scoreHiHat -->
   <!-- 第二層：(beat, beatIndex) in section" :key="beatIndex -->
   <!-- 最內層：(HiHat, HiHatIndex) in beat" -->
-   <v-container>
-    <v-row class="scoreArea h-100">
-      <template v-for="(section, sectionIndex) in scoreHiHat" :key="sectionIndex">
-        <v-col cols="10" lg="5" class="section">
-          <div class="sectionTitle">第{{sectionIndex+1}}小節</div>
-          <div class="allBeats d-flex">
+  <v-row class="scoreArea-watching">
+    <template v-for="(section, sectionIndex) in scoreHiHat" :key="sectionIndex">
+      <!-- :class="{Dnone: }"
+          在尺寸小於lg時***這部分待編輯****，偶數(sectionIndex%2==1)的v-col要加上一個屬性使display:none -->
+      <v-col cols="2" class="beginning" :class="{displayNone:(sectionIndex%2==1)}">
+        <template v-if="sectionIndex === 0">
+          <p>{{ signatureBeat }}</p>
+          <p>{{ signatureNote }}</p>
+        </template>
+      </v-col>
+      <v-col cols="10" lg="5" class="section v-col">
+        <!-- <div class="sectionTitle">第{{sectionIndex+1}}小節</div> -->
+        <div class="allBeats">
           <!-- 一拍------------------------------------------------------------ -->
-          <div class="beat w-100 bg-info" v-for="(beat, beatIndex) in section" :key="beatIndex">
-            <div class="beat-title border">第 {{beatIndex + 1}} 拍</div>
-            <div class="">
+          <div class="beat" v-for="(beat, beatIndex) in section" :key="beatIndex">
+            <!-- 這個div可以拿掉****待編輯**** -->
+            <!-- <div class="beat-title">第 {{beatIndex + 1}} 拍</div> -->
+            <!-- 這個div可拿可不拿，留著可用來調音符之間的距離***待編輯*** -->
+            <div class="oneNote">
               <!-- SVG放這裡 ------------------------------------------------------------------------->
               <svg :id="`s${ sectionIndex+1 }-b${ beatIndex+1 }`" class="note" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-              width="668px" height="398px" viewBox="0 0 668 398" enable-background="new 0 0 668 398" xml:space="preserve">
+                  width="668px" height="398px" viewBox="0 0 668 398" enable-background="new 0 0 668 398" xml:space="preserve">
                 <!-- 鼓點--------------------------------------------------------------------------- -->
                 <!-- 大鼓點-->
                 <g class="kicks">
@@ -345,36 +354,139 @@
                       )}"
                    x="513.165" y="48.723" fill="#231815" width="70.807" height="15"/>
                 </g>
+                <g class="rests">
+                  <!-- line1-1、line2-1、line3-1、line4-1都不顯示時顯示 -->
+                  <path id="rest-quarter"
+                    :class="{active:
+                        !(scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      }" fill="#231815" d="M81.096,118.91c0,0,37.412,36.682-2.06,64.591c-39.472,27.911,0.399,30.702,22.727,68.178
+                    c0,0-85.323-37.078-16.347,59.406c0,0-29.504-74.557,39.073-35.883c0,0,5.582,1.994,3.189-5.184
+                    c-2.392-7.176-68.178-51.033,4.386-92.898c0,0,3.189-1.196-1.994-11.563S80.364,104.158,81.096,118.91z"/>
+                  <!-- 八分的附點 -->
+                  <!-- line1-1、line2-1、line3-1都不顯示且line4-1顯示時顯示 -->
+                  <circle id="rest-eighth-dot"
+                    :class="{active:
+                        !(scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      }" fill="#231815" cx="126.264" cy="204.019" r="7.719"/>
+                  <!-- 1. line1-1、line2-1、line3-1都不顯示且line4-1顯示時顯示 -->
+                  <!-- 2. line1-1、line2-1都不顯示且line3-1顯示時顯示 -->
+                  <path id="rest-eighth"
+                    :class="{active:(
+                        !(scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )||(
+                        !(scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        (scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])
+                      )
+                      }"
+                    fill="#231815" d="M70.101,297.667l30.332-87.058c0,0-58.695,22.454-49.241-25.211
+                    c0,0,4.99-15.101,27.837-8.534c0,0,7.354,4.202,7.354,18.384c0,14.181,15.495,0.788,12.605,3.676
+                    c-2.889,2.889,14.706-18.119,16.808-17.857c2.101,0.262-32.817,117.651-32.817,117.651L70.101,297.667z"/>
+                  <!-- line1-1都不顯示且line2-1顯示時顯示 -->
+                  <path id="rest-sixteen"
+                    :class="{active:
+                        !(scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])
+                      }" fill="#231815" d="M132.972,149.231c-1.764-0.219-14.432,14.533-16.756,17.58
+                    c-1.94,1.117-12.657,8.4-12.657-3.398c0-14.182-7.354-18.383-7.354-18.383c-22.848-6.566-27.837,8.533-27.837,8.533
+                    c-9.454,47.665,49.241,25.211,49.241,25.211l-8.437,24.216c-3.984,4.304-8.345,9.466-9.616,11.132
+                    c-1.94,1.119-12.657,8.4-12.657-3.396c0-14.181-7.354-18.384-7.354-18.384c-22.848-6.566-27.837,8.535-27.837,8.535
+                    c-9.454,47.664,49.241,25.21,49.241,25.21l-30.332,87.057l12.878,1.051"/>
+                </g>
               </svg>
             </div>
           </div>
         </div>
       </v-col>
-      </template>
-    </v-row>
-   </v-container>
+    </template>
+  </v-row>
 </template>
 
 <script setup>
 // 外部要接收的東西
-const props = defineProps(['scoreHiHat', 'scoreSnare', 'scoreKick'])
+defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick'])
 // 對props裡的值做處理，要使用props.data
 </script>
 
 <style scoped lang="scss">
-.note{
-  width: 200px;
-  // 起始狀態全部都是fill: transparent
-  path,rect,circle,polygon,g {
-    fill: transparent;
+.scoreArea-watching{
+  width: 100%;
+  background: white;
+  margin: auto;
+
+  .v-col{
+    margin-top: 1rem;
+    padding: 0;
   }
-  .active {
-      fill: red
+
+  .beginning{
+    border: 1px solid black;
+    // border-top: 1px solid black;
+    // border-bottom: 1px solid black;
+    box-sizing: border-box;
+
+    p{
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 1rem;
     }
+  }
+  // 每個小節
+  .section{
+    // background: darkgoldenrod;
+    box-sizing: border-box;
+
+    .allBeats{
+      display: flex;
+      padding: 0;
+      height: 100%;
+      border: 1px solid black;
+      justify-content: center;
+      align-items: center;
+
+      .beat{
+        width: 100%;
+        padding: 0;
+
+        .oneNote{
+          width: 100%;
+          display: flex;
+          align-items: center;
+          padding: 0;
+
+          // 音符部分(svg)----------------------------------
+          .note{
+            width: 100%;
+            height: auto;
+            // 起始狀態全部都是fill: transparent
+            path,rect,circle,polygon,g {
+              fill: transparent;
+            }
+            .active {
+                fill: black
+              }
+          }
+        }
+      }
+    }
+  }
 }
 
-// 第s1小節－第b1拍
-#s1-b1{
-  // width: 800px;
+.displayNone{
+  display: none;
 }
+// 第s1小節－第b1拍
+// #s1-b1{
+  // width: 800px;
+// }
 </style>

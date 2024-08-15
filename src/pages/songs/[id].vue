@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- 把編輯的彈出視窗改掉*****待編輯*****，應該可以用v-if，條件為isEditting===true -->
     <!-- v-if="isEditing" => 編輯狀態；v-else => 非編輯狀態-->
     <!-- 歌曲資訊-------------------------------------------------------------------- -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
@@ -31,12 +30,10 @@
             <v-btn @click="addSection()">新增小節 sections</v-btn>
           </template>
           <template v-else>
-            <!-- 收藏歌曲 -->
-            <!-- <v-form :disabled="isSubmitting" @submit.prevent="submit">
-              <v-btn type="submit" prepend-icon="mdi-cards-heart-outline" :loading="isSubmitting">收藏歌曲</v-btn>
-            </v-form> -->
+            <!-- 如果是作者顯示編輯按鈕 -->
             <v-btn color="green" prepend-icon="mdi-pencil-outline" @click="editSong(null)" v-if="nowAccount === song.editor">編輯</v-btn>
-            <!-- 如果已經收藏，按鈕文字要改成"取消收藏****待編輯**** -->
+            <!-- 否則顯示收藏按鈕 -->
+            <!-- 如果已經收藏，按鈕文字要改成"取消收藏 -->
             <template v-else>
               <v-btn color="primary" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loadingSave" v-if="song.isSaved">取消收藏</v-btn>
               <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loadingSave" v-else>收藏</v-btn>
@@ -70,10 +67,6 @@
             </template>
             <span v-else>{{ song.BPM }}</span>
           </div>
-          <div>
-            <!-- 拍號不可編輯 -->
-            <span>拍號：{{ song.signatureBeat }} / {{ song.signatureNote }}</span>
-          </div>
         </v-col>
         <v-col cols="6">
           <p>作者：{{song.editor}}</p>
@@ -99,7 +92,9 @@
       <v-row class="scoreArea h-100" v-if="isEditing">
         <template v-for="(section, sectionIndex) in scoreHiHat.value.value" :key="sectionIndex">
           <!-- 樂器(列)名稱------------------------------------- -->
-          <v-col cols="2" class="instruments w-100 bg-black" v-if="sectionIndex%2==0">
+          <!-- 最大尺寸時，sectionIndex%2==1的時候不顯示 -->
+          <!-- 其他小尺寸則全都要顯示****待編輯**** -->
+          <v-col cols="2" class="instruments w-100 bg-black" :class="{displayNone:(sectionIndex%2==1)}">
             <div class="row-name"></div>
             <div class="row-name"></div>
             <div class="row-name">Hi-Hat</div>
@@ -157,73 +152,9 @@
           </v-col>
         </template>
       </v-row>
-      <!-- 非編輯狀態 -->
-      <v-row class="scoreArea h-100" v-else>
-        <template v-for="(section, sectionIndex) in song.scoreHiHat" :key="sectionIndex">
-          <!-- 最大尺寸時，sectionIndex%2==0"的時候才顯示 -->
-          <!-- 其他小尺寸則全都要顯示****待編輯**** -->
-          <v-col cols="2" class="instruments w-100" v-if="sectionIndex%2==0">
-            <div class="row-name"></div>
-            <div class="row-name"></div>
-            <div class="row-name">Hi-Hat</div>
-            <div class="row-name">小鼓</div>
-            <div class="row-name">大鼓</div>
-          </v-col>
-          <v-col cols="10" lg="5" class="section">
-            <div class="sectionTitle">第{{sectionIndex+1}}小節</div>
-            <div class="allBeats">
-            <!-- 一拍------------------------------------------------------------ -->
-            <div class="beat w-100" v-for="(beat, beatIndex) in section" :key="beatIndex">
-              <div class="beat-title">第 {{beatIndex + 1}} 拍</div>
-              <div class="allNoteAreas">
-                <!-- HiHat------------------------------------->
-                <div id="HiHat-area" class="noteArea w-100 d-flex">
-                  <v-checkbox
-                    class="n-HiHat-note"
-                    v-for="(HiHat, HiHatIndex) in beat"
-                    :key="HiHatIndex"
-                    :value="true"
-                    v-model="song.scoreHiHat[sectionIndex][beatIndex][HiHatIndex]"
-                    @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${HiHatIndex+1}`,song.scoreHiHat[sectionIndex][beatIndex][HiHatIndex])"
-                    >
-                  </v-checkbox>
-                </div>
-                <!-- 小鼓------------------------------------->
-                <div id="snare-area" class="noteArea w-100 d-flex">
-                  <v-checkbox
-                    class="n-snare-note"
-                    v-for="(snare, snareIndex) in beat"
-                    :key="snareIndex"
-                    :value="true"
-                    v-model="song.scoreSnare[sectionIndex][beatIndex][snareIndex]"
-                    @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${snareIndex+1}`,song.scoreSnare[sectionIndex][beatIndex][snareIndex])"
-                    >
-                  </v-checkbox>
-                </div>
-                <!-- 大鼓------------------------------------->
-                <!-- scoreKick[第X小節][第X拍][第X拍的第X部分] -->
-                <div id="kick-area" class="noteArea w-100 d-flex">
-                  <v-checkbox
-                    class="n-kick-note"
-                    v-for="(kick, kickIndex) in beat"
-                    :key="kickIndex"
-                    :value="true"
-                    v-model="song.scoreKick[sectionIndex][beatIndex][kickIndex]"
-                    @change="console.log(`${sectionIndex+1}-${beatIndex+1}-${kickIndex+1}`,song.scoreKick[sectionIndex][beatIndex][kickIndex])"
-                    >
-                  </v-checkbox>
-                </div>
-              </div>
-            </div>
-          </div>
-        </v-col>
-        </template>
-      </v-row>
     </v-form>
+    <score v-bind="song"></score>
   </v-container>
-  <div class="test">
-    <testNote v-bind="song"></testNote>
-  </div>
 </template>
 
 <script setup>
@@ -236,7 +167,7 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useUserStore } from '@/stores/user' // 取得現在的使用者
 // 引入自定義的元件－音符
-import testNote from '@/components/testNote.vue'
+import score from '@/components/score.vue'
 
 definePage({
   meta: {
@@ -262,8 +193,8 @@ const song = ref({
   singer: '',
   sell: true,
   songStyle: '',
-  signatureBeat: 0,
-  signatureNote: 0,
+  signatureBeat: 4,
+  signatureNote: 4,
   scoreHiHat: [[[]]],
   scoreSnare: [[[]]],
   scoreKick: [[[]]],
@@ -603,5 +534,8 @@ const saveSong = async () => {
     }
   }
 }
-  // 樂譜部分--------------------------------------------------------------------
+
+.displayNone{
+  display: none
+}
 </style>

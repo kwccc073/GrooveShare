@@ -82,9 +82,9 @@
       <v-row id="scoreArea" class="h-100" >
         <template v-for="(section, sectionIndex) in scoreHiHat.value.value" :key="sectionIndex">
           <!--  樂器(列)名稱------------------------------------- -->
-          <!-- 最大尺寸時，sectionIndex%2==0"的時候才顯示 -->
+          <!-- 最大尺寸時，sectionIndex%2==1的時候不顯示 -->
           <!-- 其他小尺寸則全都要顯示****待編輯**** -->
-          <v-col cols="2" class="instruments w-100" v-if="sectionIndex%2==0">
+          <v-col cols="2" class="instruments w-100" :class="{displayNone:(sectionIndex%2==1)}">
             <div class="row-name"></div>
             <div class="row-name"></div>
             <div class="row-name">Hi-Hat</div>
@@ -523,5 +523,9 @@ const submit = handleSubmit(async (values) => {
       }
     }
   }
+}
+
+.displayNone{
+  display: none
 }
 </style>
