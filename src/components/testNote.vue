@@ -13,7 +13,7 @@
           <!-- 一拍------------------------------------------------------------ -->
           <div class="beat w-100 bg-info" v-for="(beat, beatIndex) in section" :key="beatIndex">
             <div class="beat-title border">第 {{beatIndex + 1}} 拍</div>
-            <div>
+            <div class="">
               <!-- SVG放這裡 ------------------------------------------------------------------------->
               <svg :id="`s${ sectionIndex+1 }-b${ beatIndex+1 }`" class="note" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               width="668px" height="398px" viewBox="0 0 668 398" enable-background="new 0 0 668 398" xml:space="preserve">
@@ -227,28 +227,52 @@
                 </g>
                 <!-- 附點音符-------------------------------------------- -->
                 <!-- 只有(line1-1 && line4-1顯示) 且 (XXX-1顯示)時才會顯示-->
-                <g class="dots">
-                  <circle class="dot-kick"
-                    :class="{active:(
-                      (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
-                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
-                      )&& (scoreKick[sectionIndex][beatIndex][0])
-                    }"
-                    fill="#231815" cx="157.253" cy="347.048" r="7.719"/>
-                  <circle class="dot-snare"
-                    :class="{active:(
-                      (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
-                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
-                      )&& (scoreSnare[sectionIndex][beatIndex][0])
-                    }"
-                  fill="#231815" cx="157.254" cy="233.656" r="7.719"/>
-                  <circle class="dot-hihat"
+                <g class="dots-1">
+                  <circle class="dot-hihat-1"
                     :class="{active:(
                       (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
                       (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
                       )&& (scoreHiHat[sectionIndex][beatIndex][0])
                     }"
                    fill="#231815" cx="157.254" cy="157.075" r="7.719"/>
+                   <circle class="dot-snare-1"
+                    :class="{active:(
+                      (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )&& (scoreSnare[sectionIndex][beatIndex][0])
+                    }"
+                  fill="#231815" cx="157.254" cy="233.656" r="7.719"/>
+                  <circle class="dot-kick-1"
+                    :class="{active:(
+                      (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )&& (scoreKick[sectionIndex][beatIndex][0])
+                    }"
+                    fill="#231815" cx="157.253" cy="347.048" r="7.719"/>
+                </g>
+                <!-- (line2-1顯示 且 line3-1、line4-1不顯示)且 (XXX-2顯示)時才會顯示--->
+                <g class="dots-2">
+                  <circle class="dot-hihat-2"
+                    :class="{active:(
+                      (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )&& (scoreHiHat[sectionIndex][beatIndex][1])
+                    }" fill="#231815" cx="307.553" cy="157.075" r="7.719"/>
+                  <circle class="dot-snare-2"
+                    :class="{active:(
+                      (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )&& (scoreSnare[sectionIndex][beatIndex][1])
+                    }"  fill="#231815" cx="307.552" cy="233.656" r="7.719"/>
+                  <circle class="dot-kick-2"
+                    :class="{active:(
+                      (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )&& (scoreKick[sectionIndex][beatIndex][1])
+                    }"  fill="#231815" cx="307.552" cy="347.048" r="7.719"/>
                 </g>
                 <!-- 短橫線---------------------------------------------- -->
                 <!-- line1-1、line2-1、line3-1、line4-1都顯示時，六條都顯示-->
@@ -277,10 +301,49 @@
                     x="216.153" y="48.723" fill="#231815" width="70.806" height="15"/>
                   <!-- 1. line1-1、line2-1、line3-1、line4-1都顯示時顯示-->
                   <!-- 2. ((line2-1 && line3-1顯示)&& line1-1不顯示)時顯示 ****此時的line4-1是否顯示不會影響****-->
-                  <rect class="short-horizontal-line-23-1" x="293.884" y="48.723" fill="#231815" width="70.807" height="15"/>
-                  <rect class="short-horizontal-line-23-2" x="364.69" y="48.723" fill="#231815" width="70.812" height="15"/>
-                  <rect class="short-horizontal-line-34-1" x="442.358" y="48.723" fill="#231815" width="70.807" height="15"/>
-                  <rect class="short-horizontal-line-34-2" x="513.165" y="48.723" fill="#231815" width="70.807" height="15"/>
+                  <rect class="short-horizontal-line-23-1"
+                    :class="{active:(
+                        (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        (scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )||(
+                        (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        (scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])
+                      )
+                    }" x="293.884" y="48.723" fill="#231815" width="70.807" height="15"/>
+                  <!-- 1. line1-1、line2-1、line3-1、line4-1都顯示時顯示 -->
+                  <!-- 2. line2-1、line3-1、line4-1都顯示時顯示 -->
+                  <!-- 得到 =>line2-1、line3-1、line4-1顯示時就會顯示，line1-1不影響 -->
+                  <rect class="short-horizontal-line-23-2"
+                    :class="{active:(
+                        (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        (scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )}" x="364.69" y="48.723" fill="#231815" width="70.812" height="15"/>
+                  <!-- 1. line1-1、line2-1、line3-1、line4-1都顯示時顯示 -->
+                  <!-- 2. line3-1、line4-1都顯示時顯示，且line1-1、line2-1不影響 -->
+                  <!-- 得到 => 只要line3-1、line4-1都顯示時就會顯示 -->
+                  <rect class="short-horizontal-line-34-1"
+                  :class="{active:(
+                        (scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])&&
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      )}" x="442.358" y="48.723" fill="#231815" width="70.807" height="15"/>
+                  <!-- 1. line1-1、line2-1、line3-1、line4-1都顯示時顯示 -->
+                  <!-- 2. line3-1、line4-1都顯示時顯示，且line1-1、line2-1不影響 -->
+                  <!-- 3. line2-1、line4-1都顯示時顯示，此時line1-1、line3-1不影響-->
+                  <!-- 3. line1-1、line4-1都顯示時顯示，此時line2-1、line3-1不影響-->
+                  <!-- 得到 => 只要line4-1有顯示，其餘任一條有顯示時就會顯示  -->
+                  <rect class="short-horizontal-line-34-2"
+                    :class="{active:
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                        &&(
+                        (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])||
+                        (scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])||
+                        (scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])
+                      )}"
+                   x="513.165" y="48.723" fill="#231815" width="70.807" height="15"/>
                 </g>
               </svg>
             </div>
