@@ -154,11 +154,12 @@
       </v-row>
     </v-form>
     <score v-bind="song"></score>
+    <testAudio v-bind="song" :key="song._id"></testAudio>
   </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { definePage } from 'vue-router/auto'
 import { useRoute, useRouter } from 'vue-router'
 import { useApi } from '@/composables/axios'
@@ -168,6 +169,7 @@ import * as yup from 'yup'
 import { useUserStore } from '@/stores/user' // 取得現在的使用者
 // 引入自定義的元件－音符
 import score from '@/components/score.vue'
+import testAudio from '@/components/testAudio.vue'
 
 definePage({
   meta: {
@@ -205,7 +207,7 @@ const song = ref({
 const load = async () => {
   try {
     const { data } = await api.get('/song/' + route.params.id)
-    console.log(data.result)
+    // console.log(data.result)
     song.value._id = data.result._id
     song.value.editor = data.result.editor
     song.value.songTitle = data.result.songTitle
@@ -222,6 +224,7 @@ const load = async () => {
     song.value.isSaved = nowSaving.includes(song.value._id)
 
     document.title = 'Title | ' + song.value.songTitle
+    console.log(song)
   } catch (error) {
     console.log(error)
     createSnackbar({
@@ -232,8 +235,11 @@ const load = async () => {
     })
   }
 }
-load()
 
+onMounted(() => {
+  load()
+})
+console.log(song)
 // console.log(song.value) // 取不到
 // console.log(song.value.BPM) // 取不到
 // console.log(nowSaving.includes(song.value._id))
@@ -443,6 +449,7 @@ const saveSong = async () => {
   song.value.isSaved = !song.value.isSaved
   loadingSave.value = false // 跑完的時候loading為false
 }
+
 </script>
 
 <style scoped lang="scss">

@@ -413,7 +413,7 @@
 
 <script setup>
 // 外部要接收的東西
-defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick'])
+const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick'])
 // 對props裡的值做處理，要使用props.data
 </script>
 
