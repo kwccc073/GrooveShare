@@ -1,21 +1,24 @@
 <template>
   <div>
-    <audio :src="hiHatAudio" controls></audio>
-    <audio :src="snareAudio" controls></audio>
-    <audio :src="kickAudio" controls></audio>
-  </div>
-  <div>
-    <h2>Vue 節拍器</h2>
-    <label for="bpm">BPM: {{ bpm }}</label>
-    <input type="range" id="bpm" v-model="bpm" min="40" max="240" />
-    <button @click="toggleMetronome">{{ isPlaying ? '停止' : '開始' }}節拍器</button>
-    <audio ref="metronomeSound" :src="hiHatAudio"></audio>
-    <p>test: {{ BPM }}</p>
+    <!-- <h2>播放鼓譜</h2> -->
+    <!-- <label for="bpm">BPM: {{ BPM }}</label> -->
+    <!-- 起始狀態：非播放中且currentXXX皆為0的時候顯示 -->
+    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection === 0 && currentBeat === 0 && currentDivision === 0)">開始播放</v-btn>
+    <!-- 非播放中且播放到一半時顯示 -->
+    <!-- 播放到一半 => 其中一個currentXXX不為0 -->
+    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)">從第一小節開始播放</v-btn>
+    <v-btn @click="toggleMetronome" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)">接續播放</v-btn>
+    <!-- 正在播放得時候顯示 -->
+    <v-btn @click="toggleMetronome" v-if = "isPlaying">暫停播放</v-btn>
+    <audio ref="hiHatSound" :src="hiHatAudio"></audio>
+    <audio ref="snareSound" :src="snareAudio"></audio>
+    <audio ref="kickSound" :src="kickAudio"></audio>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import $ from 'jquery'
 // 引入音訊檔
 import hiHatAudio from '@/assets/instruments/hiHat.wav'
 import snareAudio from '@/assets/instruments/snare.wav'
@@ -23,43 +26,108 @@ import kickAudio from '@/assets/instruments/kick.wav'
 
 // 外部要接收的東西
 const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick', 'BPM'])
-console.log(props.BPM) // 有抓到
+// console.log(props.BPM) // 有抓到
+
+// props.scoreHiHat.forEach((section, sectionIndex) => {
+//   section.forEach((beat, beatIndex) => {
+//     beat.forEach((HiHat, HiHatIndex) => {
+//       console.log(`第${sectionIndex}小節的第${beatIndex}拍之${HiHatIndex}：`, HiHat)
+//     })
+//   })
+// })
 // 節拍器範例-------------------------------
-const bpm = ref(120) // 預設每分鐘120拍
-// console.log(props.soreSnare)
-const isPlaying = ref(false) // 節拍器狀態
+const isPlaying = ref(false) // 是否為播放狀態
+// 計算每個部分的間隔 => (每拍耗費幾秒)/4 *1000毫秒
+// 註： /4 是因為每拍拆成4份
+const interval = (60 / props.BPM) / 4 * 1000
 let intervalId = null // 初始化，以防出現undifined的錯誤
-let currentBeat = 0
+let currentSection = 0 // 現在第幾小節
+let currentBeat = 0 // 現在第幾拍
+let currentDivision = 0 // 現在第幾部分
 
-const metronomeSound = ref(null)
+const hiHatSound = ref(null)
+const snareSound = ref(null)
+const kickSound = ref(null)
 
-// 布林陣列，控制每拍是否有聲音
-const beatPattern = ref([true, false, true, false]) // 範例：每四拍，第一和第三拍有聲音
+// console.log(`整份譜總共${props.scoreHiHat.length}個小節`)
+// console.log(`每個小節總共${props.scoreHiHat[currentSection].length}拍`)
+// console.log(`每拍總共${props.scoreHiHat[currentSection][currentBeat].length}個部分`)
 
+// 按下播放聲音，先寫HiHat就好
 const playClick = () => {
-  const isSoundEnabled = beatPattern.value[currentBeat] // 取得當前拍子的布林值***第0個 => true ****
+  $(`#s${currentSection + 1}-b${currentBeat + 1}`).addClass('current')
+  // console.log(`現在是#s${currentSection + 1}-b${currentBeat + 1}`)
+  // isXXXXSoundEnabled => 判斷現在這份是否要播放
+  const isHiHatSoundEnabled = props.scoreHiHat[currentSection][currentBeat][currentDivision]
+  const isSnareSoundEnabled = props.scoreSnare[currentSection][currentBeat][currentDivision]
+  const isKickSoundEnabled = props.scoreKick[currentSection][currentBeat][currentDivision]
 
   // 如果當前拍子布林值為 false => 靜音(.muted=true)；當前拍子布林值為為 true => 取消靜音(.muted=false)
-  metronomeSound.value.muted = !isSoundEnabled
+  hiHatSound.value.muted = !isHiHatSoundEnabled
+  snareSound.value.muted = !isSnareSoundEnabled
+  kickSound.value.muted = !isKickSoundEnabled
 
   // 撥放音效
   // currentTime 表示當前音頻的播放時間
-  metronomeSound.value.currentTime = 0
-  metronomeSound.value.play() // 撥放
+  hiHatSound.value.currentTime = 0
+  snareSound.value.currentTime = 0
+  kickSound.value.currentTime = 0
+  hiHatSound.value.play() // 撥放
+  snareSound.value.play() // 撥放
+  kickSound.value.play() // 撥放
 
-  // 移動到下一個拍子，並檢查是否需要回到第一拍
-  currentBeat = (currentBeat + 1) % beatPattern.value.length
+  // 移動到下一個拍子
+  currentDivision = currentDivision + 1
+  // 檢查：如果 currentDivision 超過每拍的總部分 => 進行下一拍的第0部分
+  if (currentDivision >= props.scoreHiHat[currentSection][currentBeat].length) {
+    currentBeat = currentBeat + 1
+    currentDivision = 0
+
+    // 檢查：如果currentBeat 超過每個小節的總拍數 => 進行下一小節的第0拍的第0部分
+    if (currentBeat >= props.scoreHiHat[currentSection].length) {
+      currentSection = currentSection + 1
+      currentBeat = 0
+      currentDivision = 0
+
+      // 檢查：如果 currentSection 超過整個譜的總寫結束 => 三個值都歸零且停止
+      if (currentSection >= props.scoreHiHat.length) {
+        clearInterval(intervalId)
+        isPlaying.value = false
+        currentSection = 0
+        currentBeat = 0
+        currentDivision = 0
+        // 全部清除class
+        $('.beat').removeClass('current')
+      }
+    }
+  }
 }
 
 const toggleMetronome = () => {
-  // 如果正在撥放，按下去會停止
+  // 如果正在撥放，按下去會停止計時器
+  // 不歸零 => 可以從暫停的地方接續播放
   if (isPlaying.value) {
-    clearInterval(intervalId) // 停止
+    clearInterval(intervalId)
   } else {
-    // 計算拍子間隔（毫秒）
-    const interval = (60 / bpm.value) * 1000
     intervalId = setInterval(playClick, interval)
   }
   isPlaying.value = !isPlaying.value
 }
+
+// 歸零並開始播放
+const startPlay = () => {
+  isPlaying.value = true
+  currentSection = 0
+  currentBeat = 0
+  currentDivision = 0
+  // 全部清除class
+  $('.beat').removeClass('current')
+  intervalId = setInterval(playClick, interval)
+}
 </script>
+
+<style lang="scss">
+  .current{
+    background: yellow;
+  }
+</style>

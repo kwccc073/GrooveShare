@@ -1,6 +1,4 @@
 <template>
-
-  <!-- 測試----------------------------------------------------------------------------------- -->
   <!-- 最外層：(section, sectionIndex) in scoreHiHat -->
   <!-- 第二層：(beat, beatIndex) in section" :key="beatIndex -->
   <!-- 最內層：(HiHat, HiHatIndex) in beat" -->
@@ -18,13 +16,13 @@
         <!-- <div class="sectionTitle">第{{sectionIndex+1}}小節</div> -->
         <div class="allBeats">
           <!-- 一拍------------------------------------------------------------ -->
-          <div class="beat" v-for="(beat, beatIndex) in section" :key="beatIndex">
+          <div class="beat" v-for="(beat, beatIndex) in section" :key="beatIndex" :id="`s${sectionIndex + 1}-b${beatIndex + 1}`">
             <!-- 這個div可以拿掉****待編輯**** -->
             <!-- <div class="beat-title">第 {{beatIndex + 1}} 拍</div> -->
             <!-- 這個div可拿可不拿，留著可用來調音符之間的距離***待編輯*** -->
             <div class="oneNote">
               <!-- SVG放這裡 ------------------------------------------------------------------------->
-              <svg :id="`s${ sectionIndex+1 }-b${ beatIndex+1 }`" class="note" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              <svg class="note" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                   width="668px" height="398px" viewBox="0 0 668 398" enable-background="new 0 0 668 398" xml:space="preserve">
                 <!-- 鼓點--------------------------------------------------------------------------- -->
                 <!-- 大鼓點-->

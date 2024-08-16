@@ -30,6 +30,7 @@
             <v-btn @click="addSection()">新增小節 sections</v-btn>
           </template>
           <template v-else>
+            <testAudio v-bind="song" :key="song._id" v-if="!isEditing"></testAudio>
             <!-- 如果是作者顯示編輯按鈕 -->
             <v-btn color="green" prepend-icon="mdi-pencil-outline" @click="editSong(null)" v-if="nowAccount === song.editor">編輯</v-btn>
             <!-- 否則顯示收藏按鈕 -->
@@ -153,8 +154,7 @@
         </template>
       </v-row>
     </v-form>
-    <score v-bind="song"></score>
-    <testAudio v-bind="song" :key="song._id"></testAudio>
+    <score v-bind="song" v-if="!isEditing"></score>
   </v-container>
 </template>
 

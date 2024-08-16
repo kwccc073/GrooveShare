@@ -9,6 +9,7 @@
     </v-card-title>
     <v-card-subtitle>
       <p>{{ songStyle }} / {{ BPM }}</p>
+      <!-- 有人按收藏時，收藏次數應該跟著變動***待編輯*** -->
       <p>收藏次數：{{ savedTimes }}</p>
     </v-card-subtitle>
     <v-card-actions>
