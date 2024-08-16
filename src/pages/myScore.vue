@@ -41,7 +41,7 @@
       <!-- 觀看鼓譜 -->
       <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
       <!-- 刪除 -->
-      <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline"></v-btn>
+      <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" @click="deleteSong(item._id, item.editor)"></v-btn>
     </template>
   </v-data-table-server>
   </v-container>
@@ -110,7 +110,7 @@ const tableItemsLength = ref(0)
 // 現在搜尋的文字是什麼
 const tableSearch = ref('')
 
-// 操作-----------------------------------**待編輯**
+// 表格資料更新-----------------------------------**待編輯**
 const tableLoadItems = async (reset) => {
   if (reset) tablePage.value = 1
   tableLoading.value = true
@@ -148,7 +148,32 @@ tableLoadItems() // 第一次進來一定要呼叫
 // 切換隱私狀態的funtion*****待編輯*****
 const changeIsPublic = (value) => {
 }
-// 刪除歌曲function*****待編輯*****
+// 刪除歌曲function
+const deleteSong = (id, editor) => {
+  try {
+    if (user.account === editor) {
+      alert('確定要刪除歌曲嗎？')
+      apiAuth.delete('/song/' + id)
+      createSnackbar({
+        text: '刪除歌曲成功',
+        snackbarProps: {
+          color: 'green'
+        }
+      })
+      tableLoadItems()
+    } else {
+      alert('非原作者，無權限刪除')
+    }
+  } catch (error) {
+    console.log(error)
+    createSnackbar({
+      text: error?.response?.data?.message || '刪除歌曲發生錯誤',
+      snackbarProps: {
+        color: 'red'
+      }
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">

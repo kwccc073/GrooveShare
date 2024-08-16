@@ -31,8 +31,11 @@
           </template>
           <template v-else>
             <testAudio v-bind="song" :key="song._id" v-if="!isEditing"></testAudio>
-            <!-- 如果是作者顯示編輯按鈕 -->
-            <v-btn color="green" prepend-icon="mdi-pencil-outline" @click="editSong(null)" v-if="nowAccount === song.editor">編輯</v-btn>
+            <!-- 如果是作者顯示編輯、刪除按鈕 -->
+            <template v-if="nowAccount === song.editor">
+              <v-btn prepend-icon="mdi-pencil-outline" @click="editSong(null)" >編輯</v-btn>
+              <v-btn prepend-icon="mdi-trash-can-outline" @click="deleteSong(null)" >刪除</v-btn>
+            </template>
             <!-- 否則顯示收藏按鈕 -->
             <!-- 如果已經收藏，按鈕文字要改成"取消收藏 -->
             <template v-else>
@@ -203,7 +206,7 @@ const song = ref({
   isSaved: false
 })
 
-// 抓資料下來
+// 抓資料下來------------------------------------------------------
 const load = async () => {
   try {
     const { data } = await api.get('/song/' + route.params.id)
@@ -383,7 +386,7 @@ const scoreSnare = useField('scoreSnare')
 const scoreKick = useField('scoreKick')
 const isPublic = useField('isPublic')
 
-// *****待編輯*****
+// 編輯功能------------------------------------------------------
 const submit = handleSubmit(async (values) => {
   try {
     if (nowAccount === song.value.editor) {
@@ -450,6 +453,33 @@ const saveSong = async () => {
   loadingSave.value = false // 跑完的時候loading為false
 }
 
+// 刪除歌曲function----------------------------------------
+const deleteSong = () => {
+  try {
+    if (nowAccount === song.value.editor) {
+      alert('確定要刪除歌曲嗎？')
+      apiAuth.delete('/song/' + song.value._id)
+      createSnackbar({
+        text: '刪除歌曲成功',
+        snackbarProps: {
+          color: 'green'
+        }
+      })
+      // 刪除成功，跳轉至"我的鼓譜"
+      router.push('/myScore')
+    } else {
+      alert('非原作者，無權限刪除')
+    }
+  } catch (error) {
+    console.log(error)
+    createSnackbar({
+      text: error?.response?.data?.message || '刪除歌曲發生錯誤',
+      snackbarProps: {
+        color: 'red'
+      }
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">

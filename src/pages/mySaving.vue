@@ -79,7 +79,7 @@ const createSnackbar = useSnackbar() // 彈出對話框
 const { apiAuth } = useApi() // 取出apiAuth（要做請求都要做這個）
 
 // 一頁顯示幾個
-const tableItemsPerPage = ref(10)
+const tableItemsPerPage = ref(1)
 // 排序（先按照日期排序就好）*****待新增******
 const tableSortBy = ref([
   // createdAt是建立的日期
@@ -162,7 +162,8 @@ const saveSong = async (songID) => {
     }
   })
   loadingSave.value = false // 跑完的時候loading為false
-  router.go(0) // 重新加載當前的路由
+  // router.go(0) // 重新加載當前的路由
+  tableLoadItems()
 }
 </script>
 

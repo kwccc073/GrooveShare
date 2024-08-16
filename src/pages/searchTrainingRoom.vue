@@ -55,6 +55,7 @@
           <template #[`item.action`]="{ item }">
             <!-- 點擊時打開編輯視窗，並帶入item(這一列的練鼓室資料) -->
             <v-btn icon="mdi-pencil" variant="text" @click="openDialog(item)"></v-btn>
+            <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" @click="deleteTrainingRoom(item._id)"></v-btn>
           </template>
         </v-data-table-server>
       </v-col>
@@ -398,6 +399,29 @@ const tableLoadItems = async (reset) => {
 }
 
 tableLoadItems() // 第一次進來一定要呼叫
+
+// 刪除練鼓室function
+const deleteTrainingRoom = (id) => {
+  try {
+    alert('確定要刪除練鼓室嗎？')
+    apiAuth.delete('/trainingRoom/' + id)
+    createSnackbar({
+      text: '刪除歌曲成功',
+      snackbarProps: {
+        color: 'green'
+      }
+    })
+    tableLoadItems()
+  } catch (error) {
+    console.log(error)
+    createSnackbar({
+      text: error?.response?.data?.message || '刪除練鼓室發生錯誤',
+      snackbarProps: {
+        color: 'red'
+      }
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">
