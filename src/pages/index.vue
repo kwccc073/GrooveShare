@@ -8,68 +8,34 @@
     <div id="newArea">
       <h1>最新上架</h1>
       <v-row>
-       <v-col cols="12" md="2" v-for="song in newSongs" :key="song._id" class="SongCards">
-        <SongCard v-bind="song"></SongCard>
+       <v-col cols="12" v-for="song in newSongs" :key="song._id">
+        <SongCard v-bind="song" class="SongCard"></SongCard>
        </v-col>
       </v-row>
-      <!-- <v-row> -->
-        <!-- <v-col cols="12"> -->
-          <!-- 換頁的箭頭：https://vuetifyjs.com/en/components/paginations/-->
-          <!-- <v-pagination v-model="page" :length="pages" rounded="circle" @update:model-value="loadnewSongs"></v-pagination> -->
-        <!-- </v-col> -->
-      <!-- </v-row> -->
     </div>
 
     <!-- 熱門排行榜------------------------------------------------------- -->
     <div id="popularArea">
       <h1>熱門排行</h1>
       <v-row>
-       <v-col cols="12" md="2" v-for="song in popularSongs" :key="song._id" class="SongCards">
-        <SongCard v-bind="song"></SongCard>
+       <v-col cols="12" v-for="song in popularSongs" :key="song._id" class="sc2">
+        <SongCard v-bind="song" class="SongCard"></SongCard>
        </v-col>
       </v-row>
-      <!-- <v-row> -->
-        <!-- <v-col cols="12"> -->
-          <!-- 換頁的箭頭：https://vuetifyjs.com/en/components/paginations/-->
-          <!-- <v-pagination v-model="page" :length="pages" rounded="circle" @update:model-value="loadnewSongs"></v-pagination> -->
-        <!-- </v-col> -->
-      <!-- </v-row> -->
     </div>
-
-    <!-- 熱門排行榜-------------------------------------------------------- -->
-    <!-- <div id="rankingArea"> -->
-      <!-- <h1>熱門排行榜</h1> -->
-      <!-- <v-row> -->
-        <!-- <v-col cols="12" md="4"> -->
-          <!-- <v-card id="popularSong" class="popularArea"> -->
-            <!-- <v-card-title>熱門歌曲</v-card-title> -->
-            <!-- <v-card-text>待編輯</v-card-text> -->
-          <!-- </v-card> -->
-        <!-- </v-col> -->
-        <!-- <v-col cols="12" md="4"> -->
-          <!-- <v-card id="popularSinger" class="popularArea"> -->
-            <!-- <v-card-title>熱門歌手/樂團</v-card-title> -->
-            <!-- <v-card-text>待編輯</v-card-text> -->
-          <!-- </v-card> -->
-        <!-- </v-col> -->
-        <!-- <v-col cols="12" md="4"> -->
-          <!-- <v-card id="popularGenres" class="popularArea"> -->
-            <!-- <v-card-title>熱門曲風</v-card-title> -->
-            <!-- <v-card-text>待編輯</v-card-text> -->
-          <!-- </v-card> -->
-        <!-- </v-col> -->
-      <!-- </v-row> -->
-    <!-- </div> -->
   </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { definePage } from 'vue-router/auto'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 // 引入自定義套件
 import SongCard from '@/components/SongCard.vue'
+// 引入GSAP
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 definePage({
   meta: {
@@ -80,6 +46,8 @@ definePage({
 
 const { api } = useApi()
 const createSnackbar = useSnackbar()
+// 註冊ScrollTrigger （滾動效果）
+gsap.registerPlugin(ScrollTrigger)
 
 // 取最新上架的歌曲用------------------------------------------------------------------
 // 刪除不需要的參數***待編輯***
@@ -118,7 +86,7 @@ const loadNewSongs = async () => {
 
 loadNewSongs()
 
-// 載入最新上架的歌曲-------------------------------------------------
+// 載入最多收藏的歌曲-------------------------------------------------
 // 目前是取全部歌曲，再由上架時間 (新->舊)排列
 // 已改成只取最新的5首歌曲*****待編輯*******
 const popularSongs = ref([]) // 熱門歌曲
@@ -148,12 +116,54 @@ const loadPopularSongs = async () => {
 }
 
 loadPopularSongs()
+
+// 動畫效果------------------------------------------------------------------------------------------------------
+onMounted(async () => {
+  // nextTick() => 確保DOM完全渲染
+  await nextTick()
+  console.log('DOM已完全渲染')
+  // setTimeout() => 稍微延遲執行動畫以確保所有子元件也完全渲染
+  setTimeout(() => {
+    gsap.to('.sc', { x: 2000, duration: 3 })
+
+    // 最新上架------------------------------------------------------------------
+    gsap.from('#newArea, #newArea .SongCard', {
+      scrollTrigger: {
+        trigger: '#newArea', // 觸發者
+        markers: true, // 紅綠線標記
+        // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
+        // 觸發條件：當兩條綠色線重疊時，觸發動畫
+        // 觸發點****待編輯****
+        start: 'top center', // 綠色線
+        end: 'top center' // 紅色線
+      },
+      x: -2000,
+      duration: 2,
+      ease: 'ease-in',
+      stagger: 0.4// 每個SongCard間隔0.2秒依次執行
+    })
+
+    gsap.from('#popularArea, #popularArea .SongCard', {
+      scrollTrigger: {
+        trigger: '#popularArea', // 觸發者
+        markers: true, // 紅綠線標記
+        // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
+        // 觸發條件：當兩條綠色線重疊時，觸發動畫
+        // 觸發點****待編輯****
+        start: 'top center', // 綠色線
+        end: 'top center' // 紅色線
+      },
+      x: 2000,
+      duration: 2,
+      ease: 'ease-in',
+      stagger: 0.4// 每個SongCard間隔0.2秒依次執行
+    })
+  }, 100)
+})
 </script>
 
 <style scoped lang="scss">
 .v-container{
-  width: 80vw;
-  margin: auto;
 
   #newArea,
   #popularArea {

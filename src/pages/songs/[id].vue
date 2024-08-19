@@ -6,7 +6,7 @@
       <!-- 歌曲資訊------------------------------------ -->
       <v-row>
         <v-col cols="12" v-if="isEditing" id="isEditing-title">編輯中</v-col>
-        <v-col cols="6">
+        <v-col cols="12" class="bg-info">
           <template v-if="isEditing">
             <span>演奏/演唱者：</span>
             <v-text-field
@@ -23,7 +23,7 @@
           </template>
           <h1 v-else>{{ song.singer }} - {{ song.songTitle }}</h1>
         </v-col>
-        <v-col cols="6" id="btns">
+        <v-col cols="12" id="btns">
           <template v-if="isEditing">
             <v-btn color="red" :loading="isSubmitting" @click="isEditing = false">取消</v-btn>
             <v-btn type="submit" :loading="isSubmitting">儲存</v-btn>
@@ -485,16 +485,14 @@ const deleteSong = () => {
 <style scoped lang="scss">
 // 一整列------------------------------------------------------------------------------------------------
 .v-container{
-  width: 80vw;
-  margin: auto;
-  padding-top: 1rem;
-  // background: pink;
-
   .v-form{
     // background: cadetblue;
     // margin: 0;
     .v-row{
       #isEditing-title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
         text-align: center;
         font-size: 2rem;
         color: red;

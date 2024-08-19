@@ -5,7 +5,11 @@
         <breadcrumbs></breadcrumbs>
       </v-col>
       <v-col cols="12">
+        <!-- hide-default-header => 隱藏標題列 -->
+        <!-- height="" => 設定表格的高度，使表格具有固定高度和滾動條 -->
+        <!-- fixed-header => 固定表格的標題行，當表格滾動時標題行保持固定 -->
         <v-data-table-server
+          fixed-header
           v-model:items-per-page="tableItemsPerPage"
           v-model:sort-by="tableSortBy"
           v-model:page="tablePage"
@@ -171,9 +175,6 @@ const saveSong = async (songID) => {
 <style scoped lang="scss">
 // 樣式待編輯
 .v-container{
-  width: 80vw;
-  margin: auto;
-  padding-top: 1rem;
 }
 
 </style>

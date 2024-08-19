@@ -79,7 +79,7 @@ const createSnackbar = useSnackbar() // 彈出對話框
 const { apiAuth } = useApi() // 取出apiAuth（要做請求都要做這個）
 
 // 一頁顯示幾個
-const tableItemsPerPage = ref(1)
+const tableItemsPerPage = ref(10)
 // 排序（先按照日期排序就好）*****待新增******
 const tableSortBy = ref([
   // createdAt是建立的日期
@@ -129,7 +129,12 @@ const tableLoadItems = async (reset) => {
       }
     })
     // console.log(data.result)
-    tableItems.value = data.result[0]
+    tableItems.value.splice(0, tableItems.value.length, ...data.result[0])
+    console.log(tableItems.value.length)
+    console.log(data.result[0])
+    tableItemsLength.value = data.result[1]
+
+    console.log(data.result)
   } catch (error) {
     console.log(error)
     createSnackbar({

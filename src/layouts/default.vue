@@ -150,4 +150,17 @@ const logout = async () => {
     align-items: center;
   }
 }
+
+/* 整體版面 */
+.v-main{
+  width: 70vw;
+  /* background: cadetblue; */
+  margin: auto;
+
+  .v-container {
+    width: 100%;
+    /* background: chocolate; */
+    margin: auto;
+  }
+}
 </style>

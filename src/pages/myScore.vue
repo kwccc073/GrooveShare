@@ -2,7 +2,9 @@
 <template>
   <v-container>
     <breadcrumbs></breadcrumbs>
+    <!-- hide-default-header => 隱藏標題列 -->
     <v-data-table-server
+      class="v-data-table-server"
       v-model:items-per-page="tableItemsPerPage"
       v-model:sort-by="tableSortBy"
       v-model:page="tablePage"
@@ -77,7 +79,7 @@ const createSnackbar = useSnackbar() // 彈出對話框
 const { apiAuth } = useApi() // 取出apiAuth（要做請求都要做這個）
 
 // 一頁顯示幾個
-const tableItemsPerPage = ref(10)
+const tableItemsPerPage = ref(2)
 // 排序（先按照日期排序就好）*****待新增******
 const tableSortBy = ref([
   // createdAt是建立的日期
@@ -85,7 +87,7 @@ const tableSortBy = ref([
   { key: 'createdAt', order: 'desc' }
 ])
 // 頁碼，表示表格現在被翻到哪一頁
-const tablePage = ref(1)
+const tablePage = ref(3)
 // 表格要顯示的東西
 const tableItems = ref([])
 // 表格欄位設定（理論上應該會固定，所以不用ref）
@@ -179,9 +181,10 @@ const deleteSong = (id, editor) => {
 <style scoped lang="scss">
 // 樣式待編輯
 .v-container{
-  width: 80vw;
-  margin: auto;
-  padding-top: 1rem;
-}
 
+  .v-data-table-server {
+    // background: cadetblue;
+  }
+
+}
 </style>

@@ -5,7 +5,7 @@
         <breadcrumbs></breadcrumbs>
       </v-col>
       <v-col cols="6" id="col-btn">
-        <v-btn @click="openDialog(null)" prepend-icon="mdi-plus">新增練鼓室資料</v-btn>
+        <v-btn @click="openDialog(null)" prepend-icon="mdi-plus">新增練鼓室</v-btn>
       </v-col>
       <!-- 練鼓室表格--------------------------------------------------------- -->
       <v-col cols="12">
@@ -151,6 +151,8 @@ import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
+// 引入GSAP
+import { gsap } from 'gsap'
 
 definePage({
   meta: {
@@ -422,14 +424,13 @@ const deleteTrainingRoom = (id) => {
     })
   }
 }
+
+// 動畫效果-------------------------------------------------------------
+gsap.to('.v-dialog', { x: 500, duration: 1 })
 </script>
 
 <style scoped lang="scss">
 .v-container{
-  width: 80vw;
-  margin: auto;
-  padding-top: 1rem;
-
   .v-row{
     .v-col{
 
@@ -448,8 +449,10 @@ const deleteTrainingRoom = (id) => {
   }
 }
 
+// 彈出視窗
 .v-dialog{
   // background: violet; // 這是卡片旁邊區塊的顏色
+  width: 50vw;
 
   .v-card{
     // background: cadetblue;

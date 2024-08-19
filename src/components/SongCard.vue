@@ -1,27 +1,32 @@
 <!-- addCart改為saveSong*************** -->
 <template>
-  <v-card>
+  <!-- v-card內建屬性：
+      elevation="0" => 去除陰影
+  -->
+  <v-card elevation="0">
     <v-card-title>
       <router-link :to="'/songs/' + _id" class="router-link">
-        <h4>{{ singer }}</h4>
-        <h4>{{ songTitle }}</h4>
+        <h4>
+          {{ singer }} - {{ songTitle }}
+      </h4>
         </router-link>
     </v-card-title>
     <v-card-subtitle>
-      <p>{{ songStyle }} / {{ BPM }}</p>
+      <span class="StyleAndBPM">{{ songStyle }} / {{ BPM }}</span>
       <!-- 有人按收藏時，收藏次數應該跟著變動***待編輯*** -->
-      <p>收藏次數：{{ savedTimes }}</p>
+      <!-- <v-spacer></v-spacer> -->
+      <span class="savedTimes">收藏次數：{{ savedTimes }}</span>
     </v-card-subtitle>
-    <v-card-actions>
+    <!-- <v-card-actions> -->
       <!-- v-spacer會自動把東西推到右邊 -->
-      <v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer> -->
       <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
       <!-- 如果已經收藏，按鈕文字要改成"取消收藏****待編輯**** -->
-      <template v-if="nowAccount !== editor">
+      <!-- <template v-if="nowAccount !== editor">
         <v-btn color="primary" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loading" v-if="nowSaving.includes(_id)">取消收藏</v-btn>
         <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading" v-else>收藏歌曲</v-btn>
-      </template>
-    </v-card-actions>
+      </template> -->
+    <!-- </v-card-actions> -->
   </v-card>
 </template>
 
@@ -65,14 +70,33 @@ const saveSong = async () => {
 
 <style scoped lang="scss">
 .v-card{
+  width: 100%;
+  // height: 20%;
+  // background: chartreuse;
+  border-bottom: 1px dashed black;
+  border-radius: 0;
+
+  // 標題
   .v-card-title{
     text-decoration: none;
+    // background: cadetblue;
 
     .router-link{
       text-decoration: none;
       color: black;
       font-weight: bold;
     }
+  }
+
+  .v-card-subtitle{
+    // background: yellow;
+    display: flex;
+    justify-content: space-around;
+
+  }
+
+  .v-card-actions{
+    background: chocolate;
   }
 }
 
