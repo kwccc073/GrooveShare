@@ -72,6 +72,7 @@ const loadNewSongs = async () => {
     pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE) // 總共幾頁
     // 把newSongs陣列裡的內容換掉：從第0個開始清除, newSongs陣列長度個,
     newSongs.value.splice(0, newSongs.value.length, ...data.result.data)
+    console.log(newSongs.value)
     // console.log(newSongs.value)
   } catch (error) {
     console.log(error)

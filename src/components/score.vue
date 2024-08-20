@@ -6,13 +6,13 @@
     <template v-for="(section, sectionIndex) in scoreHiHat" :key="sectionIndex">
       <!-- :class="{Dnone: }"
           在尺寸小於lg時***這部分待編輯****，偶數(sectionIndex%2==1)的v-col要加上一個屬性使display:none -->
-      <v-col cols="2" class="beginning" :class="{displayNone:(sectionIndex%2==1)}">
+      <v-col cols="2" class="beginning" :class="{displayNone:(sectionIndex%2==1)&&xl}">
         <template v-if="sectionIndex === 0">
           <p>{{ signatureBeat }}</p>
           <p>{{ signatureNote }}</p>
         </template>
       </v-col>
-      <v-col cols="10" lg="5" class="section v-col">
+      <v-col cols="10" xl="5" class="section v-col">
         <!-- <div class="sectionTitle">第{{sectionIndex+1}}小節</div> -->
         <div class="allBeats">
           <!-- 一拍------------------------------------------------------------ -->
@@ -410,6 +410,9 @@
 </template>
 
 <script setup>
+// 引入斷點
+import { useDisplay } from 'vuetify'
+const { xl } = useDisplay() // 斷點
 // 外部要接收的東西
 const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick'])
 // 對props裡的值做處理，要使用props.data

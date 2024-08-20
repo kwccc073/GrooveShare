@@ -6,31 +6,35 @@
       <v-col cols="12">
         <breadcrumbs></breadcrumbs>
       </v-col>
-      <v-col cols="6" id="col-profile">
+      <v-col cols="12" md="4" id="col-profile">
         <img :src="nowIcon" alt="大頭貼" id="icon">
+        <v-btn @click="openDialog(null)" id="btn-edit" width="150px" color="" style="margin: auto;">上傳大頭貼</v-btn>
         <div id="information">
           <p>帳號：{{ user.account }}</p>
           <p>email：{{ nowEmail }}</p>
-          <v-btn @click="openDialog(null)" id="btn-edit">修改個人檔案</v-btn>
+        </div>
+      </v-col>
+      <v-col cols="12" md="8" id="memberArea">
+        <h1 class="title">會員專區</h1>
+        <div id="btns">
+          <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
         </div>
       </v-col>
     </v-row>
-    <v-row class="bg-primary"></v-row>
-    <v-row>
-      <v-col cols="12" id="memberArea-title">
-        會員專區
-      </v-col>
-      <v-col cols="12">
-        <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
-      </v-col>
-    </v-row>
-
-    <v-dialog v-model="isOpen" persistent width="500">
+  </v-container>
+  <v-dialog v-model="isOpen" width="400">
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <v-card>
+        <!-- 關閉視窗按鈕 -->
+        <!-- elevation="0" => 去除陰影-->
+        <v-btn :loading="isSubmitting" @click="isOpen = false" id="btn-close" elevation="0">
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
         <v-card-title>
-          編輯個人檔案
+          <h1>上傳大頭貼</h1>
         </v-card-title>
         <!-- 步驟5. 綁定欄位的 v-model、:error-messages -->
         <v-card-text>
@@ -49,11 +53,12 @@
             help-text="選擇檔案或拖曳到這裡"
             :error-text="{ type: '檔案格式不支援', size: '檔案大小不能超過 1MB' }"
             ref="fileAgent"
+            id="uploadPhoto"
           ></vue-file-agent>
-          <v-text-field
+          <!-- <v-text-field
             label="email"
             v-model="email.value.value"
-          ></v-text-field>
+          ></v-text-field> -->
           <!-- 密碼 ******************待編輯********************-->
           <!-- <v-text-field
             label="密碼"
@@ -65,15 +70,13 @@
             v-model="passwordConfirm.value.value"
           ></v-text-field> -->
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="justify-center">
           <!-- :loading="isSubmitting" 表示送出的時候會轉圈，避免重複點擊 -->
-          <v-btn color="red" :loading="isSubmitting" @click="isOpen = false">取消</v-btn>
-          <v-btn color="green" type="submit" :loading="isSubmitting">送出</v-btn>
+          <v-btn color="" type="submit" :loading="isSubmitting">上傳</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
   </v-dialog>
-  </v-container>
 </template>
 
 <script setup>
@@ -131,7 +134,7 @@ const memberItems = ref([
   { title: '我的鼓譜', to: '/myScore', prependIcon: 'mdi-file-document-outline' },
   { title: '我的收藏', to: '/mySaving', prependIcon: 'mdi-content-save-all-outline' },
   // { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
-  { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
+  // { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
 ])
 
 // 視窗------------------------------------
@@ -220,8 +223,8 @@ const submit = handleSubmit(async (values) => {
     // 建立物件fd
     const fd = new FormData()
     // 把東西放入form-data：fd.append(key, value)*****待編輯*****
-    fd.append('account', values.account)
-    fd.append('email', values.email)
+    // fd.append('account', values.account)
+    // fd.append('email', values.email)
     // 密碼***待編輯***
     // fd.append('password', values.password) // 送出後，資料庫顯示的是未加密的密碼，且無法用新密碼登入**待編輯**
 
@@ -266,48 +269,89 @@ const submit = handleSubmit(async (values) => {
   .v-row{
     .v-col{}
 
-      #col-profile{
-        // background: cadetblue;
-        display: flex;
-        justify-content: space-around;
-        // 大頭貼
-        #icon{
-          width: 100px;
-          height: 100px;
-          background: lightgray;
-        }
-        #information{
-          height: 100%;
-          // background: gold;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-
-          #btn-edit{
-            width: 100%;
-          }
-        }
+    #col-profile{
+      // background: red;
+      // height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      gap: 1rem;
+      // 大頭貼
+      #icon{
+        width: 150px;
+        height: 150px;
+        background: lightgray;
+        margin: auto;
       }
-      #memberArea-title{
+      // 使用者資料
+      #information{
+        // background: gold;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        text-align: center;
+      }
+    }
+    // 會員專區------------------------------
+    #memberArea{
+      h1{
         font-weight: bold;
         text-decoration: underline;
+        font-size: 1.5rem;
       }
+      #btns{
+        // background: rebeccapurple;
+        display: flex;
+        margin-top: 1rem;
+        width: 80%;
+        gap: 1rem;
+        .v-btn{
+          // background: cadetblue;
+        }
+      }
+    }
+
   }
 }
 
+.v-dialog{
   .v-card{
     // background: cadetblue;
     text-align: center;
+    position: relative;
 
+    // 關閉按鈕
+    #btn-close{
+      position: absolute;
+      top: 10px;
+      right: 0px;
+      width: 32px; /* 調整按鈕寬度 */
+      height: 32px; /* 調整按鈕高度 */
+      font-size: 0.8rem;
+    }
+    // 標題
     .v-card-title{
       font-weight: bold;
+      font-size: 1rem;
     }
+    // 內容
+    .v-card-text{
+      background: rgb(229, 229, 229);
 
+      #uploadPhoto{
+        background: white;
+      }
+    }
+    // 按鈕
     .v-card-actions{
-      // 沒有置中**待編輯**
-      display: flex;
-      justify-content: center;
+      .v-btn{
+        background: lavender;
+
+        &:hover{
+          background: gray;
+        }
+      }
     }
   }
-
+}
 </style>

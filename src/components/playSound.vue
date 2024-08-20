@@ -3,13 +3,13 @@
     <!-- <h2>播放鼓譜</h2> -->
     <!-- <label for="bpm">BPM: {{ BPM }}</label> -->
     <!-- 起始狀態：非播放中且currentXXX皆為0的時候顯示 -->
-    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection === 0 && currentBeat === 0 && currentDivision === 0)">開始播放</v-btn>
+    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection === 0 && currentBeat === 0 && currentDivision === 0)" prepend-icon="mdi-play">播放鼓譜</v-btn>
     <!-- 非播放中且播放到一半時顯示 -->
     <!-- 播放到一半 => 其中一個currentXXX不為0 -->
-    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)">從第一小節開始播放</v-btn>
-    <v-btn @click="toggleMetronome" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)">接續播放</v-btn>
+    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" prepend-icon="mdi-replay">重新播放</v-btn>
+    <v-btn @click="toggleMetronome" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" prepend-icon="mdi-play">接續播放</v-btn>
     <!-- 正在播放得時候顯示 -->
-    <v-btn @click="toggleMetronome" v-if = "isPlaying">暫停播放</v-btn>
+    <v-btn @click="toggleMetronome" v-if = "isPlaying" prepend-icon="mdi-stop">暫停</v-btn>
     <audio ref="hiHatSound" :src="hiHatAudio"></audio>
     <audio ref="snareSound" :src="snareAudio"></audio>
     <audio ref="kickSound" :src="kickAudio"></audio>

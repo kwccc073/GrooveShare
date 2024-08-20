@@ -4,33 +4,78 @@
     <!-- 歌曲資訊-------------------------------------------------------------------- -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <!-- 歌曲資訊------------------------------------ -->
-      <v-row>
-        <v-col cols="12" v-if="isEditing" id="isEditing-title">編輯中</v-col>
-        <v-col cols="12" class="bg-info">
-          <template v-if="isEditing">
-            <span>演奏/演唱者：</span>
-            <v-text-field
-              placeholder="請輸入演奏/演唱者"
-              v-model="singer.value.value"
-              :error-messages="singer.errorMessage.value"
-            ></v-text-field>
-            <span>歌名：</span>
-            <v-text-field
-              placeholder="請輸入歌名"
-              v-model="songTitle.value.value"
-              :error-messages="songTitle.errorMessage.value"
-            ></v-text-field>
-          </template>
-          <h1 v-else>{{ song.singer }} - {{ song.songTitle }}</h1>
+      <v-row id='songInformation'>
+        <v-col cols="12" id="isEditing-title" v-if="isEditing">
+          <span>編輯中</span>
+          <v-btn :loading="isSubmitting" @click="isEditing = false" v-if="isEditing">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-col>
-        <v-col cols="12" id="btns">
-          <template v-if="isEditing">
-            <v-btn color="red" :loading="isSubmitting" @click="isEditing = false">取消</v-btn>
-            <v-btn type="submit" :loading="isSubmitting">儲存</v-btn>
-            <v-btn @click="addSection()">新增小節 sections</v-btn>
-          </template>
+        <v-col cols="12" v-if="!isEditing" style="display: flex;justify-content: center;align-items: center;">
+          <h1>{{ song.singer }} - {{ song.songTitle }}</h1>
+          <!-- 播放按鈕 -->
+          <playSound v-bind="song" :key="song._id" v-if="!isEditing"></playSound>
+        </v-col>
+        <template v-if="isEditing">
+          <v-col class="v-col" cols="12" md="6">
+            <span>演奏/演唱者：</span>
+              <v-text-field
+                placeholder="請輸入演奏/演唱者"
+                v-model="singer.value.value"
+                :error-messages="singer.errorMessage.value"
+              ></v-text-field>
+          </v-col>
+          <v-col class="v-col" cols="12" md="6">
+            <span>歌名：</span>
+              <v-text-field
+                placeholder="請輸入歌名"
+                v-model="songTitle.value.value"
+                :error-messages="songTitle.errorMessage.value"
+              ></v-text-field>
+          </v-col>
+        </template>
+        <v-col class="v-col" cols="6" lg="3">
+          <span>曲風：</span>
+          <v-autocomplete
+            v-if="isEditing"
+            label="請選擇曲風"
+            :items="songStylies"
+            v-model="songStyle.value.value"
+            :error-messages="songStyle.errorMessage.value"
+          ></v-autocomplete>
+          <span v-else>{{ song.songStyle }}</span>
+        </v-col>
+        <v-col class="v-col" cols="6" lg="3">
+          <span>BPM：</span>
+            <template v-if="isEditing">
+              <v-text-field
+                placeholder="請輸入BPM"
+                type="number" min="0"
+                v-model="BPM.value.value"
+                :error-messages="BPM.errorMessage.value"
+              ></v-text-field>
+            </template>
+            <span v-else>{{ song.BPM }}</span>
+        </v-col>
+        <v-col class="v-col" cols="6" lg="3" v-if="!isEditing">
+          作者：{{song.editor}}
+        </v-col>
+        <v-col cols="6" lg="3" id="public">
+          <span>隱私狀態：</span>
+          <v-checkbox
+            v-if="isEditing"
+            v-model="isPublic.value.value"
+            @change="console.log(isPublic.value.value)"
+          ></v-checkbox>
           <template v-else>
-            <testAudio v-bind="song" :key="song._id" v-if="!isEditing"></testAudio>
+            <!-- 公開－true -->
+            <v-icon v-if="song.isPublic">mdi-lock-open-variant</v-icon>
+            <!-- 隱私－false -->
+            <v-icon v-else>mdi-lock</v-icon>
+          </template>
+        </v-col>
+        <v-col cols="12" class="btns" style="display: flex;justify-content: end;">
+          <template v-if="!isEditing">
             <!-- 如果是作者顯示編輯、刪除按鈕 -->
             <template v-if="nowAccount === song.editor">
               <v-btn prepend-icon="mdi-pencil-outline" @click="editSong(null)" >編輯</v-btn>
@@ -44,74 +89,30 @@
             </template>
           </template>
         </v-col>
-        <v-col cols="6">
-          <div>
-            <span>曲風：</span>
-            <template v-if="isEditing">
-              <!-- v-autocomplete 是可以打字的下拉選單
-                :items放選項的陣列 -->
-                <v-autocomplete
-                  label="請選擇曲風"
-                  :items="songStylies"
-                  v-model="songStyle.value.value"
-                  :error-messages="songStyle.errorMessage.value"
-                ></v-autocomplete>
-            </template>
-            <span v-else>{{ song.songStyle }}</span>
-          </div>
-          <div>
-            <span>BPM：</span>
-            <template v-if="isEditing">
-              <v-text-field
-                placeholder="請輸入BPM"
-                type="number" min="0"
-                v-model="BPM.value.value"
-                :error-messages="BPM.errorMessage.value"
-              ></v-text-field>
-            </template>
-            <span v-else>{{ song.BPM }}</span>
-          </div>
-        </v-col>
-        <v-col cols="6">
-          <p>作者：{{song.editor}}</p>
-          <div>
-            <span>公開狀態：</span>
-            <v-checkbox
-            v-if="isEditing"
-            v-model="isPublic.value.value"
-            @change="console.log(isPublic.value.value)"
-            ></v-checkbox>
-            <template v-else>
-              <!-- 公開－true -->
-              <v-icon v-if="song.isPublic">mdi-lock-open-variant</v-icon>
-              <!-- 隱私－false -->
-              <v-icon v-else>mdi-lock</v-icon>
-            </template>
-          </div>
-        </v-col>
       </v-row>
+
       <!-- 樂譜部分------------------------------------------------------------------------------ -->
       <!-- song.scoreHiHat[小節][第幾拍][第幾部分] -->
       <!-- 編輯狀態 ------------------------------------->
-      <v-row class="scoreArea h-100" v-if="isEditing">
+      <v-row id='scoreArea' class="h-100" v-if="isEditing">
         <template v-for="(section, sectionIndex) in scoreHiHat.value.value" :key="sectionIndex">
           <!-- 樂器(列)名稱------------------------------------- -->
           <!-- 最大尺寸時，sectionIndex%2==1的時候不顯示 -->
           <!-- 其他小尺寸則全都要顯示****待編輯**** -->
-          <v-col cols="2" class="instruments w-100 bg-black" :class="{displayNone:(sectionIndex%2==1)}">
-            <div class="row-name"></div>
-            <div class="row-name"></div>
-            <div class="row-name">Hi-Hat</div>
-            <div class="row-name">snare (小鼓)</div>
-            <div class="row-name">kick (大鼓)</div>
+          <v-col cols="2" class="instruments w-100" :class="{displayNone:(sectionIndex%2==1)&&xl}">
+            <div class="row-name-section"></div>
+            <div class="row-name-beat"></div>
+            <div class="row-name-instrument">Hi-Hat</div>
+            <div class="row-name-instrument">小鼓</div>
+            <div class="row-name-instrument">大鼓</div>
           </v-col>
           <!-- 小節 -->
-          <v-col cols="10" lg="5" class="section">
-            <div class="sectionTitle">第{{sectionIndex+1}}小節</div>
+          <v-col cols="10" xl="5" class="section v-col">
+            <div class="sectionTitle">section - {{sectionIndex+1}}</div>
             <div class="allBeats">
               <!-- 一拍------------------------------------------------------------ -->
               <div class="beat w-100" v-for="(beat, beatIndex) in section" :key="beatIndex">
-                <div class="beat-title">第 {{beatIndex + 1}} 拍</div>
+                <div class="beatTile">beat -  {{beatIndex + 1}}</div>
                   <div class="allNoteAreas">
                     <!-- HiHat----------------------------------- -->
                     <div class="HiHat-area noteArea w-100 d-flex">
@@ -155,6 +156,12 @@
             </div>
           </v-col>
         </template>
+        <v-col cols="12" class="btns-editing">
+          <template v-if="isEditing">
+            <v-btn @click="addSection()" prepend-icon="mdi-plus">新增小節</v-btn>
+            <v-btn type="submit" :loading="isSubmitting" color="green">儲存</v-btn>
+          </template>
+        </v-col>
       </v-row>
     </v-form>
     <score v-bind="song" v-if="!isEditing"></score>
@@ -172,7 +179,9 @@ import * as yup from 'yup'
 import { useUserStore } from '@/stores/user' // 取得現在的使用者
 // 引入自定義的元件－音符
 import score from '@/components/score.vue'
-import testAudio from '@/components/testAudio.vue'
+import playSound from '@/components/playSound.vue'
+// 引入斷點
+import { useDisplay } from 'vuetify'
 
 definePage({
   meta: {
@@ -189,6 +198,7 @@ const createSnackbar = useSnackbar()
 const user = useUserStore()
 const nowAccount = user.account
 const nowSaving = user.saving
+const { xl } = useDisplay() // 斷點
 
 // 頁面中歌曲的預設值
 const song = ref({
@@ -486,85 +496,143 @@ const deleteSong = () => {
 // 一整列------------------------------------------------------------------------------------------------
 .v-container{
   .v-form{
-    // background: cadetblue;
-    // margin: 0;
-    .v-row{
-      #isEditing-title{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font-size: 2rem;
-        color: red;
-      }
-      #btns{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+    #songInformation{
+    .v-col{
+      display: flex;
+      // flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-      // 樂譜部分--------------------------------------------------------------------
-    .scoreArea{
+    // 編輯中字樣
+    #isEditing-title{
       display: flex;
-      // background: lavenderblush;
-      border: 1px solid black;
-      padding: 0;
-      // text-align: center;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 2rem;
+      color: red;
+    }
 
-      // 樂器(列)名稱-------------------------------------------------
-      // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
-      .instruments{
-        // background: lawngreen;
+    // 隱私狀態
+    #public{
+      display: flex;
+      align-items: center;
+    }
+    // 拍號
+    // #signature{
+      // display: flex;
+      // justify-content: center;
+      // align-content: center;
+
+    //   .v-select{
+    //     display: inline-block;
+    //     width: 30%;
+    //     height: 30%;
+    //   }
+    // }
+    // 隱私設定
+    .v-checkbox{
+      display: flex;
+    }
+  }
+
+  .btns{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+      // 樂譜部分--------------------------------------------------------------------
+      #scoreArea{
+        display: flex;
+        box-sizing: border-box;
+        // border: 1px solid black;
         padding: 0;
         text-align: center;
 
-        .row-name{
-          height: 20%;
-          // background: orange;
-          // border: 1px solid black;
-          width: 100%;
+        .v-col{
+          padding: 0;
+          margin-top: 1rem
         }
-      }
 
-      // 一個小節 ----------------------------------------------------
-      .section{
-        // background: lemonchiffon;
-        padding: 0.2rem;
-        display: flex;
-        flex-direction: column;
-
-        .sectionTitle{
-          // background: darkgoldenrod;
-          border: 1px solid black;
+        .sectionTitle,
+        .beatTile,
+        .row-name-section,
+        .row-name-beat{
+          width: 100%;
+          height: 30px; // 高度待編輯
+          box-sizing: border-box;
           // font-size: 1rem; // 字體大小待編輯
           padding: 0;
           text-align: center;
-        }
-
-        // 一個小節裡的所有拍-----------------------------
-        .allBeats{
-          // background: darkcyan;
-          border: 1px solid black;
           display: flex;
-          justify-content: space-around;
-          // 每一拍
-          .beat{
-            padding: 0.2rem;
-            border: 1px solid black;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid black;
+        }
+        // 去掉中間的線
+        .row-name-section{
+          border-bottom: 0px solid black;
+        }
+        .row-name-beat{
+          border-top: 0px solid black;
+        }
 
-            .beat-title{
-              text-align: center;
+        .allNoteAreas{
+          // background: chocolate;
+        }
+
+        // 樂器(列)名稱-------------------------------------------------
+        // 如果尺寸為xl時，偶數的.instruments會display:none****2待編輯*****
+        // .row-name-instrument單行的高度會等於noteArea（也等於allNoteAreas/3）
+        .row-name-instrument,
+        .noteArea{
+          box-sizing: border-box;
+          border: 1px solid black;
+          width: 100%;
+          height: 50px;
+        }
+
+        .row-name-instrument{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        // 一個小節 ----------------------------------------------------
+        .section{
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+
+          // 一個小節裡的所有拍-----------------------------
+          .allBeats{
+            padding: 0;
+            display: flex;
+
+            // 每一拍
+            .beat{
+              padding: 0rem;
+
+              .allNoteAreas{
+                .noteArea{
+                  display: flex;
+                  justify-content: center;
+
+                  .v-checkbox{
+                    // display: flex;
+                    font-size: 0.8rem; // 勾選框大小
+                  }
+                }
             }
-            .allNoteAreas{
-              .noteArea{
-                display: flex;
-                flex-direction: row;
-                border: 1px solid black;
-              }
-          }
+            }
           }
         }
+      .btns-editing{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
       }
     }
   }
