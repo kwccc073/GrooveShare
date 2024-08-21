@@ -5,8 +5,7 @@
       <!-- LOGO及網頁標題 -->
       <router-link to="/">
         <v-app-bar-title>
-          <img src="" alt="logo">
-          Title
+          <img src="@/assets/logo/LOGO-br.gif" alt="logo" id="logoImg">
         </v-app-bar-title>
       </router-link>
       <v-spacer></v-spacer>
@@ -143,6 +142,11 @@ const logout = async () => {
 </script>
 
 <style>
+/* logo尺寸待編輯 */
+#logoImg{
+  width: auto;
+  height: 50px;
+}
 .v-navigation-drawer{
 
   #userAccount{

@@ -1,9 +1,34 @@
 <!-- 熱門排行榜******待編輯******* -->
 <template>
+  <!-- 網頁介紹------------------------------------------------------- -->
+  <section id="section01">
+    <img src="@/assets/logo/LOGO-ww.gif">
+  </section>
+  <section id="section02">
+    <div id="div01">
+      <img src="@/assets/photo/drum02.jpg">
+      <div class="introduce">
+        <p>鼓譜編輯器協助您完成鼓譜，輕鬆記下喜歡的歌曲與節奏，並與鼓手們分享您的創作。</p>
+        <v-btn to="/writtingArea">click me</v-btn>
+      </div>
+    </div>
+    <!-- 灰色框框 -->
+    <div id="div02"></div>
+    <!-- 鼓棒照片 -->
+    <div id="div03">
+      <img src="@/assets/photo/drumSticks.jpg">
+      <div class="introduce">
+        <p>提供練鼓室資訊交流，包含地址、電話及租借費用，幫助您快速找到適合的練習場地，讓每一次練習都事半功倍。</p>
+        <v-btn to="/searchTrainingRoom">click me</v-btn>
+      </div>
+    </div>
+    <img src="@/assets/photo/drum03.jpg" id="img-drum03">
+  </section>
+  <section id="section03">
+    <p>隨時瀏覽與聆聽其他鼓手的精彩創作，並將喜愛的鼓譜收藏起來，無論在哪裡都可以與節奏同行。</p>
+    <v-btn to="/searchSong">click me</v-btn>
+  </section>
   <v-container>
-    <!-- 網頁介紹------------------------------------------------------- -->
-    <div id="introduceArea">主視覺</div>
-
     <!-- 最新上架-------------------------------------------------------- -->
     <div id="newArea">
       <h1>最新上架</h1>
@@ -179,11 +204,91 @@ onMounted(async () => {
 }
 
 // 網頁介紹-------------------------------------------------------------
-#introduceArea{
+section{
+  // 因為defalt.vue有設定v-main寬度，故這裡的100%是指v-main的100%（非滿版）
   width: 100%;
-  height: 50vh;
-  margin: auto;
-  border: 1px solid black;
-  margin-bottom: 3rem;
+  height: auto;
+}
+#section01{
+  // 設定寬高比例
+  aspect-ratio: 16/9;
+  // center => 置中；cover => 圖片覆蓋整個容器
+  // 圖片畫質有點差，待找原圖***待編輯***
+  background: url('@/assets/photo/drum01.jpg') center / cover no-repeat ;
+  position: relative;
+  // LOGO
+  img{
+    width: 70%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+#section02{
+  #div01{
+    width: 50%;
+    background: violet;
+    display: flex;
+    flex-direction: column;
+    img{
+      width: 100%;
+    }
+
+    .introduce{
+      // background: cadetblue;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .v-btn{
+        width: 100px;
+      }
+    }
+  }
+  // 灰色框框
+  #div02{
+    width: 100px;
+    height: 100px;
+    background: lightgray;
+  }
+  // 鼓棒照片***要讓他凸出去，待編輯***
+  #div03{
+    width: 50%;
+    background: blue;
+    display: flex;
+    flex-direction: column;
+    img{
+      width: 120%;
+    }
+
+    .introduce{
+      // background: cadetblue;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .v-btn{
+        width: 100px;
+      }
+    }
+  }
+  #img-drum03{
+    width: 40%;
+  }
+}
+#section03{
+  width: 100%;
+  background: black;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  .v-btn{
+    width: 100px;
+  }
 }
 </style>
