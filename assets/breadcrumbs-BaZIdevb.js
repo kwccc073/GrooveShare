@@ -1,1 +1,0 @@
-import{ar as a,o,$ as s,a0 as r,a7 as c}from"./index-CWikNf2Y.js";const _={__name:"breadcrumbs",setup(n){const t=a(),e=o(()=>t.meta.title);return(u,l)=>(s(),r("p",null,"現在位置："+c(e.value),1))}};export{_};
