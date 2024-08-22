@@ -2,7 +2,7 @@
 <template>
   <!-- 網頁介紹------------------------------------------------------- -->
   <section id="section01">
-    <img src="@/assets/logo/LOGO-ww.gif">
+    <img src="@/assets/logo/LOGO-ww.png">
   </section>
   <section id="section02">
     <div id="div01">
@@ -225,11 +225,51 @@ section{
   }
 }
 #section02{
+  padding-top: 5%;
+  position: relative;
+  z-index: 0;
+  padding-bottom: 20%;
   #div01{
-    width: 50%;
-    background: violet;
+    width: 55%;
+    // background: violet;
     display: flex;
     flex-direction: column;
+    margin-left: 12%;
+    img{
+      width: 100%;
+    }
+
+    .introduce{
+      // background: cadetblue;
+      width: 80%;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .v-btn{
+        margin-top: 1px;
+        width: 100px;
+      }
+    }
+  }
+  // 灰色框框
+  #div02{
+    width: 35%;
+    height: 40%;
+    background: rgba(114, 79, 75, 0.1);
+    position: absolute;
+    top: 13%;
+    right: 7%;
+    z-index: -1;
+  }
+  // 鼓棒照片***要讓他凸出去，待編輯***
+  #div03{
+    width: 40%;
+    // background: blue;
+    display: flex;
+    flex-direction: column;
+    margin-top: 12%;
     img{
       width: 100%;
     }
@@ -243,39 +283,16 @@ section{
 
       .v-btn{
         width: 100px;
-      }
-    }
-  }
-  // 灰色框框
-  #div02{
-    width: 100px;
-    height: 100px;
-    background: lightgray;
-  }
-  // 鼓棒照片***要讓他凸出去，待編輯***
-  #div03{
-    width: 50%;
-    background: blue;
-    display: flex;
-    flex-direction: column;
-    img{
-      width: 120%;
-    }
+        margin-top: 1rem;
 
-    .introduce{
-      // background: cadetblue;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      .v-btn{
-        width: 100px;
       }
     }
   }
   #img-drum03{
-    width: 40%;
+    height: 40%;
+    position: absolute;
+    bottom: 13%;
+    right: 22%;
   }
 }
 #section03{

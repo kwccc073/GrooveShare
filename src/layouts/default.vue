@@ -5,7 +5,7 @@
       <!-- LOGO及網頁標題 -->
       <router-link to="/">
         <v-app-bar-title>
-          <img src="@/assets/logo/LOGO-br.gif" alt="logo" id="logoImg">
+          <img src="@/assets/logo/LOGO-br.png" alt="logo" id="logoImg">
         </v-app-bar-title>
       </router-link>
       <v-spacer></v-spacer>
