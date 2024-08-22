@@ -1,72 +1,69 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="6">
-        <breadcrumbs></breadcrumbs>
-      </v-col>
-      <v-col cols="6" id="col-btn">
-        <v-btn @click="openDialog(null)" prepend-icon="mdi-plus">新增練鼓室</v-btn>
-      </v-col>
-      <!-- 練鼓室表格--------------------------------------------------------- -->
-      <v-col cols="12">
-        <!-- v-data-table-server 是有翻頁、排序功能的表格，使後端只會回傳當下那個頁面的東西（比較不會跑太久） -->
-        <!-- 要綁定的屬性
-        items-per-page 一頁顯示幾個
-        sort-by 在表格的哪個欄位，用什麼東西去排序
-        page 頁碼，表示表格現在被翻到哪一頁
-        headers 表格欄位設定
-        items 表示表格要顯示的東西
-        items-length 每一頁加起來總共有幾筆資料
-        loading 載入狀態
-        search 現在搜尋的文字是什麼
-
-        @update:items-per-page 當"每一頁顯示幾筆"改變時，要執行後方function去重新取資料
-        @update:sort-by 當"排序"改變時，要執行後方function去重新取資料
-        @update:page 當"翻頁"時，要執行後方function去重新取資料
-        -->
-        <v-data-table-server
-          v-model:items-per-page="tableItemsPerPage"
-          v-model:sort-by="tableSortBy"
-          v-model:page="tablePage"
-          :items="tableItems"
-          :headers="tableHeaders"
-          :loading="tableLoading"
-          :items-length="tableItemsLength"
-          :search="tableSearch"
-          @update:items-per-page="tableLoadItems(false)"
-          @update:sort-by="tableLoadItems(false)"
-          @update:page="tableLoadItems(false)"
-          hover
-          id="table"
-        >
-        <!-- 特定的東西（如圖片）要修改顯示內容的方式如下---------------------- -->
-          <!-- 設定其插槽名稱為top -->
-          <template #top>
-            <v-text-field
-              label="搜尋（請輸入城市或名稱）"
-              v-model="tableSearch"
-              append-icon="mdi-magnify"
-              @click-append="tableLoadItems(true)"
-              @keydown.enter="tableLoadItems(true)"
-            ></v-text-field>
-          </template>
-          <!-- 操作---------- -->
-          <!-- { item }表示原始的東西而不是值**** -->
-          <template #[`item.action`]="{ item }">
-            <!-- 點擊時打開編輯視窗，並帶入item(這一列的練鼓室資料) -->
-            <v-btn icon="mdi-pencil" variant="text" @click="openDialog(item)"></v-btn>
-            <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" @click="deleteTrainingRoom(item._id)"></v-btn>
-          </template>
-        </v-data-table-server>
-      </v-col>
-    </v-row>
-  </v-container>
+  <breadcrumbs></breadcrumbs>
+  <!-- 練鼓室表格--------------------------------------------------------- -->
+    <!-- v-data-table-server 是有翻頁、排序功能的表格，使後端只會回傳當下那個頁面的東西（比較不會跑太久） -->
+    <!-- 要綁定的屬性
+    items-per-page 一頁顯示幾個
+    sort-by 在表格的哪個欄位，用什麼東西去排序
+    page 頁碼，表示表格現在被翻到哪一頁
+    headers 表格欄位設定
+    items 表示表格要顯示的東西
+    items-length 每一頁加起來總共有幾筆資料
+    loading 載入狀態
+    search 現在搜尋的文字是什麼
+    @update:items-per-page 當"每一頁顯示幾筆"改變時，要執行後方function去重新取資料
+    @update:sort-by 當"排序"改變時，要執行後方function去重新取資料
+    @update:page 當"翻頁"時，要執行後方function去重新取資料
+    -->
+  <v-data-table-server
+    v-model:items-per-page="tableItemsPerPage"
+    v-model:sort-by="tableSortBy"
+    v-model:page="tablePage"
+    :items="tableItems"
+    :headers="tableHeaders"
+    :loading="tableLoading"
+    :items-length="tableItemsLength"
+    :search="tableSearch"
+    @update:items-per-page="tableLoadItems(false)"
+    @update:sort-by="tableLoadItems(false)"
+    @update:page="tableLoadItems(false)"
+    hover
+    id="table"
+  >
+  <!-- 特定的東西（如圖片）要修改顯示內容的方式如下---------------------- -->
+    <!-- 設定其插槽名稱為top -->
+    <template #top>
+      <div id="btn-and-search">
+      <v-btn @click="openDialog(null)" prepend-icon="mdi-plus" color="black" id="add-btn">新增練鼓室</v-btn>
+      <!-- hide-details => 隱藏顯示錯誤訊息的空間 -->
+      <v-text-field
+        label="請搜尋城市或名稱"
+        v-model="tableSearch"
+        append-icon="mdi-magnify"
+        @click-append="tableLoadItems(true)"
+        @keydown.enter="tableLoadItems(true)"
+        hide-details
+      ></v-text-field>
+    </div>
+    </template>
+    <!-- 操作---------- -->
+    <!-- { item }表示原始的東西而不是值**** -->
+    <template #[`item.action`]="{ item }">
+      <!-- 點擊時打開編輯視窗，並帶入item(這一列的練鼓室資料) -->
+      <v-btn icon="mdi-pencil" variant="text" @click="openDialog(item)"></v-btn>
+      <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" @click="deleteTrainingRoom(item._id)"></v-btn>
+    </template>
+  </v-data-table-server>
   <!-- 新增/編輯視窗---------------------------------------- -->
-  <!-- permanent表示永久固定 -->
-  <v-dialog v-model="dialog.open" persistent width="70vw">
+  <v-dialog v-model="dialog.open" width="70vw">
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <v-card>
+        <v-btn :loading="isSubmitting" @click="closeDialog" id="btn-close" elevation="0">
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
         <v-card-title>
           <!-- 如果有id => 顯示'編輯練鼓室'
                如果沒有id => 顯示'新增練鼓室' -->
@@ -76,12 +73,12 @@
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
-              <v-select
+              <v-autocomplete
                 label="縣市"
                 :items="cities"
                 v-model="city.value.value"
                 :error-messages="city.errorMessage.value"
-              ></v-select>
+              ></v-autocomplete>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -130,8 +127,7 @@
         </v-card-text>
         <v-card-actions>
           <!-- :loading="isSubmitting" 表示送出的時候會轉圈，避免重複點擊 -->
-          <v-btn color="red" :loading="isSubmitting" @click="closeDialog">取消</v-btn>
-          <v-btn color="green" type="submit" :loading="isSubmitting">送出</v-btn>
+          <v-btn type="submit" :loading="isSubmitting">新增</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -156,7 +152,7 @@ import { gsap } from 'gsap'
 
 definePage({
   meta: {
-    title: '尋找練鼓室',
+    title: 'GrooveShare | 尋找練鼓室',
     login: false
   }
 })
@@ -430,21 +426,21 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
 </script>
 
 <style scoped lang="scss">
-.v-container{
-  .v-row{
-    .v-col{
+#table{
+  font-size: 1rem;
 
-      .v-data-table{
-        text-align: center; // 沒有整個表格內容都置中**待編輯**
-        // background: gold;
-
-        .v-data-table-header {
-          background: green; // 沒有改到顏色**待編輯**
-        }
-      }
-    }
-    #col-btn{
-      text-align: right;
+  // 按鈕和搜尋欄的排列
+  #btn-and-search{
+    // background: cadetblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    // 按鈕
+    #add-btn{
+      height: 60px;
+      font-size: 1rem;
     }
   }
 }
@@ -457,15 +453,35 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
   .v-card{
     // background: cadetblue;
     text-align: center;
-
+    padding: 1rem;
+    // 關閉按鈕
+    #btn-close{
+      position: absolute;
+      top: 10px;
+      right: 0px;
+      width: 32px; /* 調整按鈕寬度 */
+      height: 32px; /* 調整按鈕高度 */
+      font-size: 0.8rem;
+    }
+    // 標題
     .v-card-title{
+      font-size: 2rem;
       font-weight: bold;
     }
 
+    // 按鈕
     .v-card-actions{
-      // 沒有置中**待編輯**
-      display: flex;
-      justify-content: center;
+      .v-btn{
+        width: 100px;
+        background: black;
+        color: white;
+        font-size: 1rem;
+        margin: auto;
+
+        &:hover{
+          background: gray;
+        }
+      }
     }
   }
 }

@@ -1,20 +1,19 @@
-<!-- 搜尋功能不能用，**************待編輯************** -->
 <template>
-  <v-container>
-    <breadcrumbs></breadcrumbs>
-    <v-data-table-server
-      v-model:items-per-page="tableItemsPerPage"
-      v-model:sort-by="tableSortBy"
-      v-model:page="tablePage"
-      :items="tableItems"
-      :headers="tableHeaders"
-      :loading="tableLoading"
-      :items-length="tableItemsLength"
-      :search="tableSearch"
-      @update:items-per-page="tableLoadItems(false)"
-      @update:sort-by="tableLoadItems(false)"
-      @update:page="tableLoadItems(false)"
-      hover>
+  <breadcrumbs></breadcrumbs>
+  <v-data-table-server
+    id="table"
+    v-model:items-per-page="tableItemsPerPage"
+    v-model:sort-by="tableSortBy"
+    v-model:page="tablePage"
+    :items="tableItems"
+    :headers="tableHeaders"
+    :loading="tableLoading"
+    :items-length="tableItemsLength"
+    :search="tableSearch"
+    @update:items-per-page="tableLoadItems(false)"
+    @update:sort-by="tableLoadItems(false)"
+    @update:page="tableLoadItems(false)"
+    hover>
     <template #top>
       <v-text-field
         label="搜尋（請輸入演唱/演奏者、歌名或曲風）"
@@ -24,7 +23,6 @@
         @keydown.enter="tableLoadItems(true)"
       ></v-text-field>
     </template>
-
     <!-- 公開狀態 -->
     <!-- <template #[`item.isPublic`]="{ value }"> -->
       <!-- 公開－true -->
@@ -46,7 +44,6 @@
       <!-- <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn> -->
     </template>
   </v-data-table-server>
-  </v-container>
 </template>
 
 <script setup>
@@ -65,7 +62,7 @@ import { useUserStore } from '@/stores/user'
 
 definePage({
   meta: {
-    title: '我的收藏',
+    title: 'GrooveShare | 我的收藏',
     login: true
   }
 })
@@ -173,11 +170,8 @@ const saveSong = async (songID) => {
 </script>
 
 <style scoped lang="scss">
-// 樣式待編輯
-.v-container{
-  width: 80vw;
-  margin: auto;
-  padding-top: 1rem;
+#table{
+  font-size: 1rem;
 }
 
 </style>

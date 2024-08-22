@@ -1,11 +1,12 @@
 <template>
   <!-- 導覽列------------------------------------------------ -->
-  <v-app-bar>
-    <v-container class="d-flex align-center">
+  <v-app-bar elevation="0" color="black" height="100">
+    <!-- 改成align-end後，註冊/登入按鈕沒辦法靠下面 -->
+    <div class="d-flex align-end" id="bar-container">
       <!-- LOGO及網頁標題 -->
       <router-link to="/">
         <v-app-bar-title>
-          <img src="@/assets/logo/LOGO-br.png" alt="logo" id="logoImg">
+          <img src="@/assets/logo/LOGO-wr.png" alt="logo" id="logoImg">
         </v-app-bar-title>
       </router-link>
       <v-spacer></v-spacer>
@@ -33,12 +34,12 @@
         <!-- 登入的使用者、登出按鈕：有登入才會顯示 -->
         <!-- 排版****待編輯**** -->
       </template>
-    </v-container>
+    </div>
   </v-app-bar>
-  <!-- 手機版 側欄------------------------------------------------------------------------------------------ -->
+  <!-- 手機版側邊欄------------------------------------------------------------------------------------------ -->
   <!-- 參考：https://vuetifyjs.com/en/components/navigation-drawers/#caveats -->
   <!-- 改成靠右****待編輯**** -->
-  <v-navigation-drawer v-if="mobile" v-model="drawer">
+  <v-navigation-drawer v-if="mobile" v-model="drawer" color="navigation-drawer-color">
     <div v-if="user.isLogin" id="userAccount">
       <img :src="nowIcon" id="icon" style="width: 40px;height: 40px;">
       <span>{{ nowAccount }}</span>
@@ -54,13 +55,22 @@
         >
       </v-list-item>
     </template>
-
+    <v-divider></v-divider>
     <!-- 會員專區
          要登入才會顯示 -->
     <template v-if="user.isLogin">
-      <p>會員專區</p>
+      <h2>會員專區</h2>
       <!-- 按鈕們 -->
       <template v-for="item in memberItems" :key="item.to">
+        <!-- <v-list-item :to="item.to"> -->
+          <!-- <v-list-item-icon> -->
+            <!-- <v-icon>{{ item.prependIcon }}</v-icon> -->
+          <!-- </v-list-item-icon> -->
+          <!-- <v-list-item-content> -->
+            <!-- <span>{{ item.title }}</span> -->
+          <!-- </v-list-item-content> -->
+        <!-- </v-list-item> -->
+
         <v-list-item
           :prepend-icon="item.prependIcon"
           :to="item.to"
@@ -74,7 +84,7 @@
     <logIn v-if="!user.isLogin"></logIn>
     <!-- 登出按鈕
          有登入才會顯示 -->
-    <v-list-item v-if="user.isLogin" @click="logout" title="登出"></v-list-item>
+    <v-list-item v-if="user.isLogin" @click="logout" title="登出" id="v-list-item-logout"></v-list-item>
   </v-navigation-drawer>
   <!-- 主要內容 -->
   <v-main>
@@ -143,21 +153,53 @@ const logout = async () => {
 
 <style>
 /* logo尺寸待編輯 */
-#logoImg{
-  width: auto;
-  height: 50px;
+.v-app-bar{
+  #bar-container{
+    /* background: blue; */
+    width: 80vw;
+    margin: auto;
+  }
+  #logoImg{
+    width: auto;
+    height: 70px;
+  }
 }
-.v-navigation-drawer{
 
+/* 手機版側邊欄----------------------------------------------------- */
+.v-navigation-drawer{
   #userAccount{
+    padding: 1rem;
     display: flex;
     align-items: center;
+    justify-content: start;
+    gap: 1rem;
+  }
+
+  /* 會員專區 */
+  h2{
+    margin-top: 1rem;
+    padding-left: 1rem;
+    text-decoration: underline;
+  }
+  .v-list-item{
+    padding: 1rem;
+    /* background: rebeccapurple; */
+    /* display: flex; */
+    /* flex-direction: row; */
+    /* justify-content: center; */
+    /* text-align: center; */
+  }
+  #v-list-item-logout{
+    background: rgb(51, 50, 50);
+    text-align: center;
+    font-weight: bold;
+    margin-top: 1rem;
   }
 }
 
 /* 整體版面 */
 .v-main{
-  width: 70vw;
+  width: 80vw;
   /* background: cadetblue; */
   margin: auto;
 
@@ -167,4 +209,5 @@ const logout = async () => {
     margin: auto;
   }
 }
+
 </style>

@@ -46,3 +46,6 @@ const memberItems = ref([
   { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
 ])
 </script>
+
+<style scoped lang="scss">
+</style>

@@ -3,13 +3,22 @@
     <!-- <h2>播放鼓譜</h2> -->
     <!-- <label for="bpm">BPM: {{ BPM }}</label> -->
     <!-- 起始狀態：非播放中且currentXXX皆為0的時候顯示 -->
-    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection === 0 && currentBeat === 0 && currentDivision === 0)" prepend-icon="mdi-play">播放鼓譜</v-btn>
+    <v-btn icon @click="startPlay" v-if = "!isPlaying&&(currentSection === 0 && currentBeat === 0 && currentDivision === 0)" color="black">
+      <v-icon>mdi-play</v-icon>
+      <!-- <span>播放鼓譜</span> -->
+    </v-btn>
     <!-- 非播放中且播放到一半時顯示 -->
+    <v-btn icon @click="toggleMetronome" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" color="black">
+      <v-icon>mdi-play</v-icon>
+    </v-btn>
     <!-- 播放到一半 => 其中一個currentXXX不為0 -->
-    <v-btn @click="startPlay" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" prepend-icon="mdi-replay">重新播放</v-btn>
-    <v-btn @click="toggleMetronome" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" prepend-icon="mdi-play">接續播放</v-btn>
+    <v-btn icon @click="startPlay" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" color="black">
+      <v-icon>mdi-replay</v-icon>
+    </v-btn>
     <!-- 正在播放得時候顯示 -->
-    <v-btn @click="toggleMetronome" v-if = "isPlaying" prepend-icon="mdi-stop">暫停</v-btn>
+    <v-btn icon @click="toggleMetronome" v-if = "isPlaying" color="black">
+      <v-icon>mdi-stop</v-icon>
+    </v-btn>
     <audio ref="hiHatSound" :src="hiHatAudio"></audio>
     <audio ref="snareSound" :src="snareAudio"></audio>
     <audio ref="kickSound" :src="kickAudio"></audio>
@@ -128,6 +137,6 @@ const startPlay = () => {
 
 <style lang="scss">
   .current{
-    background: yellow;
+    background: rgb(233, 233, 233);
   }
 </style>

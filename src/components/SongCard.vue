@@ -6,16 +6,14 @@
   <v-card elevation="0">
     <v-card-title>
       <router-link :to="'/songs/' + _id" class="router-link">
-        <h4>
-          {{ singer }} - {{ songTitle }}
-      </h4>
-        </router-link>
+        <h4 id="singer">{{ singer }}</h4>
+        <h2 id="songTitle">{{ songTitle }}</h2>
+      </router-link>
     </v-card-title>
     <v-card-subtitle>
-      <span class="StyleAndBPM">{{ songStyle }} / {{ BPM }}</span>
+      <span class="bpm-style-savedTimes">{{ songStyle }} / {{ BPM }} / 收藏：{{ savedTimes }}</span>
       <!-- 有人按收藏時，收藏次數應該跟著變動***待編輯*** -->
       <!-- <v-spacer></v-spacer> -->
-      <span class="savedTimes">收藏次數：{{ savedTimes }}</span>
     </v-card-subtitle>
     <!-- <v-card-actions> -->
       <!-- v-spacer會自動把東西推到右邊 -->
@@ -25,8 +23,8 @@
       <!-- <template v-if="nowAccount !== editor">
         <v-btn color="primary" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loading" v-if="nowSaving.includes(_id)">取消收藏</v-btn>
         <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loading" v-else>收藏歌曲</v-btn>
-      </template> -->
-    <!-- </v-card-actions> -->
+      </template>
+    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -75,28 +73,39 @@ const saveSong = async () => {
   // background: chartreuse;
   border-bottom: 1px dashed black;
   border-radius: 0;
+  display: flex;
+  justify-content: space-between;
 
   // 標題
   .v-card-title{
     text-decoration: none;
     // background: cadetblue;
-
+    text-align: left;
+    padding-bottom: 0;
+    padding: 0;
     .router-link{
       text-decoration: none;
       color: black;
       font-weight: bold;
+      // 歌手
+      h4{
+        // background: firebrick;
+        // margin: 0;
+      }
+      // 歌名
+      h1{
+        // background: chartreuse;
+      }
     }
   }
 
   .v-card-subtitle{
-    // background: yellow;
     display: flex;
     justify-content: space-around;
-
-  }
-
-  .v-card-actions{
-    background: chocolate;
+    align-items: end;
+    // background-color: darkorange;
+    padding-bottom: 0;
+    font-size: 1rem;
   }
 }
 

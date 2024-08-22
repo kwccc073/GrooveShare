@@ -11,7 +11,11 @@ import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  extendRoutes: setupLayouts
+  extendRoutes: setupLayouts,
+  scrollBehavior (to, from, savedPosition) {
+    // 固定滾動到頂部
+    return { top: 0 }
+  }
 })
 
 // 進去每一頁之前

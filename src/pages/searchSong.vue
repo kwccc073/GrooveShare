@@ -1,58 +1,51 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <breadcrumbs></breadcrumbs>
-      </v-col>
-      <v-col cols="12">
-        <!-- hide-default-header => 隱藏標題列 -->
-        <!-- height="" => 設定表格的高度，使表格具有固定高度和滾動條 -->
-        <!-- fixed-header => 固定表格的標題行，當表格滾動時標題行保持固定 -->
-        <v-data-table-server
-          fixed-header
-          v-model:items-per-page="tableItemsPerPage"
-          v-model:sort-by="tableSortBy"
-          v-model:page="tablePage"
-          :items="tableItems"
-          :headers="tableHeaders"
-          :loading="tableLoading"
-          :items-length="tableItemsLength"
-          :search="tableSearch"
-          @update:items-per-page="tableLoadItems(false)"
-          @update:sort-by="tableLoadItems(false)"
-          @update:page="tableLoadItems(false)"
-          hover>
-            <template #top>
-              <v-text-field
-                label="搜尋（請輸入演唱/演奏者、歌名或曲風）"
-                v-model="tableSearch"
-                append-icon="mdi-magnify"
-                @click-append="tableLoadItems(true)"
-                @keydown.enter="tableLoadItems(true)"
-              ></v-text-field>
-            </template>
-            <!-- 操作按鈕 ****我的收藏page也會有這幾個按鈕****---------- -->
-            <template #[`item.action`]="{ item }">
-              <!-- elevation="0"是去除v-btn預設的陰影 -->
-              <!-- @click="openDialog(item)" 此屬性待加上去********************* -->
-              <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
-              <template v-if="nowAccount !== item.editor">
-                <!-- 已收藏和未收藏用v-if決定顯示哪個****待編輯**** -->
-                <!-- 實心愛心 => 已收藏，按下去會取消收藏 -->
-                <v-btn elevation="0" prepend-icon=" mdi-cards-heart" @click="saveSong(item._id)" v-if="nowSaving.includes(item._id)"></v-btn>
-                <!-- 未收藏 -->
-                <!-- 白色變黑色會馬上變，但黑色不會變回白色***待編輯*** -->
-                <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline" @click="saveSong(item._id)" :loading="loadingSave" v-else></v-btn>
-              </template>
-              <!-- 觀看鼓譜 -->
-              <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
-              <!-- 下載 -->
-              <!-- <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn> -->
-            </template>
-          </v-data-table-server>
-        </v-col>
-    </v-row>
-  </v-container>
+  <breadcrumbs></breadcrumbs>
+  <!-- hide-default-header => 隱藏標題列 -->
+  <!-- height="" => 設定表格的高度，使表格具有固定高度和滾動條 -->
+  <!-- fixed-header => 固定表格的標題行，當表格滾動時標題行保持固定 -->
+  <v-data-table-server
+    id="table"
+    fixed-header
+    v-model:items-per-page="tableItemsPerPage"
+    v-model:sort-by="tableSortBy"
+    v-model:page="tablePage"
+    :items="tableItems"
+    :headers="tableHeaders"
+    :loading="tableLoading"
+    :items-length="tableItemsLength"
+    :search="tableSearch"
+    @update:items-per-page="tableLoadItems(false)"
+    @update:sort-by="tableLoadItems(false)"
+    @update:page="tableLoadItems(false)"
+    hover>
+      <template #top>
+        <v-text-field
+          label="搜尋（請輸入演唱/演奏者、歌名或曲風）"
+          v-model="tableSearch"
+          append-icon="mdi-magnify"
+          @click-append="tableLoadItems(true)"
+          @keydown.enter="tableLoadItems(true)"
+        ></v-text-field>
+      </template>
+      <!-- 操作按鈕 ****我的收藏page也會有這幾個按鈕****---------- -->
+      <template #[`item.action`]="{ item }">
+        <!-- elevation="0"是去除v-btn預設的陰影 -->
+        <!-- @click="openDialog(item)" 此屬性待加上去********************* -->
+        <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
+        <template v-if="nowAccount !== item.editor">
+          <!-- 已收藏和未收藏用v-if決定顯示哪個****待編輯**** -->
+          <!-- 實心愛心 => 已收藏，按下去會取消收藏 -->
+          <v-btn elevation="0" prepend-icon=" mdi-cards-heart" @click="saveSong(item._id)" v-if="nowSaving.includes(item._id)"></v-btn>
+          <!-- 未收藏 -->
+          <!-- 白色變黑色會馬上變，但黑色不會變回白色***待編輯*** -->
+          <v-btn elevation="0" prepend-icon=" mdi-cards-heart-outline" @click="saveSong(item._id)" :loading="loadingSave" v-else></v-btn>
+        </template>
+        <!-- 觀看鼓譜 -->
+        <v-btn elevation="0" prepend-icon=" mdi-file-eye-outline" :to="'/songs/' + item._id"></v-btn>
+        <!-- 下載 -->
+        <!-- <v-btn elevation="0" prepend-icon=" mdi-cloud-download-outline"></v-btn> -->
+    </template>
+  </v-data-table-server>
 </template>
 
 <script setup>
@@ -71,7 +64,7 @@ import { useUserStore } from '@/stores/user'
 
 definePage({
   meta: {
-    title: '尋找鼓譜',
+    title: 'GrooveShare | 尋找鼓譜',
     login: false
   }
 })
@@ -173,8 +166,8 @@ const saveSong = async (songID) => {
 </script>
 
 <style scoped lang="scss">
-// 樣式待編輯
-.v-container{
+#table{
+  font-size: 1rem;
 }
 
 </style>

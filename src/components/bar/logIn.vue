@@ -1,6 +1,6 @@
 <template>
   <!-- 參考：https://vuetifyjs.com/en/components/dialogs/#anatomy -->
-  <div class="text-center pa-4">
+  <!-- <div class="text-center pa-4"> -->
     <v-btn prepend-icon="mdi-account" @click="logInDialog = true">
       註冊/登入
     </v-btn>
@@ -38,8 +38,6 @@
 
       </v-card>
     </v-dialog>
-  </div>
-
 </template>
 <script setup>
 import { ref } from 'vue'

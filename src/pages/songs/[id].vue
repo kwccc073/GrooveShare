@@ -1,13 +1,12 @@
 <template>
-  <v-container>
-    <!-- v-if="isEditing" => 編輯狀態；v-else => 非編輯狀態-->
-    <!-- 歌曲資訊-------------------------------------------------------------------- -->
+  <!-- v-if="isEditing" => 編輯狀態；v-else => 非編輯狀態-->
+  <div id="container">
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
       <!-- 歌曲資訊------------------------------------ -->
       <v-row id='songInformation'>
         <v-col cols="12" id="isEditing-title" v-if="isEditing">
           <span>編輯中</span>
-          <v-btn :loading="isSubmitting" @click="isEditing = false" v-if="isEditing">
+          <v-btn icon color="red" :loading="isSubmitting" @click="isEditing = false" v-if="isEditing">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-col>
@@ -43,7 +42,7 @@
             v-model="songStyle.value.value"
             :error-messages="songStyle.errorMessage.value"
           ></v-autocomplete>
-          <span v-else>{{ song.songStyle }}</span>
+          <span v-if="!isEditing">{{ song.songStyle }}</span>
         </v-col>
         <v-col class="v-col" cols="6" lg="3">
           <span>BPM：</span>
@@ -55,7 +54,7 @@
                 :error-messages="BPM.errorMessage.value"
               ></v-text-field>
             </template>
-            <span v-else>{{ song.BPM }}</span>
+            <span v-if="!isEditing">{{ song.BPM }}</span>
         </v-col>
         <v-col class="v-col" cols="6" lg="3" v-if="!isEditing">
           作者：{{song.editor}}
@@ -64,10 +63,11 @@
           <span>隱私狀態：</span>
           <v-checkbox
             v-if="isEditing"
+            label="公開"
             v-model="isPublic.value.value"
             @change="console.log(isPublic.value.value)"
           ></v-checkbox>
-          <template v-else>
+          <template v-if="!isEditing">
             <!-- 公開－true -->
             <v-icon v-if="song.isPublic">mdi-lock-open-variant</v-icon>
             <!-- 隱私－false -->
@@ -78,19 +78,18 @@
           <template v-if="!isEditing">
             <!-- 如果是作者顯示編輯、刪除按鈕 -->
             <template v-if="nowAccount === song.editor">
-              <v-btn prepend-icon="mdi-pencil-outline" @click="editSong(null)" >編輯</v-btn>
-              <v-btn prepend-icon="mdi-trash-can-outline" @click="deleteSong(null)" >刪除</v-btn>
+              <v-btn id="btn-edit" color="black" prepend-icon="mdi-pencil-outline" @click="editSong(null)" >編輯</v-btn>
+              <v-btn id="btn-delete" prepend-icon="mdi-trash-can-outline" @click="deleteSong(null)" >刪除</v-btn>
             </template>
             <!-- 否則顯示收藏按鈕 -->
             <!-- 如果已經收藏，按鈕文字要改成"取消收藏 -->
             <template v-else>
-              <v-btn color="primary" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loadingSave" v-if="song.isSaved">取消收藏</v-btn>
-              <v-btn color="primary" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loadingSave" v-else>收藏</v-btn>
+              <v-btn color="black" prepend-icon="mdi-cards-heart" @click="saveSong" :loading="loadingSave" v-if="song.isSaved">取消收藏</v-btn>
+              <v-btn color="black" prepend-icon="mdi-cards-heart-outline" @click="saveSong" :loading="loadingSave" v-else>收藏</v-btn>
             </template>
           </template>
         </v-col>
       </v-row>
-
       <!-- 樂譜部分------------------------------------------------------------------------------ -->
       <!-- song.scoreHiHat[小節][第幾拍][第幾部分] -->
       <!-- 編輯狀態 ------------------------------------->
@@ -158,14 +157,14 @@
         </template>
         <v-col cols="12" class="btns-editing">
           <template v-if="isEditing">
-            <v-btn @click="addSection()" prepend-icon="mdi-plus">新增小節</v-btn>
-            <v-btn type="submit" :loading="isSubmitting" color="green">儲存</v-btn>
+            <v-btn id="btn-plus" @click="addSection()" prepend-icon="mdi-plus" elevation="0">新增小節</v-btn>
+            <v-btn type="submit" :loading="isSubmitting" color="black" prepend-icon="mdi-content-save-outline">儲存</v-btn>
           </template>
         </v-col>
       </v-row>
     </v-form>
-    <score v-bind="song" v-if="!isEditing"></score>
-  </v-container>
+  <score v-bind="song" v-if="!isEditing"></score>
+  </div>
 </template>
 
 <script setup>
@@ -494,17 +493,26 @@ const deleteSong = () => {
 
 <style scoped lang="scss">
 // 一整列------------------------------------------------------------------------------------------------
-.v-container{
+#container{
+  margin-top: 1.5rem;
   .v-form{
+    // 歌曲資訊
     #songInformation{
-    .v-col{
-      display: flex;
-      // flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
+      .v-col{
+        display: flex;
+        // flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.4rem;
+        h1{
+          font-size: 2rem;
+        }
+      }
+    // 隱私狀態字樣
+    #public{
+      font-size: 1.4rem;
     }
-
     // 編輯中字樣
     #isEditing-title{
       display: flex;
@@ -539,10 +547,17 @@ const deleteSong = () => {
   }
 
   .btns{
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .v-btn{
+      font-size: 1rem;
     }
+    #btn-delete{
+      background: lightgray;
+    }
+  }
       // 樂譜部分--------------------------------------------------------------------
       #scoreArea{
         display: flex;
@@ -636,6 +651,10 @@ const deleteSong = () => {
       }
     }
   }
+}
+
+#btn-plus{
+  border: 1px solid black;
 }
 
 .displayNone{

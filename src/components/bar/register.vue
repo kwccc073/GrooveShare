@@ -57,6 +57,7 @@ import validator from 'validator'
 import { useApi } from '@/composables/axios'
 // 彈出對話框
 import { useSnackbar } from 'vuetify-use-dialog'
+// import icons from '@boindil/vue-file-agent-next/dist/lib/icons'
 
 // 用於決定註冊視窗的彈出與否
 const registerDiglog = ref(false)
@@ -118,7 +119,7 @@ const submit = handleSubmit(async (values) => {
       // 顯示在Request payload上面
       account: values.account,
       email: values.email,
-      password: values.password
+      password: values.password,
       // 後端沒有確認密碼，所以不用寫確認密碼
     })
     createSnackbar({

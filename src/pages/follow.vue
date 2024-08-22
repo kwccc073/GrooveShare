@@ -11,7 +11,7 @@ import breadcrumbs from '@/components/breadcrumbs'
 
 definePage({
   meta: {
-    title: '我的關注',
+    title: 'GrooveShare | 我的關注',
     login: true
   }
 })

@@ -1,9 +1,8 @@
-<!-- 刪除功能待編輯 -->
 <template>
-  <v-container>
     <breadcrumbs></breadcrumbs>
     <!-- hide-default-header => 隱藏標題列 -->
     <v-data-table-server
+      id="table"
       class="v-data-table-server"
       v-model:items-per-page="tableItemsPerPage"
       v-model:sort-by="tableSortBy"
@@ -19,7 +18,7 @@
       hover>
     <template #top>
       <v-text-field
-        label="搜尋（請輸入演唱/演奏者、歌名或曲風）"
+        label="請搜尋演唱/演奏者、歌名或曲風"
         v-model="tableSearch"
         append-icon="mdi-magnify"
         @click-append="tableLoadItems(true)"
@@ -46,7 +45,6 @@
       <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" @click="deleteSong(item._id, item.editor)"></v-btn>
     </template>
   </v-data-table-server>
-  </v-container>
 </template>
 
 <script setup>
@@ -65,7 +63,7 @@ import { useUserStore } from '@/stores/user'
 
 definePage({
   meta: {
-    title: '我的鼓譜',
+    title: 'GrooveShare | 我的鼓譜',
     login: true
   }
 })
@@ -179,12 +177,7 @@ const deleteSong = (id, editor) => {
 </script>
 
 <style scoped lang="scss">
-// 樣式待編輯
-.v-container{
-
-  .v-data-table-server {
-    // background: cadetblue;
-  }
-
+#table{
+  font-size: 1rem;
 }
 </style>

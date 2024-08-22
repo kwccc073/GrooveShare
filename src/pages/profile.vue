@@ -8,11 +8,11 @@
       </v-col>
       <v-col cols="12" md="4" id="col-profile">
         <img :src="nowIcon" alt="大頭貼" id="icon">
-        <v-btn @click="openDialog(null)" id="btn-edit" width="150px" color="" style="margin: auto;">上傳大頭貼</v-btn>
-        <div id="information">
-          <p>帳號：{{ user.account }}</p>
-          <p>email：{{ nowEmail }}</p>
-        </div>
+        <v-btn @click="openDialog(null)" id="btn-edit" width="150px" color="black" style="margin: auto;">上傳大頭貼</v-btn>
+        <!-- <div id="information"> -->
+        <div>{{ user.account }}</div>
+          <!-- <p>email：{{ nowEmail }}</p> -->
+        <!-- </div> -->
       </v-col>
       <v-col cols="12" md="8" id="memberArea">
         <h1 class="title">會員專區</h1>
@@ -99,7 +99,7 @@ import { useRouter } from 'vue-router'
 
 definePage({
   meta: {
-    title: '會員資料',
+    title: 'GrooveShare | 會員資料',
     login: true
   }
 })
@@ -275,6 +275,7 @@ const submit = handleSubmit(async (values) => {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      align-items: center;
       gap: 1rem;
       // 大頭貼
       #icon{
@@ -284,13 +285,20 @@ const submit = handleSubmit(async (values) => {
         margin: auto;
       }
       // 使用者資料
-      #information{
-        // background: gold;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        text-align: center;
-      }
+      // #information{
+      //   // background: gold;
+      //   display: flex;
+      //   flex-direction: column;
+      //   justify-content: space-around;
+      //   text-align: center;
+
+        // 使用者帳號
+        div{
+          width: 150px;
+          font-size: 1.2rem;
+          text-align: center;
+        }
+      // }
     }
     // 會員專區------------------------------
     #memberArea{
@@ -345,7 +353,11 @@ const submit = handleSubmit(async (values) => {
     // 按鈕
     .v-card-actions{
       .v-btn{
-        background: lavender;
+        width: 100px;
+        background: black;
+        color: white;
+        font-size: 1rem;
+        margin: auto;
 
         &:hover{
           background: gray;

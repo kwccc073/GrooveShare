@@ -9,6 +9,7 @@
       <img src="@/assets/photo/drum02.jpg">
       <div class="introduce">
         <p>鼓譜編輯器協助您完成鼓譜，輕鬆記下喜歡的歌曲與節奏，並與鼓手們分享您的創作。</p>
+        <!-- 沒登入無法進入這頁，待編輯 -->
         <v-btn to="/writtingArea">click me</v-btn>
       </div>
     </div>
@@ -64,7 +65,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 definePage({
   meta: {
-    title: '首頁',
+    title: 'GrooveShare',
     login: false
   }
 })
@@ -208,6 +209,7 @@ section{
   // 因為defalt.vue有設定v-main寬度，故這裡的100%是指v-main的100%（非滿版）
   width: 100%;
   height: auto;
+  font-size: 1.5rem;
 }
 #section01{
   // 設定寬高比例
@@ -256,7 +258,7 @@ section{
   // 灰色框框
   #div02{
     width: 35%;
-    height: 40%;
+    height: 700px;
     background: rgba(114, 79, 75, 0.1);
     position: absolute;
     top: 13%;
@@ -265,7 +267,7 @@ section{
   }
   // 鼓棒照片***要讓他凸出去，待編輯***
   #div03{
-    width: 40%;
+    width: 42%;
     // background: blue;
     display: flex;
     flex-direction: column;
@@ -276,7 +278,9 @@ section{
 
     .introduce{
       // background: cadetblue;
-      padding: 1rem;
+      padding-top: 1rem;
+      padding-left: 4rem;
+      padding-right: 2rem;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
@@ -289,20 +293,22 @@ section{
     }
   }
   #img-drum03{
-    height: 40%;
+    width: 38%;
     position: absolute;
-    bottom: 13%;
-    right: 22%;
+    top: 48%;
+    right: 18%;
   }
 }
+// 黑底文字介紹
 #section03{
   width: 100%;
   background: black;
   color: white;
-  padding: 1rem;
+  padding: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 1.5rem;
   gap: 1rem;
   .v-btn{
     width: 100px;
