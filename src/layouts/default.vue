@@ -16,7 +16,7 @@
       </template>
 
       <!-- 電腦版按鈕----------------------------------------------------------- -->
-      <template v-else>
+      <template v-if="!mobile">
         <template v-for="item in navItems" :key="item.to">
           <v-btn
             :prepend-icon="item.prependIcon"
@@ -152,7 +152,6 @@ const logout = async () => {
 </script>
 
 <style>
-/* logo尺寸待編輯 */
 .v-app-bar{
   #bar-container{
     /* background: blue; */
@@ -167,6 +166,7 @@ const logout = async () => {
 
 /* 手機版側邊欄----------------------------------------------------- */
 .v-navigation-drawer{
+  font-size: 1rem;
   #userAccount{
     padding: 1rem;
     display: flex;
