@@ -1,4 +1,3 @@
-<!-- addCart改為saveSong*************** -->
 <template>
   <!-- v-card內建屬性：
       elevation="0" => 去除陰影
@@ -12,12 +11,9 @@
     </v-card-title>
     <v-card-subtitle>
       <span class="bpm-style-savedTimes">{{ songStyle }} / {{ BPM }} / 收藏：{{ savedTimes }}</span>
-      <!-- 有人按收藏時，收藏次數應該跟著變動***待編輯*** -->
       <!-- <v-spacer></v-spacer> -->
     </v-card-subtitle>
     <!-- <v-card-actions> -->
-      <!-- v-spacer會自動把東西推到右邊 -->
-      <!-- <v-spacer></v-spacer> -->
       <!-- 當下的使用者不是建立者時，才會顯示收藏的按鈕 -->
       <!-- 如果已經收藏，按鈕文字要改成"取消收藏****待編輯**** -->
       <!-- <template v-if="nowAccount !== editor">
@@ -87,15 +83,6 @@ const saveSong = async () => {
       text-decoration: none;
       color: black;
       font-weight: bold;
-      // 歌手
-      h4{
-        // background: firebrick;
-        // margin: 0;
-      }
-      // 歌名
-      h1{
-        // background: chartreuse;
-      }
     }
   }
 

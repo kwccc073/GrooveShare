@@ -1,7 +1,7 @@
 <!-- 修改密碼待編輯 -->
 <!-- 第一次進入此頁的時候email沒有顯示，需重新整理才有***待編輯*** -->
 <template>
-  <v-container>
+  <div id="profile-container">
     <v-row>
       <v-col cols="12">
         <breadcrumbs></breadcrumbs>
@@ -21,7 +21,7 @@
         </div>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
   <v-dialog v-model="isOpen" width="400">
     <!-- :disabled="isSubmitting"表示送出中表單停用 -->
     <v-form @submit.prevent="submit" :disabled="isSubmitting">
@@ -36,7 +36,7 @@
         <v-card-title>
           <h1>上傳大頭貼</h1>
         </v-card-title>
-        <!-- 步驟5. 綁定欄位的 v-model、:error-messages -->
+        <!-- 綁定欄位的 v-model、:error-messages -->
         <v-card-text>
           <!-- vue-file-agent是檔案上傳的套件 -->
           <!-- accept 接受的格式
@@ -55,23 +55,9 @@
             ref="fileAgent"
             id="uploadPhoto"
           ></vue-file-agent>
-          <!-- <v-text-field
-            label="email"
-            v-model="email.value.value"
-          ></v-text-field> -->
-          <!-- 密碼 ******************待編輯********************-->
-          <!-- <v-text-field
-            label="密碼"
-            v-model="password.value.value"
-          ></v-text-field> -->
-          <!-- 確認密碼 -->
-          <!-- <v-text-field
-            label="確認密碼"
-            v-model="passwordConfirm.value.value"
-          ></v-text-field> -->
         </v-card-text>
         <v-card-actions class="justify-center">
-          <!-- :loading="isSubmitting" 表示送出的時候會轉圈，避免重複點擊 -->
+          <!-- :loading="isSubmitting" => 送出的時候會轉圈，避免重複點擊 -->
           <v-btn color="" type="submit" :loading="isSubmitting">上傳</v-btn>
         </v-card-actions>
       </v-card>
@@ -86,11 +72,11 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-// 步驟1-1. 引入驗證套件
+// 引入驗證套件
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import validator from 'validator'
-// 步驟6-2. 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
+// 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -104,7 +90,7 @@ definePage({
   }
 })
 
-// 步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
+// 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
 
 const createSnackbar = useSnackbar() // 對話框
@@ -113,9 +99,8 @@ const router = useRouter() // 跳到其他分頁用
 // 要抓頁面上東西需在標籤上加ref='XXX'，並於JS中const同名的ref
 const fileAgent = ref(null)
 
-// 第一次進分頁時不知為何沒有執行profile抓資料，因此需先手動重新整理****待編輯****
+// 第一次進分頁時不知為何沒有執行profile抓頭貼資料，因此需先手動重新整理****待編輯****
 
-// 進到網頁會先顯示原本的資料-------------------------***目前寫法抓不到頭貼，待編輯***
 // router裡面有寫到：一進網頁會先取得使用者資料
 const user = useUserStore()
 // console.log(user.account) // 確認store有存account
@@ -141,7 +126,7 @@ const memberItems = ref([
 const isOpen = ref(false) // 決定對話框是否開啟
 
 // 打開視窗 funtion******item待確認要不要放******
-const openDialog = async (item) => {
+const openDialog = async () => {
   isOpen.value = true
 
   // 打開後代入store中的使用者資料
@@ -155,18 +140,6 @@ const openDialog = async (item) => {
 }
 
 const schema = yup.object({
-  // account: yup
-  //   .string() // 此欄位為文字
-  //   .required('使用者帳號必填') // 此欄位為必填
-  //   .min(4, '使用者帳號長度不符') // 最少4個字
-  //   .max(20, '使用者帳號長度不符')
-  //   .test(
-  //     // .test(自訂驗證名稱, 錯誤訊息, 驗證 function)
-  //     'isAlphanumeric', '使用者帳號格式錯誤',
-  //     (value) => {
-  //       return validator.isAlphanumeric(value)
-  //     }
-  //   ),
   email: yup
     .string()
     .required('使用者信箱必填')
@@ -176,43 +149,31 @@ const schema = yup.object({
         return validator.isEmail(value)
       }
     ),
-  // 修改密碼部分***待編輯***
-  // password: yup
-  //   .string()
-  //   .required('使用者密碼必填')
-  //   .min(4, '使用者密碼長度不符')
-  //   .max(20, '使用者密碼長度不符'),
-  // passwordConfirm: yup
-  //   .string()
-  //   .oneOf([yup.ref('password')], '密碼不一致')
 })
 
-// 步驟3. useForm()建立表單------------------------------------------------------------
+// useForm()建立表單------------------------------------------------------------
 // 解構出handleSubmit (處理送出表單的動作)、isSubmitting (判斷表單是否在送出)、resetForm (重設表單)
 const { handleSubmit, isSubmitting } = useForm({
-  // 驗證格式為上方的schema
   validationSchema: schema
 })
 
-// 步驟4. useField()建立表單的各個欄位---------------------------------------------
+// useField()建立表單的各個欄位---------------------------------------------
 // useField()裡的欄位名稱要跟跟上方schema的一樣
 // useField('name') => 返回與 name 字段相關的值(value)和錯誤訊息(errorMessage)
 
-// v-model和error-messages會綁這些值*****待編輯*****
+// v-model和error-messages會綁這些值
 // 例如上方的v-model='account.value.value'、:error-messages="account.errorMessage.value"
 //  當字段驗證失敗時，vee-validate 會自動更新 errorMessage，並顯示相應的錯誤信息（schema裡自己定義的，例如'密碼不一致'）
 const account = useField('account')
 const email = useField('email')
 const icon = useField('icon')
 const id = useField('id')
-// 密碼***待編輯***
-// const password = useField('password')
-// const passwordConfirm = useField('passwordConfirm')
+
 // 檔案上傳用
 const fileRecords = ref([])
 const rawFileRecords = ref([])
 
-// 步驟6-1. 定義送出的function-----------------------------------------------------------------
+// 定義送出的function-----------------------------------------------------------------
 // handleSubmit()會先上方的schema執行驗證，過了再執行下面的程式碼
 const submit = handleSubmit(async (values) => {
   // handleSubmit()不會執行驗證檔案上傳（因為是引入其他套件），因此要自己寫：
@@ -225,8 +186,6 @@ const submit = handleSubmit(async (values) => {
     // 把東西放入form-data：fd.append(key, value)*****待編輯*****
     // fd.append('account', values.account)
     // fd.append('email', values.email)
-    // 密碼***待編輯***
-    // fd.append('password', values.password) // 送出後，資料庫顯示的是未加密的密碼，且無法用新密碼登入**待編輯**
 
     // 如果有放檔案就要放入fd
     if (fileRecords.value.length > 0) {
@@ -238,7 +197,7 @@ const submit = handleSubmit(async (values) => {
 
     // 對話框
     createSnackbar({
-      text: '編輯會員資料成功',
+      text: '上傳大頭貼成功',
       snackbarProps: {
         color: 'green'
       }
@@ -257,26 +216,21 @@ const submit = handleSubmit(async (values) => {
   }
 })
 
-// 待解決問題******************
-// 打開編輯視窗沒辦法看到原本的圖片
 </script>
 
 <style scoped lang="scss">
-.v-container{
+#profile-container{
   margin: auto;
   padding-top: 1rem;
 
   .v-row{
-    .v-col{}
-
     #col-profile{
-      // background: red;
-      // height: 400px;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
       align-items: center;
       gap: 1rem;
+
       // 大頭貼
       #icon{
         width: 150px;
@@ -284,13 +238,6 @@ const submit = handleSubmit(async (values) => {
         background: lightgray;
         margin: auto;
       }
-      // 使用者資料
-      // #information{
-      //   // background: gold;
-      //   display: flex;
-      //   flex-direction: column;
-      //   justify-content: space-around;
-      //   text-align: center;
 
         // 使用者帳號
         div{
@@ -298,7 +245,6 @@ const submit = handleSubmit(async (values) => {
           font-size: 1.2rem;
           text-align: center;
         }
-      // }
     }
     // 會員專區------------------------------
     #memberArea{
@@ -308,14 +254,10 @@ const submit = handleSubmit(async (values) => {
         font-size: 1.5rem;
       }
       #btns{
-        // background: rebeccapurple;
         display: flex;
         margin-top: 1rem;
         width: 80%;
         gap: 1rem;
-        .v-btn{
-          // background: cadetblue;
-        }
       }
     }
 

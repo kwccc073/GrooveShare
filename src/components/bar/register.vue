@@ -14,7 +14,6 @@
       <v-card-title>會員註冊</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="submit" :disabled="isSubmitting">
-          <!-- 帳號、密碼、信箱等規則先照上課範例 -->
           <v-text-field
             label="帳號"
             minlength="4" maxlength="20" counter
@@ -57,7 +56,6 @@ import validator from 'validator'
 import { useApi } from '@/composables/axios'
 // 彈出對話框
 import { useSnackbar } from 'vuetify-use-dialog'
-// import icons from '@boindil/vue-file-agent-next/dist/lib/icons'
 
 // 用於決定註冊視窗的彈出與否
 const registerDiglog = ref(false)
@@ -151,7 +149,6 @@ const submit = handleSubmit(async (values) => {
   // background: violet; // 這是卡片旁邊區塊的顏色
 
   .v-card{
-    // background: cadetblue;
     text-align: center;
     width: 50vw;
 

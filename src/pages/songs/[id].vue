@@ -316,7 +316,7 @@ const addSection = () => {
 // 曲風
 const songStylies = ['流行', '龐克', '金屬', '後搖', '慢搖', '民謠', '爵士', '其他']
 
-// 步驟2. 以schema定義格式---------------------
+// 以schema定義格式---------------------
 const schema = yup.object({
   // 演唱者
   singer: yup
@@ -374,14 +374,14 @@ const schema = yup.object({
     .boolean()
 })
 
-// 步驟3. useForm()建立表單－schema、初始值-------------------
+// useForm()建立表單－schema、初始值-------------------
 // 解構出handleSubmit (處理送出表單的動作) 和 isSubmitting (判斷表單是否在送出)
 const { handleSubmit, isSubmitting } = useForm({
   // 指定驗證格式使用上方建立的schema
   validationSchema: schema
 })
 
-// 步驟4. useField()建立表單的各個欄位-----------
+// useField()建立表單的各個欄位-----------
 // useField('name') => 返回與 name 字段相關的值(value)和錯誤訊息(errorMessage)
 // v-model和error-messages會綁這些值
 // 例如上方的v-model='singer.value.value'、:error-messages="singer.errorMessage.value"
@@ -528,18 +528,7 @@ const deleteSong = () => {
       display: flex;
       align-items: center;
     }
-    // 拍號
-    // #signature{
-      // display: flex;
-      // justify-content: center;
-      // align-content: center;
 
-    //   .v-select{
-    //     display: inline-block;
-    //     width: 30%;
-    //     height: 30%;
-    //   }
-    // }
     // 隱私設定
     .v-checkbox{
       display: flex;

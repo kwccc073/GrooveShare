@@ -6,7 +6,7 @@
     <v-row id="songInformation">
       <v-col class="v-col" cols="12" md="6">
         <span>演奏/演唱者：</span>
-        <!-- 步驟5. 綁定欄位的 v-model、:error-messages -->
+        <!-- 綁定欄位的 v-model、:error-messages -->
         <v-text-field
           placeholder="請輸入演奏/演唱者"
           v-model="singer.value.value"
@@ -150,10 +150,10 @@ import { useUserStore } from '@/stores/user'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
 import { ref } from 'vue'
-// 步驟1-1. 引入驗證套件
+// 引入驗證套件
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-// 步驟6-2. 引入useApi
+// 引入useApi
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -165,11 +165,11 @@ import { useDisplay } from 'vuetify'
 definePage({
   meta: {
     title: 'GrooveShare | 寫譜專區',
-    login: true
+    // login: true
   }
 })
 
-// 步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
+// 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 
@@ -191,7 +191,7 @@ const signatureNotes = [2, 4, 8]
 // 禁用按鈕
 const isDisabled = ref(false)
 
-// 步驟2. 以schema定義格式---------------------
+// 以schema定義格式---------------------
 const schema = yup.object({
   // 演唱者
   singer: yup
@@ -266,7 +266,7 @@ const schema = yup.object({
     .boolean()
 })
 
-// 步驟3. useForm()建立表單－schema、初始值-------------------
+// useForm()建立表單－schema、初始值-------------------
 // 解構出handleSubmit (處理送出表單的動作) 和 isSubmitting (判斷表單是否在送出)
 const { handleSubmit, isSubmitting } = useForm({
   // 指定驗證格式使用上方建立的schema
@@ -286,7 +286,7 @@ const { handleSubmit, isSubmitting } = useForm({
   }
 })
 
-// 步驟4. useField()建立表單的各個欄位-----------
+// useField()建立表單的各個欄位-----------
 // useField('name') => 返回與 name 字段相關的值(value)和錯誤訊息(errorMessage)
 // v-model和error-messages會綁這些值
 // 例如上方的v-model='singer.value.value'、:error-messages="singer.errorMessage.value"
@@ -305,6 +305,10 @@ const isPublic = useField('isPublic')
 const divisions = ref(16) // 這拍是以幾分音符來寫（相當於切成 division / 4 份）
 const isStart = ref(false)
 const start = () => {
+  if (!user.isLogin) {
+    alert('請先登入會員')
+    router.push('/')
+  }
   isStart.value = true
   // HiHat---------------------
   scoreHiHat.value.value.push(
@@ -376,7 +380,7 @@ const addSection = () => {
   console.log('新增小節')
 }
 
-// 步驟6-1. 定義送出的function-----------------------------------------------------------------
+// 定義送出的function-----------------------------------------------------------------
 const submit = handleSubmit(async (values) => {
   try {
     const fd = new FormData()

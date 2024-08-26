@@ -14,15 +14,6 @@
         </template>
 
         <v-btn v-for="(item, index) in memberItems" :key="index" :to="item.to">{{ item.title }}</v-btn>
-
-        <!-- <v-list>
-          <v-list-item
-            v-for="(item, index) in items"
-            :key="index"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list> -->
       </v-menu>
     </div>
 

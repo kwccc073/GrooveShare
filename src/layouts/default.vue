@@ -1,7 +1,6 @@
 <template>
   <!-- 導覽列------------------------------------------------ -->
   <v-app-bar elevation="0" color="black" height="100">
-    <!-- 改成align-end後，註冊/登入按鈕沒辦法靠下面 -->
     <div class="d-flex align-end" id="bar-container">
       <!-- LOGO及網頁標題 -->
       <router-link to="/">
@@ -24,21 +23,16 @@
             {{item.title}}
           </v-btn>
         </template>
-        <!-- 會員專區下拉選單
-             要登入才會顯示 -->
+        <!-- 會員專區下拉選單、登出按鈕，要登入才會顯示 -->
         <hoverMenu v-if="user.isLogin"></hoverMenu>
         <v-btn v-if="user.isLogin" @click="logout">登出</v-btn>
-        <!-- 註冊/登入按鈕
-             沒登入才會顯示-->
+        <!-- 註冊/登入按鈕，沒登入才會顯示-->
         <logIn v-if="!user.isLogin"></logIn>
-        <!-- 登入的使用者、登出按鈕：有登入才會顯示 -->
-        <!-- 排版****待編輯**** -->
       </template>
     </div>
   </v-app-bar>
   <!-- 手機版側邊欄------------------------------------------------------------------------------------------ -->
   <!-- 參考：https://vuetifyjs.com/en/components/navigation-drawers/#caveats -->
-  <!-- 改成靠右****待編輯**** -->
   <v-navigation-drawer v-if="mobile" v-model="drawer" color="navigation-drawer-color">
     <div v-if="user.isLogin" id="userAccount">
       <img :src="nowIcon" id="icon" style="width: 40px;height: 40px;">
@@ -56,21 +50,11 @@
       </v-list-item>
     </template>
     <v-divider></v-divider>
-    <!-- 會員專區
-         要登入才會顯示 -->
+    <!-- 會員專區，要登入才會顯示 -->
     <template v-if="user.isLogin">
       <h2>會員專區</h2>
       <!-- 按鈕們 -->
       <template v-for="item in memberItems" :key="item.to">
-        <!-- <v-list-item :to="item.to"> -->
-          <!-- <v-list-item-icon> -->
-            <!-- <v-icon>{{ item.prependIcon }}</v-icon> -->
-          <!-- </v-list-item-icon> -->
-          <!-- <v-list-item-content> -->
-            <!-- <span>{{ item.title }}</span> -->
-          <!-- </v-list-item-content> -->
-        <!-- </v-list-item> -->
-
         <v-list-item
           :prepend-icon="item.prependIcon"
           :to="item.to"
@@ -79,14 +63,15 @@
         </v-list-item>
       </template>
     </template>
-    <!-- 註冊/登入按鈕
-         沒登入才會顯示-->
-    <logIn v-if="!user.isLogin"></logIn>
-    <!-- 登出按鈕
-         有登入才會顯示 -->
+    <!-- 註冊/登入按鈕，沒登入才會顯示-->
+    <div id="mobile-logIn" v-if="!user.isLogin">
+      <logIn></logIn>
+    </div>
+    <!-- 登出按鈕，有登入才會顯示 -->
     <v-list-item v-if="user.isLogin" @click="logout" title="登出" id="v-list-item-logout"></v-list-item>
   </v-navigation-drawer>
-  <!-- 主要內容 -->
+
+  <!-- 主要內容--------------------- -->
   <v-main>
     <router-view />
   </v-main>
@@ -161,6 +146,11 @@ const logout = async () => {
   #logoImg{
     width: auto;
     height: 70px;
+
+    /* 小於md尺寸時 */
+    @media (max-width: 959px) {
+      height: 45px;
+    }
   }
 }
 
@@ -183,17 +173,17 @@ const logout = async () => {
   }
   .v-list-item{
     padding: 1rem;
-    /* background: rebeccapurple; */
-    /* display: flex; */
-    /* flex-direction: row; */
-    /* justify-content: center; */
-    /* text-align: center; */
   }
   #v-list-item-logout{
     background: rgb(51, 50, 50);
     text-align: center;
     font-weight: bold;
     margin-top: 1rem;
+  }
+
+  #mobile-logIn{
+    margin-top: 1rem;
+    text-align: center;
   }
 }
 

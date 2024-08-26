@@ -1,11 +1,8 @@
 <template>
   <div>
-    <!-- <h2>播放鼓譜</h2> -->
-    <!-- <label for="bpm">BPM: {{ BPM }}</label> -->
     <!-- 起始狀態：非播放中且currentXXX皆為0的時候顯示 -->
     <v-btn icon @click="startPlay" v-if = "!isPlaying&&(currentSection === 0 && currentBeat === 0 && currentDivision === 0)" color="black">
       <v-icon>mdi-play</v-icon>
-      <!-- <span>播放鼓譜</span> -->
     </v-btn>
     <!-- 非播放中且播放到一半時顯示 -->
     <v-btn icon @click="toggleMetronome" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" color="black">
@@ -15,7 +12,7 @@
     <v-btn icon @click="startPlay" v-if = "!isPlaying&&(currentSection != 0 || currentBeat != 0 || currentDivision != 0)" color="black">
       <v-icon>mdi-replay</v-icon>
     </v-btn>
-    <!-- 正在播放得時候顯示 -->
+    <!-- 正在播放的時候顯示 -->
     <v-btn icon @click="toggleMetronome" v-if = "isPlaying" color="black">
       <v-icon>mdi-stop</v-icon>
     </v-btn>
@@ -35,15 +32,7 @@ import kickAudio from '@/assets/instruments/kick.wav'
 
 // 外部要接收的東西
 const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick', 'BPM'])
-// console.log(props.BPM) // 有抓到
 
-// props.scoreHiHat.forEach((section, sectionIndex) => {
-//   section.forEach((beat, beatIndex) => {
-//     beat.forEach((HiHat, HiHatIndex) => {
-//       console.log(`第${sectionIndex}小節的第${beatIndex}拍之${HiHatIndex}：`, HiHat)
-//     })
-//   })
-// })
 // 節拍器範例-------------------------------
 const isPlaying = ref(false) // 是否為播放狀態
 // 計算每個部分的間隔 => (每拍耗費幾秒)/4 *1000毫秒
@@ -62,7 +51,6 @@ const kickSound = ref(null)
 // console.log(`每個小節總共${props.scoreHiHat[currentSection].length}拍`)
 // console.log(`每拍總共${props.scoreHiHat[currentSection][currentBeat].length}個部分`)
 
-// 按下播放聲音，先寫HiHat就好
 const playClick = () => {
   $(`#s${currentSection + 1}-b${currentBeat + 1}`).addClass('current')
   // console.log(`現在是#s${currentSection + 1}-b${currentBeat + 1}`)

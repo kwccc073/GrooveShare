@@ -103,9 +103,9 @@ export const useUserStore = defineStore('user', () => {
 
       const text = ref('')
       if (data.isSaving) {
-        text.value = '收藏歌曲成功-stores'
+        text.value = '收藏歌曲成功'
       } else {
-        text.value = '取消收藏歌曲-stores'
+        text.value = '取消收藏歌曲'
       }
       return {
         color: 'green',
@@ -118,22 +118,6 @@ export const useUserStore = defineStore('user', () => {
       }
     }
   }
-
-  // const checkout = async () => {
-  //   try {
-  //     await apiAuth.post('/order')
-  //     saving.value = 0
-  //     return {
-  //       color: 'green',
-  //       text: '成功'
-  //     }
-  //   } catch (error) {
-  //     return {
-  //       color: 'red',
-  //       text: error?.response?.data?.message || '發生錯誤，請稍後再試'
-  //     }
-  //   }
-  // }
 
   return {
     token,

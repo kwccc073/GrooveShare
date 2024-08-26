@@ -79,7 +79,7 @@ const nowSaving = ref(user.saving)
 
 // 一頁顯示幾個
 const tableItemsPerPage = ref(10)
-// 排序（先按照日期排序就好）*****待新增******
+// 排序（先按照日期排序就好）
 const tableSortBy = ref([
   // createdAt是建立的日期
   // order是正的或到的排，desc是倒的
@@ -99,7 +99,6 @@ const tableHeaders = [
   { title: '曲風', align: 'center', sortable: true, key: 'songStyle' },
   { title: 'BPM', align: 'center', sortable: true, key: 'BPM' },
   { title: '建立者', align: 'center', sortable: false, key: 'editor' },
-  // { title: '難易度', align: 'center', sortable: true, key: 'sell' },
   { title: '', align: 'center', sortable: false, key: 'action' }
 ]
 // 預設剛點進來的時候會是載入狀態

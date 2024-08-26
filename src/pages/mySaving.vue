@@ -135,7 +135,7 @@ const tableLoadItems = async (reset) => {
   } catch (error) {
     console.log(error)
     createSnackbar({
-      text: error?.response?.data?.message || '發生錯誤-mySave',
+      text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
         color: 'red'
       }

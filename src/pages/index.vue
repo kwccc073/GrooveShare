@@ -1,4 +1,4 @@
-<!-- 熱門排行榜******待編輯******* -->
+<!-- 熱門排行榜* -->
 <template>
   <!-- 網頁介紹------------------------------------------------------- -->
   <section id="section01">
@@ -435,8 +435,7 @@
     <div id="div01">
       <img src="@/assets/photo/drum02.jpg">
       <div class="introduce">
-        <p>鼓譜編輯器協助您完成鼓譜，輕鬆記下喜歡的歌曲與節奏，並與鼓手們分享您的創作。</p>
-        <!-- 沒登入無法進入這頁，待編輯 -->
+        <p>寫譜專區協助您完成鼓譜，輕鬆記下喜歡的歌曲與節奏，並與鼓手們分享您的創作。</p>
         <v-btn to="/writtingArea">click me</v-btn>
       </div>
     </div>
@@ -456,27 +455,25 @@
     <p>隨時瀏覽與聆聽其他鼓手的精彩創作，並將喜愛的鼓譜收藏起來，無論在哪裡都可以與節奏同行。</p>
     <v-btn to="/searchSong" class="clickMe">click me</v-btn>
   </section>
-  <v-container>
-    <!-- 最新上架-------------------------------------------------------- -->
-    <div id="newArea">
-      <h1>最新上架</h1>
-      <v-row>
-       <v-col cols="12" v-for="song in newSongs" :key="song._id">
-        <SongCard v-bind="song" class="SongCard"></SongCard>
-       </v-col>
-      </v-row>
-    </div>
+  <!-- 最新上架-------------------------------------------------------- -->
+  <section id="newArea">
+    <h1>最新上架</h1>
+    <v-row>
+     <v-col cols="12" md="10" v-for="song in newSongs" :key="song._id">
+      <SongCard v-bind="song" class="SongCard"></SongCard>
+     </v-col>
+    </v-row>
+  </section>
 
-    <!-- 熱門排行榜------------------------------------------------------- -->
-    <div id="popularArea">
-      <h1>熱門排行</h1>
-      <v-row>
-       <v-col cols="12" v-for="song in popularSongs" :key="song._id" class="sc2">
-        <SongCard v-bind="song" class="SongCard"></SongCard>
-       </v-col>
-      </v-row>
-    </div>
-  </v-container>
+  <!-- 熱門排行榜------------------------------------------------------- -->
+  <section id="popularArea">
+    <h1>熱門排行</h1>
+    <v-row>
+     <v-col cols="12" md="10" v-for="song in popularSongs" :key="song._id">
+      <SongCard v-bind="song" class="SongCard"></SongCard>
+     </v-col>
+    </v-row>
+  </section>
 </template>
 
 <script setup>
@@ -520,8 +517,8 @@ const loadNewSongs = async () => {
       // 傳參數讓後端知道一頁有幾個*****待編輯*******
       params: {
         // 沒有做排序就會預設照時間排
-        itemsPerPage: ITEMS_PER_PAGE,
-        page: page.value
+        // itemsPerPage: ITEMS_PER_PAGE,
+        // page: page.value
       }
     })
     pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE) // 總共幾頁
@@ -552,8 +549,8 @@ const loadPopularSongs = async () => {
       // 傳參數讓後端知道一頁有幾個*****待編輯*******
       params: {
         // 沒有做排序就會預設照時間排
-        itemsPerPage: ITEMS_PER_PAGE,
-        page: page.value
+        // itemsPerPage: ITEMS_PER_PAGE,
+        // page: page.value
       }
     })
     pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE) // 總共幾頁
@@ -612,7 +609,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'end end', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -620,14 +616,6 @@ onMounted(async () => {
       x: -300,
       duration: 2,
       ease: 'back.inOut',
-      // #div03要單獨寫的話可以拿掉以下
-      // stagger: {
-      //   each: 0.2,
-      //   from: 'start', // 關鍵字是start、end、center、random、edges
-      //   // repeat: -1,
-      //   // yoyo: true,
-      //   ease: 'back.out'
-      // }
     })
 
     gsap.from('#div01 .introduce', {
@@ -636,7 +624,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'end end', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -653,7 +640,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'end end', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -671,7 +657,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'center center', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -688,7 +673,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'center center', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -712,7 +696,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'center center', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -730,7 +713,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'top 100%', // 綠色線
         end: 'top end' // 紅色線
       },
@@ -745,7 +727,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'end 100%', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -762,7 +743,6 @@ onMounted(async () => {
         // markers: true, // 紅綠線標記
         // 第一個值為Trigger綠色線的位置，第二個值為視窗(scroll)綠色線的位置
         // 觸發條件：當兩條綠色線重疊時，觸發動畫
-        // 觸發點****待編輯****
         start: 'end 100%', // 綠色線
         end: 'top center' // 紅色線
       },
@@ -776,20 +756,6 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-.v-container{
-
-  #newArea,
-  #popularArea {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 3rem;
-    .v-row{
-      justify-content: center;
-      align-items: center;
-    }
-  }
-}
-
 // 網頁介紹-------------------------------------------------------------
 section{
   // 因為defalt.vue有設定v-main寬度，故這裡的100%是指v-main的100%（非滿版）
@@ -799,12 +765,17 @@ section{
 }
 #section01{
   // 設定寬高比例
-  height: calc(100vh - 100px);
-  // aspect-ratio: 16/9;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
   // center => 置中；cover => 圖片覆蓋整個容器
-  // 圖片畫質有點差，待找原圖***待編輯***
   background: url('@/assets/photo/drum01.jpg') center / cover no-repeat ;
   position: relative;
+
+  @media (min-width: 1920px) {
+    height: calc(100vh - 100px);
+    width: auto;
+  }
   // LOGO
   #logo-container{
     width: 80%;
@@ -927,6 +898,21 @@ section{
   gap: 1rem;
   .v-btn{
     width: 100px;
+  }
+}
+#newArea,
+#popularArea {
+  width: 100%;
+  text-align: center;
+  margin-top: 5rem;
+  margin-bottom: 10rem;
+
+  h1{
+    font-size: 2.5rem;
+  }
+  .v-row{
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

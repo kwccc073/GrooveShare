@@ -69,7 +69,7 @@
                如果沒有id => 顯示'新增練鼓室' -->
           {{ dialog.id ? '編輯練鼓室' : '新增練鼓室' }}
         </v-card-title>
-        <!-- submit功能之步驟5. 綁定欄位的 v-model、:error-messages -->
+        <!-- 綁定欄位的 v-model、:error-messages -->
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -138,10 +138,10 @@
 // 定義頁面
 import { definePage } from 'vue-router/auto'
 import { ref } from 'vue'
-// submit功能之步驟1-1. 引入驗證套件
+// 引入驗證套件
 import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
-// submit功能之步驟6-2. 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
+// 引入useApi（要把資料傳出去都要引入這個，用於跟API溝通）
 import { useApi } from '@/composables/axios'
 // 對話框
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -157,7 +157,7 @@ definePage({
   }
 })
 
-// submit功能之步驟6-3. 取出apiAuth（要把資料傳出去都要引入這個）
+// 取出apiAuth（要把資料傳出去都要引入這個）
 const { apiAuth } = useApi()
 
 const createSnackbar = useSnackbar()
@@ -202,7 +202,7 @@ const reservations = ['電話預約', '官網預約', '社群預約', '現場登
 // 定義電話號碼驗證的正則表達式
 const phoneNumberRegex = /^0\d{9}$/
 
-// submit功能之步驟2. 以schema定義格式----------------------------------------------
+// 以schema定義格式----------------------------------------------
 const schema = yup.object({
   // 縣市----------------
   city: yup
@@ -244,7 +244,7 @@ const schema = yup.object({
     .min(0, '費用不能小於 0'),
 })
 
-// submit功能之步驟3. useForm()建立表單------------------------------------------------------------
+// useForm()建立表單------------------------------------------------------------
 // 解構出handleSubmit (處理送出表單的動作)、isSubmitting (判斷表單是否在送出)、resetForm (重設表單)
 const { handleSubmit, isSubmitting, resetForm } = useForm({
   // 驗證格式為上方的schema
@@ -263,7 +263,7 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
   }
 })
 
-// submit功能之步驟4. useField()建立表單的各個欄位---------------------------------------------
+// useField()建立表單的各個欄位---------------------------------------------
 // useField()裡的欄位名稱要跟跟上方schema的一樣
 // useField('city') => 返回與 city 字段相關的值(value)和錯誤訊息(errorMessage)
 
@@ -278,7 +278,7 @@ const phoneNumber = useField('phoneNumber')
 const reservation = useField('reservation')
 const fee = useField('fee')
 
-// submit功能之步驟6-1. 定義送出的function-----------------------------------------------------------------
+// 定義送出的function-----------------------------------------------------------------
 // handleSubmit()會先上方的schema執行驗證，過了再執行下面的程式碼
 const submit = handleSubmit(async (values) => {
   try {

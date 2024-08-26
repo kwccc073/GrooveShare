@@ -4,22 +4,19 @@
   <!-- 最內層：(HiHat, HiHatIndex) in beat" -->
   <v-row class="scoreArea-watching">
     <template v-for="(section, sectionIndex) in scoreHiHat" :key="sectionIndex">
-      <!-- :class="{Dnone: }"
-          在尺寸小於lg時***這部分待編輯****，偶數(sectionIndex%2==1)的v-col要加上一個屬性使display:none -->
+      <!-- 偶數(sectionIndex%2==1)的v-col，在尺寸小於lg時要加上.displayNone -->
       <v-col cols="2" class="beginning" :class="{displayNone:(sectionIndex%2==1)&&xl}">
-        <template v-if="sectionIndex === 0">
+        <div id="signature" v-if="sectionIndex === 0">
           <p>{{ signatureBeat }}</p>
           <p>{{ signatureNote }}</p>
-        </template>
+        </div>
       </v-col>
       <v-col cols="10" xl="5" class="section v-col">
         <!-- <div class="sectionTitle">第{{sectionIndex+1}}小節</div> -->
         <div class="allBeats">
           <!-- 一拍------------------------------------------------------------ -->
           <div class="beat" v-for="(beat, beatIndex) in section" :key="beatIndex" :id="`s${sectionIndex + 1}-b${beatIndex + 1}`">
-            <!-- 這個div可以拿掉****待編輯**** -->
             <!-- <div class="beat-title">第 {{beatIndex + 1}} 拍</div> -->
-            <!-- 這個div可拿可不拿，留著可用來調音符之間的距離***待編輯*** -->
             <div class="oneNote">
               <!-- SVG放這裡 ------------------------------------------------------------------------->
               <svg class="note" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -431,15 +428,28 @@ const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scor
 
   .beginning{
     border: 1px solid black;
-    // border-top: 1px solid black;
-    // border-bottom: 1px solid black;
     box-sizing: border-box;
 
-    p{
-      font-size: 2rem;
-      font-weight: bold;
-      text-align: right;
-      padding-right: 1rem;
+    #signature{
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+      p{
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: right;
+        padding-right: 1rem;
+        // 小於s尺寸時的設定
+        @media (max-width: 559px) {
+          font-size: 1rem
+        }
+        // s-md尺寸時的設定
+        @media (min-width: 600px) and (max-width: 959px) {
+          font-size: 1.5rem;
+        }
+      }
     }
   }
   // 每個小節
@@ -486,8 +496,4 @@ const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scor
 .displayNone{
   display: none;
 }
-// 第s1小節－第b1拍
-// #s1-b1{
-  // width: 800px;
-// }
 </style>

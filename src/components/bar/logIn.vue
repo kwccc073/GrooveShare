@@ -1,43 +1,40 @@
 <template>
   <!-- 參考：https://vuetifyjs.com/en/components/dialogs/#anatomy -->
-  <!-- <div class="text-center pa-4"> -->
-    <v-btn prepend-icon="mdi-account" @click="logInDialog = true">
-      註冊/登入
-    </v-btn>
+  <v-btn prepend-icon="mdi-account" @click="logInDialog = true">
+    註冊/登入
+  </v-btn>
 
-    <v-dialog
-      v-model="logInDialog"
-      width="auto"
-    >
-      <v-card>
-      <v-card-title>會員登入</v-card-title>
-      <v-card-text>
-        <v-form @submit.prevent="submit" :disabled="isSubmitting">
-          <!-- 帳號、密碼、信箱等規則先照上課範例 -->
-          <v-text-field
-            label="帳號"
-            minlength="4" maxlength="20" counter
-            v-model="account.value.value"
-            :error-messages="account.errorMessage.value"
-          ></v-text-field>
-          <v-text-field
-            label="密碼" type="password"
-            minlength="4" maxlength="20" counter
-            hint="請輸入英數字混合密碼"
-            v-model="password.value.value"
-            :error-messages="password.errorMessage.value"
-          ></v-text-field>
-          <v-btn type="submit" :loading="isSubmitting">登入</v-btn>
-        </v-form>
-        <div>
-          <span>尚未註冊會員？</span>
-          <!-- 註冊按鈕位置待調整 -->
-          <register></register>
-        </div>
-      </v-card-text>
+  <v-dialog
+    v-model="logInDialog"
+    width="auto">
+    <v-card>
+    <v-card-title>會員登入</v-card-title>
+    <v-card-text>
+      <v-form @submit.prevent="submit" :disabled="isSubmitting">
+        <v-text-field
+          label="帳號"
+          minlength="4" maxlength="20" counter
+          v-model="account.value.value"
+          :error-messages="account.errorMessage.value"
+        ></v-text-field>
+        <v-text-field
+          label="密碼" type="password"
+          minlength="4" maxlength="20" counter
+          hint="請輸入英數字混合密碼"
+          v-model="password.value.value"
+          :error-messages="password.errorMessage.value"
+        ></v-text-field>
+        <v-btn type="submit" :loading="isSubmitting">登入</v-btn>
+      </v-form>
+      <div>
+        <span>尚未註冊會員？</span>
+        <!-- 註冊按鈕位置待調整 -->
+        <register></register>
+      </div>
+    </v-card-text>
 
-      </v-card>
-    </v-dialog>
+    </v-card>
+  </v-dialog>
 </template>
 <script setup>
 import { ref } from 'vue'
