@@ -77,7 +77,7 @@ const createSnackbar = useSnackbar() // 彈出對話框
 const { apiAuth } = useApi() // 取出apiAuth（要做請求都要做這個）
 
 // 一頁顯示幾個
-const tableItemsPerPage = ref(2)
+const tableItemsPerPage = ref(10)
 // 排序（先按照日期排序就好）*****待新增******
 const tableSortBy = ref([
   // createdAt是建立的日期
@@ -85,7 +85,7 @@ const tableSortBy = ref([
   { key: 'createdAt', order: 'desc' }
 ])
 // 頁碼，表示表格現在被翻到哪一頁
-const tablePage = ref(3)
+const tablePage = ref(1)
 // 表格要顯示的東西
 const tableItems = ref([])
 // 表格欄位設定（理論上應該會固定，所以不用ref）
