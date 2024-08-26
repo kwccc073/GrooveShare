@@ -230,26 +230,34 @@
                   c-0.107-0.855-0.128-1.615-0.14-2.143c0.002-0.538,0.023-0.865,0.023-0.864L587.879,44.844z"/>
                 </g>
                 <!-- 附點音符-------------------------------------------- -->
-                <!-- 只有(line1-1 && line4-1顯示) 且 (XXX-1顯示)時才會顯示-->
+                <!-- 只有(line1-1顯示 && line4-1顯示 && line2-1 不顯示 && line3-1不顯示 ) 且 (XXX-1顯示)時才會顯示-->
                 <g class="dots-1">
                   <circle class="dot-hihat-1"
-                    :class="{active:(
-                      (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
-                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
-                      )&& (scoreHiHat[sectionIndex][beatIndex][0])
+                    :class="{active:
+                      (
+                        (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
+                        (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                        !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])
+                      )
+                      && (scoreHiHat[sectionIndex][beatIndex][0])
                     }"
                    fill="#231815" cx="157.254" cy="157.075" r="7.719"/>
                    <circle class="dot-snare-1"
                     :class="{active:(
                       (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
-                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])
                       )&& (scoreSnare[sectionIndex][beatIndex][0])
                     }"
                   fill="#231815" cx="157.254" cy="233.656" r="7.719"/>
                   <circle class="dot-kick-1"
                     :class="{active:(
                       (scoreHiHat[sectionIndex][beatIndex][0]||scoreSnare[sectionIndex][beatIndex][0]||scoreKick[sectionIndex][beatIndex][0])&&
-                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])
+                      (scoreHiHat[sectionIndex][beatIndex][3]||scoreSnare[sectionIndex][beatIndex][3]||scoreKick[sectionIndex][beatIndex][3])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][1]||scoreSnare[sectionIndex][beatIndex][1]||scoreKick[sectionIndex][beatIndex][1])&&
+                      !(scoreHiHat[sectionIndex][beatIndex][2]||scoreSnare[sectionIndex][beatIndex][2]||scoreKick[sectionIndex][beatIndex][2])
                       )&& (scoreKick[sectionIndex][beatIndex][0])
                     }"
                     fill="#231815" cx="157.253" cy="347.048" r="7.719"/>

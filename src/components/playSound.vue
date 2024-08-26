@@ -29,6 +29,7 @@ import $ from 'jquery'
 import hiHatAudio from '@/assets/instruments/hiHat.wav'
 import snareAudio from '@/assets/instruments/snare.wav'
 import kickAudio from '@/assets/instruments/kick.wav'
+// import { forEach } from 'core-js/core/array'
 
 // 外部要接收的東西
 const props = defineProps(['signatureBeat', 'signatureNote', 'scoreHiHat', 'scoreSnare', 'scoreKick', 'BPM'])
@@ -69,13 +70,13 @@ const playClick = () => {
   hiHatSound.value.currentTime = 0
   snareSound.value.currentTime = 0
   kickSound.value.currentTime = 0
-  hiHatSound.value.play() // 撥放
-  snareSound.value.play() // 撥放
-  kickSound.value.play() // 撥放
+  hiHatSound.value.play()
+  snareSound.value.play()
+  kickSound.value.play()
 
   // 移動到下一個拍子
   currentDivision = currentDivision + 1
-  // 檢查：如果 currentDivision 超過每拍的總部分 => 進行下一拍的第0部分
+  // 檢查：如果 currentDivision 超過每拍的總長度 => 進行下一拍的第0部分
   if (currentDivision >= props.scoreHiHat[currentSection][currentBeat].length) {
     currentBeat = currentBeat + 1
     currentDivision = 0
@@ -86,14 +87,14 @@ const playClick = () => {
       currentBeat = 0
       currentDivision = 0
 
-      // 檢查：如果 currentSection 超過整個譜的總寫結束 => 三個值都歸零且停止
+      // 檢查：如果 currentSection 超過整個譜的總小節數 => 三個值都歸零且停止
       if (currentSection >= props.scoreHiHat.length) {
         clearInterval(intervalId)
         isPlaying.value = false
         currentSection = 0
         currentBeat = 0
         currentDivision = 0
-        // 全部清除class
+        // 全部播放完畢，清除class
         $('.beat').removeClass('current')
       }
     }
