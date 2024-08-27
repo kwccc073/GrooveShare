@@ -135,8 +135,9 @@
         </v-col>
       </template>
       <v-col cols="12" class="btns-start">
+        <v-btn id="btn-close" @click="close()" :disabled="!isDisabled" v-if="isStart" prepend-icon="mdi-close" elevation="0" color="red">離開</v-btn>
         <v-btn id="btn-plus" @click="addSection()" :disabled="!isDisabled" v-if="isStart" prepend-icon="mdi-plus" elevation="0">新增小節</v-btn>
-        <v-btn type="submit" :loading="isSubmitting" :disabled="!isDisabled" color="black" v-if="isStart" prepend-icon="mdi-upload-multiple">上傳</v-btn>
+        <v-btn id="btn-upload" type="submit" :loading="isSubmitting" :disabled="!isDisabled" color="black" v-if="isStart" prepend-icon="mdi-upload-multiple" elevation="0">上傳</v-btn>
       </v-col>
     </v-row>
   </v-form>
@@ -190,6 +191,22 @@ const signatureNotes = [2, 4, 8]
 // 禁用按鈕
 const isDisabled = ref(false)
 
+// 建議轉為橫向模式****
+const mediaQuery = window.matchMedia('(orientation: portrait)')
+
+function handleOrientationChange (event) {
+  if (event.matches) {
+    console.log('直向模式')
+    alert('建議將裝置轉為橫向')
+  } else {
+    console.log('橫向模式')
+  }
+}
+
+mediaQuery.addEventListener('change', handleOrientationChange)
+
+// 初次檢查
+handleOrientationChange(mediaQuery)
 // 以schema定義格式---------------------
 const schema = yup.object({
   // 演唱者
@@ -344,6 +361,12 @@ const start = () => {
   isDisabled.value = !isDisabled.value
 }
 
+// 離開頁面---------------------------------------------------------------
+const close = () => {
+  alert('確定要離開寫譜專區嗎？')
+  router.push('/profile')
+}
+
 // 新增小節function----------------------------------------------------------------
 const addSection = () => {
   // HiHat------------------
@@ -448,6 +471,9 @@ const submit = handleSubmit(async (values) => {
   .v-checkbox{
     display: flex;
   }
+  @media (max-width: 700px) {
+    font-size: 0.7rem;
+  }
 }
 .btns-nonstart{
     display: flex;
@@ -525,6 +551,9 @@ const submit = handleSubmit(async (values) => {
             .v-checkbox{
               // display: flex;
               font-size: 0.8rem; // 勾選框大小
+              @media (max-width: 700px) {
+                font-size: 0.4rem;
+              }
             }
           }
       }
@@ -537,14 +566,23 @@ const submit = handleSubmit(async (values) => {
     align-items: center;
     gap: 1rem;
   }
+  @media (max-width: 700px) {
+    font-size: 0.7rem;
+  }
 }
 
 .v-btn{
   font-size: 1rem;
+  @media (max-width: 700px) {
+    font-size: 0.7rem;
+  }
 }
 
 #btn-plus{
   border: 1px solid black;
+}
+#btn-upload{
+  border: 1px solid white;
 }
 
 .displayNone{

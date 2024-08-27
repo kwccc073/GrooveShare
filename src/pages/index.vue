@@ -851,7 +851,7 @@ section{
     right: 7%;
     z-index: -1;
   }
-  // 鼓棒照片***要讓他凸出去，待編輯***
+  // 鼓棒照片
   #div03{
     width: 42%;
     // background: blue;
@@ -913,6 +913,51 @@ section{
   .v-row{
     justify-content: center;
     align-items: center;
+  }
+}
+
+// 小尺寸的樣式
+@media (max-width: 700px) {
+  section{
+
+    .v-btn{
+      width: 35px;
+      height: 25px;
+      font-size: 0.7rem;
+    }
+  }
+
+  #section02{
+    font-size: 0.7rem;
+    // 灰色框框
+    #div02{
+      height: 300px;
+    }
+    // 鼓棒照片
+    #div03{
+      .introduce{
+        padding-left: 1rem;
+      }
+    }
+  }
+
+  #section03{
+    padding: 2rem;
+    font-size: 0.7rem;
+  }
+
+  #newArea,
+  #popularArea {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+
+    h1{
+      font-size: 1.5rem;
+    }
+    .v-row{
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
 </style>

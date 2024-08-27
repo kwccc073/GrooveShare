@@ -50,8 +50,8 @@
     <!-- { item }表示原始的東西而不是值**** -->
     <template #[`item.action`]="{ item }">
       <!-- 點擊時打開編輯視窗，並帶入item(這一列的練鼓室資料) -->
-      <v-btn icon="mdi-pencil" variant="text" @click="openDialog(item)"></v-btn>
-      <v-btn elevation="0" prepend-icon=" mdi-trash-can-outline" @click="deleteTrainingRoom(item._id)"></v-btn>
+      <v-btn class="edit-and-delete" icon="mdi-pencil" variant="text" @click="openDialog(item)"></v-btn>
+      <v-btn class="edit-and-delete" icon=" mdi-trash-can-outline" variant="text" @click="deleteTrainingRoom(item._id)"></v-btn>
     </template>
   </v-data-table-server>
   <!-- 新增/編輯視窗---------------------------------------- -->
@@ -428,7 +428,6 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
 <style scoped lang="scss">
 #table{
   font-size: 1rem;
-
   // 按鈕和搜尋欄的排列
   #btn-and-search{
     // background: cadetblue;
@@ -437,11 +436,20 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
+
     // 按鈕
     #add-btn{
-      height: 60px;
+      height: 50px;
       font-size: 1rem;
+      // 小於xs尺寸的樣式
+      @media (max-width: 800px) {
+        font-size: 0.7rem;
+      }
     }
+  }
+  // 小尺寸的樣式
+  @media (max-width: 800px) {
+    font-size: 0.7rem;
   }
 }
 
@@ -449,7 +457,6 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
 .v-dialog{
   // background: violet; // 這是卡片旁邊區塊的顏色
   width: 50vw;
-
   .v-card{
     // background: cadetblue;
     text-align: center;
@@ -480,6 +487,47 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
 
         &:hover{
           background: gray;
+        }
+
+      }
+    }
+  }
+  // 小於xs尺寸的樣式
+  @media (max-width: 800px) {
+    width: 95vw;
+    .v-card{
+      padding: 0.5rem;
+
+      // 關閉按鈕
+      #btn-close{
+        width: 20px;
+        height: 20px;
+      }
+      // 標題
+      .v-card-title{
+        font-size: 1rem;
+      }
+
+      .v-card-text{
+        // background: cadetblue;
+        .v-text-field{
+          height: 40px;
+        }
+      }
+
+      // 按鈕
+      .v-card-actions{
+        .v-btn{
+          width: 50px;
+          background: black;
+          color: white;
+          font-size: 0.7rem;
+          margin: auto;
+
+          &:hover{
+            background: gray;
+          }
+
         }
       }
     }

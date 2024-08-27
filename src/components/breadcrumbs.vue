@@ -33,6 +33,11 @@ div{
   font-size: 1.5rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+  // 小於xs尺寸的樣式
+  @media (max-width: 600px) {
+    height: 35px;
+    font-size: 1rem;
+  }
   img{
     height: 100%;
     width: auto;

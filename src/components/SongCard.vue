@@ -83,6 +83,15 @@ const saveSong = async () => {
       text-decoration: none;
       color: black;
       font-weight: bold;
+      // 小於xs尺寸的樣式
+      @media (max-width: 600px) {
+        h4{
+          font-size: 0.8rem;
+        }
+        h2{
+          font-size: 1.3rem;
+        }
+      }
     }
   }
 
@@ -93,6 +102,10 @@ const saveSong = async () => {
     // background-color: darkorange;
     padding-bottom: 0;
     font-size: 1rem;
+    // 小於xs尺寸的樣式
+    @media (max-width: 600px) {
+      font-size: 0.8rem;
+    }
   }
 }
 
