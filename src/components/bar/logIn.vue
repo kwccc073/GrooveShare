@@ -101,10 +101,11 @@ const submit = handleSubmit(async (values) => {
         color: 'green'
       }
     })
-    // 登入成功會跳到首頁
-    router.push('/profile')
     // 並關閉登入視窗
     logInDialog.value = false
+    // 登入成功會跳到會員資料
+    await router.push('/profile')
+    window.location.reload()
   } else {
     alert(result)
   }

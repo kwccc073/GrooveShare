@@ -40,7 +40,7 @@
           :error-messages="BPM.errorMessage.value"
         ></v-text-field>
       </v-col>
-      <v-col class="v-col" cols="6" xl="3" id="signature">
+      <v-col class="v-col" cols="12" sm="6" xl="3" id="signature">
         <span>拍號：</span>
         <!-- 一個小節幾拍 -->
         <!-- @update:modelValue="" 用來監測此值的變化 -->
@@ -57,7 +57,7 @@
           :disabled="isDisabled"
         ></v-autocomplete>
       </v-col>
-      <v-col class="v-col" cols="6" xl="3">
+      <v-col class="v-col" cols="12" sm="6" xl="3">
         <span>隱私狀態：</span>
         <v-checkbox
           label="公開"
@@ -575,14 +575,14 @@ const submit = handleSubmit(async (values) => {
     align-items: center;
     gap: 1rem;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 850px) {
     font-size: 0.7rem;
   }
 }
 
 .v-btn{
   font-size: 1rem;
-  @media (max-width: 700px) {
+  @media (max-width: 850px) {
     font-size: 0.7rem;
   }
 }

@@ -33,7 +33,7 @@
               ></v-text-field>
           </v-col>
         </template>
-        <v-col class="v-col" cols="6" lg="3">
+        <v-col class="v-col" cols="12" sm="6" xl="3">
           <span>曲風：</span>
           <v-autocomplete
             v-if="isEditing"
@@ -44,7 +44,7 @@
           ></v-autocomplete>
           <span v-if="!isEditing">{{ song.songStyle }}</span>
         </v-col>
-        <v-col class="v-col" cols="6" lg="3">
+        <v-col class="v-col" cols="12" sm="6" xl="3">
           <span>BPM：</span>
             <template v-if="isEditing">
               <v-text-field
@@ -56,10 +56,10 @@
             </template>
             <span v-if="!isEditing">{{ song.BPM }}</span>
         </v-col>
-        <v-col class="v-col" cols="6" lg="3" v-if="!isEditing">
+        <v-col class="v-col" cols="12" sm="6" xl="3" v-if="!isEditing">
           作者：{{song.editor}}
         </v-col>
-        <v-col cols="6" lg="3" id="public">
+        <v-col id="public" cols="12" sm="6" xl="3">
           <span>隱私狀態：</span>
           <v-checkbox
             v-if="isEditing"
@@ -504,13 +504,29 @@ const deleteSong = () => {
         align-items: center;
         gap: 0.5rem;
         font-size: 1.4rem;
+        @media (max-width: 850px) {
+          font-size: 0.8rem;
+          justify-content: start;
+        }
         h1{
           font-size: 2rem;
+          @media (max-width: 850px) {
+            font-size: 1.2rem;
+            justify-content: start;
+          }
         }
       }
     // 隱私狀態字樣
     #public{
       font-size: 1.4rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+
+      @media (max-width: 850px) {
+          font-size: 0.8rem;
+          justify-content: start;
+        }
     }
     // 編輯中字樣
     #isEditing-title{
@@ -520,6 +536,9 @@ const deleteSong = () => {
       text-align: center;
       font-size: 2rem;
       color: red;
+      @media (max-width: 850px) {
+        font-size: 1.3rem;
+      }
     }
 
     // 隱私狀態
@@ -532,6 +551,7 @@ const deleteSong = () => {
     .v-checkbox{
       display: flex;
     }
+
   }
 
   .btns{
@@ -541,6 +561,9 @@ const deleteSong = () => {
 
     .v-btn{
       font-size: 1rem;
+      @media (max-width: 850px) {
+        font-size: 0.7rem;
+      }
     }
     #btn-delete{
       background: lightgray;

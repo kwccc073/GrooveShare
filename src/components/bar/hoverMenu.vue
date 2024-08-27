@@ -36,6 +36,7 @@ const memberItems = ref([
   // { title: '我的關注', to: '/follow', prependIcon: 'mdi-account-heart' },
   { title: '會員資料', to: '/profile', prependIcon: 'mdi-account' }
 ])
+
 </script>
 
 <style scoped lang="scss">

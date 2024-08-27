@@ -33,13 +33,8 @@ export const useUserStore = defineStore('user', () => {
       // 跟後端的controllerss的檔案user.js登入後回傳的資料一樣
       token.value = data.result.token
       account.value = data.result.account
-      // email.value = data.result.email
-      // icon.value = data.result.icon
-      // id.value = data.result.id
-      // role.value = data.result.role
-      // saving.value = data.result.saving
-      console.log(data.result) // 只有出現token和account（因為登入只會傳這兩個值）
-      console.log(saving.value)
+      // console.log(data.result) // 只有token和account（因為登入只會傳這兩個值）
+
       return '登入成功'
     } catch (error) {
       console.log(error)
