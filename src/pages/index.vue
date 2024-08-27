@@ -524,6 +524,7 @@ const loadNewSongs = async () => {
     pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE) // 總共幾頁
     // 把newSongs陣列裡的內容換掉：從第0個開始清除, newSongs陣列長度個,
     newSongs.value.splice(0, newSongs.value.length, ...data.result.data)
+
     // console.log(newSongs.value)
   } catch (error) {
     console.log(error)
@@ -658,9 +659,9 @@ onMounted(async () => {
         end: 'top center' // 紅色線
       },
       opacity: 0,
-      // y: -20,
-      duration: 4,
-      ease: 'power2',
+      y: -20,
+      duration: 1.7,
+      ease: 'power1.inOut',
     })
 
     // 鼓棒照片
@@ -675,8 +676,8 @@ onMounted(async () => {
       },
       opacity: 0,
       x: -300,
-      delay: 0.7,
-      duration: 2,
+      delay: 0.2,
+      duration: 2.6,
       ease: 'back.inOut',
       // #div03要單獨寫的話可以拿掉以下
       stagger: {
@@ -687,6 +688,7 @@ onMounted(async () => {
         ease: 'back.out'
       }
     })
+    // 鼓棒下方文字
     gsap.from('#div03 .introduce', {
       scrollTrigger: {
         trigger: '#div02', // 觸發者
@@ -697,14 +699,14 @@ onMounted(async () => {
         end: 'top center' // 紅色線
       },
       opacity: 0,
-      delay: 1,
+      delay: 0.1,
       x: -100,
-      duration: 1.5,
+      duration: 2.5,
       ease: 'back.in',
     })
 
     // section03----------------------------------------------------------------
-    gsap.from('#section03, #section03 p,#section03 .clickMe', {
+    gsap.from('#section03, #section03 p', {
       scrollTrigger: {
         trigger: '#section03', // 觸發者
         // markers: true, // 紅綠線標記
