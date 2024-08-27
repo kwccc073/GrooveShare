@@ -172,7 +172,7 @@ const saveSong = async (songID) => {
 <style scoped lang="scss">
 #table{
   font-size: 1rem;
-  @media (max-width: 800px) {
+  @media (max-width: 850px) {
     font-size: 0.7rem;
   }
 }

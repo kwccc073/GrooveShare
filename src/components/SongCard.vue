@@ -103,7 +103,7 @@ const saveSong = async () => {
     padding-bottom: 0;
     font-size: 1rem;
     // 小於xs尺寸的樣式
-    @media (max-width: 600px) {
+    @media (max-width: 850px) {
       font-size: 0.8rem;
     }
   }

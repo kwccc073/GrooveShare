@@ -149,7 +149,7 @@ import { definePage } from 'vue-router/auto'
 import { useUserStore } from '@/stores/user'
 // 引入自定義元件
 import breadcrumbs from '@/components/breadcrumbs'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 // 引入驗證套件
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
@@ -180,6 +180,31 @@ const account = user.account
 const router = useRouter() // 跳到其他分頁用
 const { xl } = useDisplay() // 斷點
 
+// 建議行動裝置轉為橫向模式---------------------------------------------------
+const mediaQuery = window.matchMedia('(orientation: portrait)')
+function isMobileDevice () {
+  return /Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent)
+}
+
+function handleOrientationChange (event) {
+  if (!isMobileDevice()) return
+  if (event.matches) {
+    // 對話框
+    createSnackbar({
+      text: '建議將裝置轉為橫向',
+      snackbarProps: {
+        color: 'blue',
+      }
+    })
+  }
+}
+
+// 初次檢查
+onMounted(() => {
+  handleOrientationChange(mediaQuery)
+})
+mediaQuery.addEventListener('change', handleOrientationChange)
+
 // 歌曲基本資訊部分-----------------------------------------------------------------
 // 選項（跟後端相同）--------------------------
 // 曲風
@@ -191,22 +216,6 @@ const signatureNotes = [2, 4, 8]
 // 禁用按鈕
 const isDisabled = ref(false)
 
-// 建議轉為橫向模式****
-const mediaQuery = window.matchMedia('(orientation: portrait)')
-
-function handleOrientationChange (event) {
-  if (event.matches) {
-    console.log('直向模式')
-    alert('建議將裝置轉為橫向')
-  } else {
-    console.log('橫向模式')
-  }
-}
-
-mediaQuery.addEventListener('change', handleOrientationChange)
-
-// 初次檢查
-handleOrientationChange(mediaQuery)
 // 以schema定義格式---------------------
 const schema = yup.object({
   // 演唱者

@@ -442,13 +442,13 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
       height: 50px;
       font-size: 1rem;
       // 小於xs尺寸的樣式
-      @media (max-width: 800px) {
+      @media (max-width: 850px) {
         font-size: 0.7rem;
       }
     }
   }
   // 小尺寸的樣式
-  @media (max-width: 800px) {
+  @media (max-width: 850px) {
     font-size: 0.7rem;
   }
 }
@@ -492,8 +492,8 @@ gsap.to('.v-dialog', { x: 500, duration: 1 })
       }
     }
   }
-  // 小於xs尺寸的樣式
-  @media (max-width: 800px) {
+  // 小尺寸的樣式
+  @media (max-width: 850px) {
     width: 95vw;
     .v-card{
       padding: 0.5rem;

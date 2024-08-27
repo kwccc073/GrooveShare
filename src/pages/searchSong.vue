@@ -168,7 +168,7 @@ const saveSong = async (songID) => {
 #table{
   font-size: 1rem;
   // 小於xs尺寸的樣式
-  @media (max-width: 800px) {
+  @media (max-width: 850px) {
     font-size: 0.7rem;
   }
 }
