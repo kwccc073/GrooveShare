@@ -7,13 +7,12 @@ import { useApi } from '@/composables/axios'
 export const useUserStore = defineStore('user', () => {
   const { api, apiAuth } = useApi()
 
-  // 要抓下來的東西-------------
+  // 要保存的使用者資訊-------------
   const token = ref('')
   const account = ref('')
   const email = ref('')
   const icon = ref('')
   const id = ref('')
-  // const role = ref(UserRole.USER) // 使用者
   const saving = ref([])
 
   // 是否登入
@@ -22,6 +21,7 @@ export const useUserStore = defineStore('user', () => {
     return token.value.length > 0
   })
 
+  // 主要功能----------------------------------------------------------------------------------------------------------------------------------------
   // 登入---------------------------------------------------------------------
   // 登入要對使用者的store做操作，操作成功要把上方的token、account等值換掉
   // 有些人覺得登入是表單送出，所以把請求的API放在page裡
@@ -41,6 +41,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  // 取得使用者資訊-----------------------------------------------
   const profile = async () => {
     if (!isLogin.value) return
     // 有登入才做處理
@@ -87,6 +88,7 @@ export const useUserStore = defineStore('user', () => {
     saving.value = []
   }
 
+  // 收藏歌曲----------------------------------------------------------------
   // saveSong相當於上課範例中的addCart
   const saveSong = async (song) => {
     try {
@@ -130,7 +132,7 @@ export const useUserStore = defineStore('user', () => {
     // checkout
   }
 }, {
-  // 保存localstorage的設定
+  // 保存localstorage的設定，避免重新整理後遺失
   persist: {
     // 存儲在瀏覽器local storage中的鍵名
     key: 'web',

@@ -125,16 +125,16 @@ const memberItems = ref([
 // 視窗------------------------------------
 const isOpen = ref(false) // 決定對話框是否開啟
 
-// 打開視窗 funtion******item待確認要不要放******
+// 打開視窗 funtion******
 const openDialog = async () => {
   isOpen.value = true
 
   // 打開後代入store中的使用者資料
   account.value.value = user.account // 同一個使用者會固定帳號，不得修改
   email.value.value = nowEmail
-  icon.value.value = nowIcon // 打開對話框沒有顯示圖片**待編輯**
+  icon.value.value = nowIcon // 打開對話框沒有顯示圖片****
   id.value.value = user.id // 同一個使用者會固定id，不得修改
-  // 密碼待編輯
+  // 密碼***
   // password.value.value = ''
   // passwordConfirm.value.value = ''
 }

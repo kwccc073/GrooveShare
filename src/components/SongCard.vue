@@ -31,35 +31,35 @@ import { ref } from 'vue'
 
 const user = useUserStore()
 // 取得當下的使用者
-const nowAccount = user.account
-const nowSaving = ref(user.saving)
+// const nowAccount = user.account
+// const nowSaving = ref(user.saving)
 
-const createSnackbar = useSnackbar()
+// const createSnackbar = useSnackbar()
 
 // props表示元件可以接收的資料，defineProps()是script setup的固定寫法（不須import）
 // 可以一個個定義每個東西的型態、預設值等
 const props = defineProps(['_id', 'songStyle', 'songTitle', 'singer', 'BPM', 'signatureSection', 'signatureNotes', 'editor', 'savedTimes'])
 
-const loading = ref(false) // UIUX用，使按下去時按鈕為載入狀態（避免一直點）
+// const loading = ref(false) // UIUX用，使按下去時按鈕為載入狀態（避免一直點）
 
-const saveSong = async () => {
+// const saveSong = async () => {
   // 如果沒有登入
-  if (!user.isLogin) {
-    alert('請先登入帳號')
-    return
-  }
-  loading.value = true // 還沒跑完的時候loading為true
-  const result = await user.saveSong(props._id)
+  // if (!user.isLogin) {
+    // alert('請先登入帳號')
+    // return
+  // }
+  // loading.value = true // 還沒跑完的時候loading為true
+  // const result = await user.saveSong(props._id)
   // console.log(result)
-  createSnackbar({
-    text: result.text,
-    snackbarProps: {
-      color: result.color
-    }
-  })
-  nowSaving.value = user.saving
-  loading.value = false // 跑完的時候loading為false
-}
+  // createSnackbar({
+    // text: result.text,
+    // snackbarProps: {
+      // color: result.color
+    // }
+  // })
+  // nowSaving.value = user.saving
+  // loading.value = false // 跑完的時候loading為false
+// }
 </script>
 
 <style scoped lang="scss">

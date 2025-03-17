@@ -540,13 +540,11 @@ const loadNewSongs = async () => {
 loadNewSongs()
 
 // 載入最多收藏的歌曲-------------------------------------------------
-// 目前是取全部歌曲，再由上架時間 (新->舊)排列
-// 已改成只取最新的5首歌曲*****待編輯*******
 const popularSongs = ref([]) // 熱門歌曲
 const loadPopularSongs = async () => {
   try {
     const { data } = await api.get('/song/popular', {
-      // 傳參數讓後端知道一頁有幾個*****待編輯*******
+      // 傳參數讓後端知道一頁有幾個*****
       params: {
         // 沒有做排序就會預設照時間排
         // itemsPerPage: ITEMS_PER_PAGE,

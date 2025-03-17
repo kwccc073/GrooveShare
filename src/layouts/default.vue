@@ -9,7 +9,7 @@
         </v-app-bar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <!-- 使用漢堡按鈕 -->
+      <!-- 漢堡按鈕（手機版才會顯示） -->
       <template v-if="mobile">
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       </template>

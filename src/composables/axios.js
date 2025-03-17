@@ -11,7 +11,7 @@ import { useUserStore } from '@/stores/user'
 // baseURL = x
 // axios.post('http://localhost:4000/user')
 
-// 建立新的一份axios
+// 自訂兩種axios的基礎網址-----------------------------------------------------------
 const api = axios.create({
   baseURL: import.meta.env.VITE_API
 })
@@ -29,6 +29,9 @@ const apiAuth = axios.create({
 // 4. 回應攔截器 interceptors.response
 // 5. 回到.then() .catch()
 // config表示這次請求的設定(get, post等)及帶有的資料
+
+// 請求攔截器------------------------------------------------
+// 在每次發送請求之前加上token再送出
 apiAuth.interceptors.request.use(config => {
   // 讀取當下的UserStore
   const user = useUserStore()
@@ -37,6 +40,7 @@ apiAuth.interceptors.request.use(config => {
   return config
 })
 
+// 回應攔截器------------------------------------------------
 // 1. apiAuth.get(/user/profile) 執行back \ controller \user.js裡的profile
 // 2. apiAuth.interceptors.request  自動加上 JWT
 // 3. 傳送出去

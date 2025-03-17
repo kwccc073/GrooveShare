@@ -326,7 +326,7 @@ const scoreSnare = useField('scoreSnare')
 const scoreKick = useField('scoreKick')
 const isPublic = useField('isPublic')
 
-// 開始寫譜（會帶入一個小節）***可以改成帶入多個小節，待編輯***-------------------------------------------------------------
+// 開始寫譜（預設會帶入一個小節）-------------------------------------------------------------
 const divisions = ref(16) // 這拍是以幾分音符來寫（相當於切成 division / 4 份）
 const isStart = ref(false)
 const start = () => {
