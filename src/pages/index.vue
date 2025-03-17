@@ -487,7 +487,7 @@ import SongCard from '@/components/SongCard.vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 // 引入JQ
-import $ from 'jquery'
+// import $ from 'jquery'
 
 definePage({
   meta: {
@@ -503,7 +503,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 // 取最新上架的歌曲用------------------------------------------------------------------
 // 刪除不需要的參數***待編輯***
-const page = ref(1) // 現在第幾頁
+// const page = ref(1) // 現在第幾頁
 const pages = ref(1) // 總共幾頁
 const ITEMS_PER_PAGE = 3 // 一頁3個
 
