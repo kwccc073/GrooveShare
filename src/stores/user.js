@@ -14,7 +14,6 @@ export const useUserStore = defineStore('user', () => {
   const icon = ref('')
   const id = ref('')
   // const role = ref(UserRole.USER) // 使用者
-  // 購物車有數量，但收藏歌曲沒有，因此推測這裡應該是空陣列***待編輯***
   const saving = ref([])
 
   // 是否登入
